@@ -2,20 +2,19 @@
 ===============================================
 Team Captain - 
 
-Programming Captain -  
+Programming Captain -  Pedro A
 Programming Team - Pedro A, Emery N, Caden H, James L
 
-Electronics Captain -  
-Electronics Team - Nick Z, Emery N, Will G, TBD
+Electronics Captain -  Nick Z
+Electronics Team - Nick Z, Emery N, Will G, Cole D
 
 Mechanics Captain -  
-Mechanics Team - Ariel W, Alex Z, Cole D, TBD
+Mechanics Team - Ariel W, Alex Z, Cole D, Will G, Alex C, Jedidah
 
-Design Manager -  
-Design Team - TBD
+Design Team - Everyone  
 
-CAD Team - Katherine H, Ariel W
+CAD Team - Katherine H, Jedidah
 
-Cargo / Logistics Manager - Ken D
+Cargo / Logistics Manager - Ken D, Griffin G
 
 Drive Team - TBD After Launch
