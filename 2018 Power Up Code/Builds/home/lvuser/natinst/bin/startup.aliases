@@ -1,5 +1,5 @@
 [My Computer]
-My Computer="172.22.11.1"
+My Computer="169.254.107.91"
 
 [Target]
 Target="localhost"
