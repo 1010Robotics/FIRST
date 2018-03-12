@@ -126,6 +126,7 @@ AddOutputFilter chunkFilter
 			<Item Name="Vision Processing.vi" Type="VI" URL="../Vision Processing.vi"/>
 		</Item>
 		<Item Name="Feet to Encoder Value.vi" Type="VI" URL="../Feet to Encoder Value.vi"/>
+		<Item Name="PID Tusks Range.vi" Type="VI" URL="../PID Tusks Range.vi"/>
 		<Item Name="Robot Main.vi" Type="VI" URL="../Robot Main.vi"/>
 		<Item Name="Tusk Conversion.vi" Type="VI" URL="../Tusk Conversion.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
