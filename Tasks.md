@@ -3,7 +3,7 @@
 Design Leader - Alex C
 Design Team - Everybody
 
-Programming Leader -  Pedro A
+Programming Leader -  Pedro A :smiley:
 Programming Team - Pedro A, Emery N, Caden H, James L
 
 Electronics Leader -  Nick Z
