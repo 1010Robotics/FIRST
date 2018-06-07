@@ -9,6 +9,7 @@ package org.usfirst.frc.team6364.robot;
 
 import org.usfirst.frc.team6364.robot.subsystems.driveBase;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -82,6 +83,7 @@ public class Robot extends TimedRobot {
 		motor.configNominalOutputForward(0.0, 0);
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
+		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 	}
 	public static void initVictor(VictorSPX motor) {
 		motor.setNeutralMode(NeutralMode.Coast);
