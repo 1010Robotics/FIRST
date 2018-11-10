@@ -3,6 +3,7 @@ package org.usfirst.frc.team6364.robot.commands;
 import org.usfirst.frc.team6364.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnToAngle extends Command {
 
@@ -22,6 +23,7 @@ public class TurnToAngle extends Command {
 	}
 
 	protected void execute() { // Run periodically as command goes
+		SmartDashboard.putNumber("Angle", Angle);
 		double error = Robot.drivebase.turnController.getError();
 		inErrorZone = Math.abs(error) < 2;
 		if (inErrorZone) {
@@ -30,7 +32,7 @@ public class TurnToAngle extends Command {
 		} else {
 			count = 0;
 		}
-	}
+	\]
 
 	protected boolean isFinished() { // Tell if it's finished
 		return isFinished;

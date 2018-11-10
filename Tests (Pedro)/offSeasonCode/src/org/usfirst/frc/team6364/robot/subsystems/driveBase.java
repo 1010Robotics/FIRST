@@ -16,10 +16,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class driveBase extends Subsystem implements PIDOutput {
 
-	private TalonSRX leftMotor;
-	private VictorSPX leftMotorF;
-	private TalonSRX rightMotor;
-	private VictorSPX rightMotorF;
+	//Hardware
+	private TalonSRX leftMotor, rightMotor;
+	private VictorSPX leftMotorF, rightMotorF;
 	private final AHRS ahrs;
 	
 	public final PIDController turnController;
