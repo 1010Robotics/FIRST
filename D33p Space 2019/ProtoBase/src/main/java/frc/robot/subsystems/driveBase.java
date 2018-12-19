@@ -15,7 +15,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -42,9 +41,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 		ahrs = new AHRS(I2C.Port.kMXP);
 		
-		//Read Encoder Absolute
-		//int pulseWidthPos = leftMotor.getSensorCollection().getPulseWidthPosition();
-
+		
 		Robot.initVictor(leftMotorF, true);
 		Robot.initTalon(leftMotor, true);
 		Robot.initVictor(rightMotorF, false);
@@ -72,8 +69,16 @@ public class driveBase extends Subsystem implements PIDOutput {
 		turnController.enable();
 	}
 
+	public double getLeftPosition() {
+		return -((leftMotor.getSensorCollection().getPulseWidthPosition()/4096)*1.57);
+	}
+
+	public int getRightPosition(){
+		return rightMotor.getSensorCollection().getPulseWidthPosition();
+	}
+
 	public void set(ControlMode mode, double rightValue, double leftValue) {
-		leftMotor.set(mode, leftValue);
+		leftMotor.set(mode, leftValue); 
 		rightMotor.set(mode, rightValue);
 	}
 
