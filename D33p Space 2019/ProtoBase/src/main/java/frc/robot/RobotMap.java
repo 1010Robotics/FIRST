@@ -9,7 +9,9 @@ package frc.robot;
 
 public enum RobotMap 
 {
-
+	//Controller Mapping
+	CONTROLLER_MAIN(0),
+	CONTROLLER_PARTNER(1),
   //CAN Motors Mapping
 	LEFT_MOTORF(7),
 	LEFT_MOTOR(1), 

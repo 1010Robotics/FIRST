@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,8 +16,11 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
 
-	private final Joystick m_stick = new Joystick(RobotMap.LEFT_JOYSTICK.value);
+	double joyYval = Robot.oi.main.getY();
+	double joyXVal = Robot.oi.main.getX(); //works -- why?
+	/*double joyYval = OI.main.getY();*/ //doesn't work-- why?
 
+	private final Joystick m_stick = new Joystick(RobotMap.LEFT_JOYSTICK.value);
 	public arcadeDrive() { // Called when initialize arcadeDrive
 		requires(Robot.drivebase);
 	}
