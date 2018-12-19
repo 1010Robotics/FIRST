@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//ARM RATIO: -1 ELBOW, 0.7 ARM
+
 package frc.robot;
 
 import frc.robot.subsystems.driveBase;
