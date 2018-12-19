@@ -37,7 +37,7 @@ public class OI {
 	public final Button DriverButton_START = new JoystickButton(LEFT_JOY, 8);
 	public final Button DriverLeftStickPress = new JoystickButton(LEFT_JOY, 9);
 	public final Button DriverRightStickPress = new JoystickButton(LEFT_JOY, 10);
-
+	
 	public final Joystick RIGHT_JOY = new Joystick(RobotMap.RIGHT_JOYSTICK.value);
 	public final Button OperatorButtonA = new JoystickButton(RIGHT_JOY, 1);
 	public final Button OperatorButtonB = new JoystickButton(RIGHT_JOY, 2);

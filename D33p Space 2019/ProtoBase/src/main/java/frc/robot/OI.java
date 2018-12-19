@@ -7,24 +7,9 @@
 
 package frc.robot;
 
-public enum RobotMap 
-{
+public class OI {
 
-  //CAN Motors Mapping
-	LEFT_MOTORF(7),
-	LEFT_MOTOR(1), 
-	RIGHT_MOTORF(8), 
-	RIGHT_MOTOR(2),
-	//Controllers Mapping
-	LEFT_JOYSTICK(0),
-	RIGHT_JOYSTICK(1);
+	public OI() {
 
-	public final int value;
-
-  RobotMap(int value) 
-  {
-		this.value = value;
-  }
-  
+	}
 }
-
