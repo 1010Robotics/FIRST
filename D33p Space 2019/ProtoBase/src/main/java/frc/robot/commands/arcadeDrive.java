@@ -12,6 +12,7 @@ import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
@@ -30,8 +31,8 @@ public class arcadeDrive extends Command {
 		    int power = (int) (joySign * (motorMin + ((128 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
 		    return power;
 	}
-	double joyYval = exponential(Robot.oi.main.getY(), DriveExp, JoyDead, MotorMin);
-	double joyXval = exponential(Robot.oi.main.getX(), DriveExp, JoyDead, MotorMin); //works -- why?
+	double joyYval = exponential(Robot.oi.main.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
+	double joyXval = exponential(Robot.oi.main.getX(Hand.kRight), DriveExp, JoyDead, MotorMin); //works -- why?
 	/*double joyYval = OI.main.getY();*/ //doesn't work-- why?
 
 	private final Joystick m_stick = new Joystick(RobotMap.LEFT_JOYSTICK.value);
@@ -45,8 +46,8 @@ public class arcadeDrive extends Command {
 
 	protected void execute() { // Run periodically as command goes
 		//exponential Xbox joy x and joy y
-		joyYval = exponential(Robot.oi.main.getY(), DriveExp, JoyDead, MotorMin);
-		joyXval = exponential(Robot.oi.main.getX(), DriveExp, JoyDead, MotorMin);
+		joyYval = exponential(Robot.oi.main.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
+		joyXval = exponential(Robot.oi.main.getX(Hand.kRight), DriveExp, JoyDead, MotorMin);
 		Robot.drivebase.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval));
 		//original drivebase
 		Robot.drivebase.set(ControlMode.PercentOutput, m_stick.getY() + m_stick.getX(), m_stick.getY() - m_stick.getX());
