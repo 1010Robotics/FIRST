@@ -6,10 +6,12 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj.XboxController;
 public class OI {
 
-	public OI() {
+	public final XboxController main = new XboxController(RobotMap.CONTROLLER_MAIN.value);
+	public final XboxController partner = new XboxController(RobotMap.CONTROLLER_PARTNER.value);
 
+	public OI() {
 	}
 }
