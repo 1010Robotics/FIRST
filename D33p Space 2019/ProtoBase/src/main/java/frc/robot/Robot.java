@@ -20,6 +20,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends TimedRobot {
 
+	//Constant
+	public static final int kSlotIdx = 0; //Which PID Slot to pull gains from (0,1,2,3)
+	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
+	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
+
 	public enum RobotState {
         DISABLED, AUTONOMOUS, TELEOP
     }
@@ -61,6 +66,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		Robot.drivebase.moveStraight(10);
 	}
 
 	@Override
@@ -97,7 +103,18 @@ public class Robot extends TimedRobot {
 		motor.configClosedloopRamp(0.5, 0);
 	}
 
-	public static void initDriveMotor(TalonSRX motor){
-		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+	public static void initMasterDriveMotor(TalonSRX motor){
+		motor.configNominalOutputForward(0, kTimeoutMs);
+		motor.configNominalOutputReverse(0, kTimeoutMs);
+		motor.configPeakOutputForward(1, kTimeoutMs);
+		motor.configPeakOutputReverse(-1, kTimeoutMs);
+		motor.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
+		motor.config_kF(0, 0.2, kTimeoutMs);
+		motor.config_kP(0, 0.2, kTimeoutMs);
+		motor.config_kI(0, 0, kTimeoutMs);
+		motor.config_kD(0, 0, kTimeoutMs);
+		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
+		motor.configMotionAcceleration(6000, kTimeoutMs);
+		motor.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
 	}
 }

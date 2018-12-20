@@ -23,36 +23,42 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class driveBase extends Subsystem implements PIDOutput {
 
 	//Hardware
-	
 	private TalonSRX leftMotor, rightMotor;
 	private VictorSPX leftMotorF, rightMotorF;
 	private final AHRS ahrs;
 	
+	//PID Controller
 	public final PIDController turnController;
 
+	//Turn PID Gains
 	private final double Kp = 0.0;
 	private final double Ki = 0.0;
 	private final double Kd = 0.0;
 
 	public driveBase() {
 
+		//Create Objects
 		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.value);
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 		ahrs = new AHRS(Port.kUSB);
 		
+		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
 		Robot.initTalon(leftMotor, true);
 		Robot.initVictor(rightMotorF, false);
 		Robot.initTalon(rightMotor, false);
 
+		//Enslave Victors to Talon (Master Motors)
 		leftMotorF.follow(leftMotor);
 		rightMotorF.follow(rightMotor);
 
-		leftMotor.setSelectedSensorPosition(0, 0, 10);
-		rightMotor.setSelectedSensorPosition(0, 0, 10);
+		//Set Closed Control Loop and Motion Magic Configuration
+		Robot.initMasterDriveMotor(leftMotor);
+		Robot.initMasterDriveMotor(rightMotor);
 
+		//Configure PID Controller
 		turnController = new PIDController(Kp, Ki, Kd, ahrs, this);
 		turnController.setInputRange(-180.0f, 180.0f);
 		turnController.setOutputRange(-0.45, 0.45);
@@ -67,6 +73,13 @@ public class driveBase extends Subsystem implements PIDOutput {
 		turnController.setPID(Kp, Ki, Kd);
 		turnController.setSetpoint(angle);
 		turnController.enable();
+	}
+
+	public void moveStraight(double feet){
+		double target = ((feet/1.57)*4096);
+		leftMotor.setSelectedSensorPosition(0, 0, 10);
+		rightMotor.setSelectedSensorPosition(0, 0, 10);
+		set(ControlMode.MotionMagic, target, target);
 	}
 
 	public double getLeftPosition() {
