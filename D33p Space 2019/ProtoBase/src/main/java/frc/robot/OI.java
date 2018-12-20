@@ -6,7 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
 import edu.wpi.first.wpilibj.XboxController;
+
 public class OI {
 
 	public final XboxController main = new XboxController(RobotMap.CONTROLLER_MAIN.value);

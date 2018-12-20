@@ -5,8 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//ARM RATIO: -1 ELBOW, 0.7 ARM
-
 package frc.robot;
 
 import frc.robot.subsystems.driveBase;
@@ -97,5 +95,9 @@ public class Robot extends TimedRobot {
 		motor.configNominalOutputForward(0.0, 0);
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
+	}
+
+	public static void initDriveMotor(TalonSRX motor){
+		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 	}
 }
