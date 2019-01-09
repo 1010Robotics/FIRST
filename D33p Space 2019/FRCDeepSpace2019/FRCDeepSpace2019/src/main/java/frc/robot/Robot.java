@@ -7,26 +7,19 @@
 
 package frc.robot;
 
-
 import frc.robot.subsystems.driveBase;
-import frc.robot.commands.turnAngle;
-import frc.robot.commands.Drive;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
-
-public class Robot extends IterativeRobot {
-
-
+public class Robot extends TimedRobot {
 
 	//Constants
 	public static final int kSlotIdx = 0; //Which PID Slot to pull gains from (0,1,2,3)
@@ -34,13 +27,12 @@ public class Robot extends IterativeRobot {
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for c<onfirmation
 
 	public static OI oi;
-	public static driveBase drivebase;
+	public static driveBase drive;
 	
 	Command autonomousCommand;
 	
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
-
 
 	public enum RobotState {
         DISABLED, AUTONOMOUS, TELEOP
@@ -60,10 +52,10 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		//create new objects
 		oi = new OI();
-		drivebase = new driveBase();
-		autonomousCommand = new Drive(3);
-	//	autoSelector = new SendableChooser();
-		SmartDashboard.putData(drivebase);
+		drive = new driveBase();
+		//autonomousCommand = new Drive(3);
+	  //autoSelector = new SendableChooser();
+		SmartDashboard.putData(drive);
 	
 	}
 

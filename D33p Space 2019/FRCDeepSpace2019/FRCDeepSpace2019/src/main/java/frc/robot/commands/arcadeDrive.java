@@ -42,7 +42,7 @@ public class arcadeDrive extends Command {
 	double joyXval = Robot.oi.main.getX(Hand.kRight);
 
 	public arcadeDrive() { // Called when initialize arcadeDrive
-		requires(Robot.drivebase);
+		requires(Robot.drive);
 	}
 
 	protected void initialize() { // Called when first run command
@@ -53,20 +53,13 @@ public class arcadeDrive extends Command {
 		
 		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
-		Robot.drivebase.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
+		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
 		
-		SmartDashboard.putNumber("Left Position", (Robot.drivebase.getLeftPosition()));
-		SmartDashboard.putNumber("Right Position", (Robot.drivebase.getRightPosition()));
+		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
+		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);
 		SmartDashboard.putNumber("Joystick Right", joyXval);
-		SmartDashboard.putNumber("Gyro Angle", (Robot.drivebase.getGyroPosition()));
-	
-		if(Robot.oi.main.getAButton()){
-			float kp = (float)0.02;
-			double error = 90 - Robot.drivebase.getGyroPosition();
-			double power = error * kp;
-			Robot.drivebase.set(ControlMode.PercentOutput, power, -power);
-			}
+		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
 	}
 
 	protected boolean isFinished() { // Tell if it's finished

@@ -5,24 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.arcadeDrive;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
 
 public class driveBase extends Subsystem implements PIDOutput {
 
@@ -48,7 +48,8 @@ public class driveBase extends Subsystem implements PIDOutput {
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
-		ahrs = new AHRS(Port.kUSB);
+    ahrs = new AHRS(Port.kUSB);
+    
 		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
 		Robot.initTalon(leftMotor, true);
