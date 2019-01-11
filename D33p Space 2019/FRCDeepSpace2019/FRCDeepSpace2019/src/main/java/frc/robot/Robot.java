@@ -8,6 +8,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.driveBase;
+import frc.robot.subsystems.limeLight;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,9 +29,9 @@ public class Robot extends TimedRobot {
 
 	public static OI oi;
 	public static driveBase drive;
-	
+	public static limeLight camera;
 	Command autonomousCommand;
-	
+	Command arcadeDrive;
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
 
@@ -53,10 +54,11 @@ public class Robot extends TimedRobot {
 		//create new objects
 		oi = new OI();
 		drive = new driveBase();
+		camera = new limeLight();
 		//autonomousCommand = new Drive(3);
 	  //autoSelector = new SendableChooser();
 		SmartDashboard.putData(drive);
-	
+		SmartDashboard.putData(camera);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonomousCommand.start();
+		//autonomousCommand.start();
 	}
 
 	@Override
@@ -81,12 +83,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		autonomousCommand.cancel();
+		//autonomousCommand.cancel();
 	}
 
 	@Override
 	public void teleopPeriodic() {
+
 		Scheduler.getInstance().run();
+
 	}
 
 	@Override  
@@ -115,6 +119,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public static void initMasterDriveMotor(TalonSRX motor){
+		motor.setNeutralMode(NeutralMode.Brake);
 		motor.configNominalOutputForward(0, kTimeoutMs);
 		motor.configNominalOutputReverse(0, kTimeoutMs);
 		motor.configPeakOutputForward(1, kTimeoutMs);

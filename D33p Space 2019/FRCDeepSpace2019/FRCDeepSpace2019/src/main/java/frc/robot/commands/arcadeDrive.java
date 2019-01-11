@@ -12,11 +12,11 @@ import frc.robot.Robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
+//import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
-
 	//Exponential Variables
 	/*
 	private final double MotorMin = 0.3;
@@ -50,7 +50,6 @@ public class arcadeDrive extends Command {
 	}
 
 	protected void execute() { // Run periodically as command goes
-		
 		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
 		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
@@ -60,6 +59,7 @@ public class arcadeDrive extends Command {
 		SmartDashboard.putNumber("Joystick Left", joyYval);
 		SmartDashboard.putNumber("Joystick Right", joyXval);
 		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+		
 	}
 
 	protected boolean isFinished() { // Tell if it's finished

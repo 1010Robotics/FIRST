@@ -11,6 +11,7 @@ package frc.robot.subsystems;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.arcadeDrive;
+//import frc.robot.commands.autoAlign;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -22,7 +23,9 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.livewindow.*;
+
+@SuppressWarnings( "deprecation" ) //supress the LiveWindow deprecation warnings
 
 public class driveBase extends Subsystem implements PIDOutput {
 
@@ -41,6 +44,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 	private final double Kd = 0.0;
 
 	public driveBase() {
+
 		//Suffleboard tab = Shuffleboard.getTab("Teleop");
 		
 		//Create Objects
@@ -48,7 +52,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
-    ahrs = new AHRS(Port.kUSB);
+    	ahrs = new AHRS(Port.kUSB);
     
 		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
@@ -73,6 +77,8 @@ public class driveBase extends Subsystem implements PIDOutput {
 
 		testmotor = new Spark(9);
 
+
+		
 		LiveWindow.addSensor("drivebase", "Gyro", ahrs);
 		LiveWindow.addActuator("drivebase", "Test Motor", testmotor);
 	}
