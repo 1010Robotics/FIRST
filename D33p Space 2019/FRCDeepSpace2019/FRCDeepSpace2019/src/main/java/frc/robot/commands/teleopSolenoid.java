@@ -26,12 +26,12 @@ public class teleopSolenoid extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
     if(Robot.oi.main.getAButton()){
-			Robot.solenoid.extendSolenoid(Robot.solenoid.diskIntake);
+			Robot.solenoid.extendSolenoid();
 		}
 		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid(Robot.solenoid.diskIntake);
+      Robot.solenoid.retractSolenoid();
     }
-    SmartDashboard.putString("Solenoid State", Robot.solenoid.solenoidState.toString());
+    SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -42,7 +42,7 @@ public class teleopSolenoid extends Command {
   // Called once after isFinished returns true
   
   protected void end() {
-    Robot.solenoid.disableSolenoid(Robot.solenoid.diskIntake);
+    Robot.solenoid.disableSolenoid();
     Robot.solenoid.stopCompressor();
   }
 

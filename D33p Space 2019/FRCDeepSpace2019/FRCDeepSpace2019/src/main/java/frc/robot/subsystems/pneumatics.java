@@ -9,27 +9,42 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.teleopSolenoid;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 
 public class pneumatics extends Subsystem {
+  public enum solenoidState{OPEN, CLOSED, OFF}
+  public solenoidState actuatorState;
+  public DoubleSolenoid diskIntake;
+  public Compressor compressor;
 
+  public pneumatics(){
+    diskIntake = new DoubleSolenoid(0, 1);
+    compressor = new Compressor();
+  }
   public void extendSolenoid(){
-
+    diskIntake.set(DoubleSolenoid.Value.kForward);
+    actuatorState =  solenoidState.OPEN;
   }
 
   public void retractSolenoid(){
-
+    diskIntake.set(DoubleSolenoid.Value.kReverse);
+    actuatorState = solenoidState.CLOSED;
   }
 
   public void disableSolenoid(){
-
+    diskIntake.set(DoubleSolenoid.Value.kOff);
+    actuatorState = solenoidState.OFF;
   }
 
   public void startCompressor(){
-
+    compressor.setClosedLoopControl(true);
   }
 
   public void stopCompressor(){
-
+    compressor.setClosedLoopControl(false);
+    compressor.stop();
   }
 
   @Override
