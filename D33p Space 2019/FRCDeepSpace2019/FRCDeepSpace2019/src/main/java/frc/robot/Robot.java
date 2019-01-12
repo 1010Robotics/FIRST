@@ -9,6 +9,7 @@ package frc.robot;
 
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.limeLight;
+import frc.robot.subsystems.pneumatics;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,10 +29,14 @@ public class Robot extends TimedRobot {
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for c<onfirmation
 
 	public static OI oi;
+
 	public static driveBase drive;
 	public static limeLight camera;
+	public static pneumatics solenoid;
+
 	Command autonomousCommand;
 	Command arcadeDrive;
+	Command teleopSolenoid;
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
 
@@ -54,11 +59,12 @@ public class Robot extends TimedRobot {
 		//create new objects
 		oi = new OI();
 		drive = new driveBase();
+		solenoid = new pneumatics();
 		camera = new limeLight();
 		//autonomousCommand = new Drive(3);
-	  //autoSelector = new SendableChooser();
+	  	//autoSelector = new SendableChooser();
 		SmartDashboard.putData(drive);
-		SmartDashboard.putData(camera);
+		//SmartDashboard.putData(camera);
 	}
 
 	@Override

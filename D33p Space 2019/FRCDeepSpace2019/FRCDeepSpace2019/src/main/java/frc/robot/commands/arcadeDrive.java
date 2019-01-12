@@ -12,18 +12,13 @@ import frc.robot.Robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
-//import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
-	//Exponential Variables
-	/*
-	private final double MotorMin = 0.3;
-	private final double DriveExp = 1.4;
-	*/
 
 	private final double JoyDead = 0.15;
+	private boolean status;
 
 	//Exponential Function
 	float exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
@@ -54,6 +49,9 @@ public class arcadeDrive extends Command {
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
 		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
 		
+		//Robot.drive.startCompressor();
+
+		SmartDashboard.putBoolean("Intake Status", status);
 		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);

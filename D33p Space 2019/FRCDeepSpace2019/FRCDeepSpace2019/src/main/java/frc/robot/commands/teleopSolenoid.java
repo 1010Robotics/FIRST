@@ -6,43 +6,49 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.Robot;
-//import frc.robot.subsystems.limeLight.*;
-import edu.wpi.first.wpilibj.smartdashboard.*;
-import edu.wpi.first.wpilibj.command.Command;
 
-public class teleopCamera extends Command {
-  public teleopCamera() {
-    // Use requires() here to declare subsystem dependencies
-    requires(Robot.camera);
+import frc.robot.Robot;
+
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.*;
+
+public class teleopSolenoid extends Command {
+
+  public teleopSolenoid() {
+    requires(Robot.solenoid);
   }
 
   // Called just before this Command runs the first time
-  @Override
   protected void initialize() {
+    Robot.solenoid.startCompressor();
   }
 
   // Called repeatedly when this Command is scheduled to run
-  @Override
   protected void execute() {
-    //Robot.camera.setLedMode(CameraLightMode.light_Off);
-    SmartDashboard.putNumber("X Value", Robot.camera.getTx());
+    if(Robot.oi.main.getAButton()){
+			Robot.solenoid.extendSolenoid(Robot.solenoid.diskIntake);
+		}
+		else if(Robot.oi.main.getBButton()){
+      Robot.solenoid.retractSolenoid(Robot.solenoid.diskIntake);
+    }
+    SmartDashboard.putString("Solenoid State", Robot.solenoid.solenoidState.toString());
   }
 
   // Make this return true when this Command no longer needs to run execute()
-  @Override
   protected boolean isFinished() {
     return false;
   }
 
   // Called once after isFinished returns true
-  @Override
+  
   protected void end() {
+    Robot.solenoid.disableSolenoid(Robot.solenoid.diskIntake);
+    Robot.solenoid.stopCompressor();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
-  @Override
+  
   protected void interrupted() {
     end();
   }

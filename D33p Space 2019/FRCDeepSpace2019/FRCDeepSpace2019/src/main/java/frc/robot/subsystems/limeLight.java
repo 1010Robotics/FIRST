@@ -20,13 +20,14 @@ public class limeLight extends Subsystem {
   
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
      setDefaultCommand(new teleopCamera());
   }
+
   public limeLight(){
     table = null;
     SmartDashboard.putBoolean("limeLight Active", true);
   }
+  
   private static NetworkTableEntry getValue(String key){
     if(table == null){
       table = NetworkTableInstance.getDefault();

@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
@@ -35,6 +36,8 @@ public class driveBase extends Subsystem implements PIDOutput {
 	private final AHRS ahrs;
 
 	private Spark testmotor;
+	public DoubleSolenoid diskIntake;
+
 	//PID Controller
 	public final PIDController turnController;
 
@@ -52,6 +55,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
+
     	ahrs = new AHRS(Port.kUSB);
     
 		//Initialize Drive Motors
@@ -77,8 +81,6 @@ public class driveBase extends Subsystem implements PIDOutput {
 
 		testmotor = new Spark(9);
 
-
-		
 		LiveWindow.addSensor("drivebase", "Gyro", ahrs);
 		LiveWindow.addActuator("drivebase", "Test Motor", testmotor);
 	}
@@ -130,15 +132,12 @@ public class driveBase extends Subsystem implements PIDOutput {
 		rightMotor.set(ControlMode.PercentOutput, 0); 
 	}
 
-
-	
-	protected void initDefaultCommand() {
-		setDefaultCommand(new arcadeDrive());
-	}
-
-	
 	public void pidWrite(double output) {
 		set(ControlMode.PercentOutput, -output, output);
 	}
 
+	protected void initDefaultCommand() {
+		setDefaultCommand(new arcadeDrive());
+	}
+	
 }
