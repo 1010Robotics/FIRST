@@ -17,6 +17,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
 
+	//Exponential Variables
+	/*
+	private final double MotorMin = 0.3;
+	private final double DriveExp = 1.4;
+	*/
+
 	private final double JoyDead = 0.15;
 
 	//Exponential Function
@@ -36,7 +42,7 @@ public class arcadeDrive extends Command {
 	double joyXval = Robot.oi.main.getX(Hand.kRight);
 
 	public arcadeDrive() { // Called when initialize arcadeDrive
-		requires(Robot.drive);
+		requires(Robot.drivebase);
 	}
 
 	protected void initialize() { // Called when first run command
@@ -44,18 +50,23 @@ public class arcadeDrive extends Command {
 	}
 
 	protected void execute() { // Run periodically as command goes
+		
 		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
-		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
+		Robot.drivebase.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
 		
-		//Robot.drive.startCompressor();
-
-		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
-		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
+		SmartDashboard.putNumber("Left Position", (Robot.drivebase.getLeftPosition()));
+		SmartDashboard.putNumber("Right Position", (Robot.drivebase.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);
 		SmartDashboard.putNumber("Joystick Right", joyXval);
-		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
-		
+		SmartDashboard.putNumber("Gyro Angle", (Robot.drivebase.getGyroPosition()));
+	
+		if(Robot.oi.main.getAButton()){
+			float kp = (float)0.02;
+			double error = 90 - Robot.drivebase.getGyroPosition();
+			double power = error * kp;
+			Robot.drivebase.set(ControlMode.PercentOutput, power, -power);
+			}
 	}
 
 	protected boolean isFinished() { // Tell if it's finished

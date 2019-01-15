@@ -11,18 +11,15 @@ package frc.robot.subsystems;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.arcadeDrive;
-//import frc.robot.commands.autoAlign;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.*;
 
@@ -31,20 +28,16 @@ import edu.wpi.first.wpilibj.livewindow.*;
 public class driveBase extends Subsystem implements PIDOutput {
 
 	//Hardware
+	public final int talonTPR = 4096;
+	public final double wheelDiameter = 0.16;
+	public final double baseWidth = 0.64;
+	public final int maxVelocity = 14; // (CIM RPM / Gearbox Ratio) / 60sec * (Diamater of Wheel in Meters * Pi) * 60 Percent
+
 	private TalonSRX leftMotor, rightMotor;
 	private VictorSPX leftMotorF, rightMotorF;
-	private final AHRS ahrs;
+	private AHRS ahrs;
 
 	private Spark testmotor;
-	public DoubleSolenoid diskIntake;
-
-	//PID Controller
-	public final PIDController turnController;
-
-	//Turn PID Gains
-	private final double Kp = 0.0;
-	private final double Ki = 0.0;
-	private final double Kd = 0.0;
 
 	public driveBase() {
 
@@ -56,7 +49,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 
-    	ahrs = new AHRS(Port.kUSB);
+    	ahrs = new AHRS(SPI.Port.kMXP);
     
 		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
@@ -72,41 +65,28 @@ public class driveBase extends Subsystem implements PIDOutput {
 		Robot.initMasterDriveMotor(leftMotor);
 		Robot.initMasterDriveMotor(rightMotor);
 
-		//Configure PID Controller
-		turnController = new PIDController(Kp, Ki, Kd, ahrs, this);
-		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-0.45, 0.45);
-		turnController.setAbsoluteTolerance(2.0f);
-		turnController.setContinuous();
-
+		//Test Spark
 		testmotor = new Spark(9);
 
+		//Test Mode Variable Send
 		LiveWindow.addSensor("drivebase", "Gyro", ahrs);
 		LiveWindow.addActuator("drivebase", "Test Motor", testmotor);
 	}
 
-	public void rotateDegrees(double angle) {
-		ahrs.reset();
-		turnController.reset();
-		turnController.setPID(Kp, Ki, Kd);
-		turnController.setSetpoint(angle);
-		turnController.enable();
-		turnController.get();
-	}
-
-	public void moveStraight(double feet){
-		double target = ((feet/1.57)*4096);
-		leftMotor.setSelectedSensorPosition(0, 0, 10);
-		rightMotor.setSelectedSensorPosition(0, 0, 10);
-		set(ControlMode.MotionMagic, -target, -target);
-	}
-
 	public double getLeftPosition() {
-		return -((leftMotor.getSensorCollection().getPulseWidthPosition()/4096)*1.57);
+		return -((leftMotor.getSensorCollection().getPulseWidthPosition()/talonTPR)*1.57);
 	}  
 
 	public double getRightPosition(){
-		return ((rightMotor.getSensorCollection().getPulseWidthPosition()/4096)*1.57);
+		return ((rightMotor.getSensorCollection().getPulseWidthPosition()/talonTPR)*1.57);
+	}
+
+	public int getLeftPositionRaw(){
+		return -(leftMotor.getSensorCollection().getPulseWidthPosition());
+	}
+
+	public int getRightPositionRaw(){
+		return rightMotor.getSensorCollection().getPulseWidthPosition();
 	}
 
 	public void resetEnc(){
@@ -133,7 +113,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 	}
 
 	public void pidWrite(double output) {
-		set(ControlMode.PercentOutput, -output, output);
+		set(ControlMode.PercentOutput, (output/1), -(output/1));
 	}
 
 	protected void initDefaultCommand() {

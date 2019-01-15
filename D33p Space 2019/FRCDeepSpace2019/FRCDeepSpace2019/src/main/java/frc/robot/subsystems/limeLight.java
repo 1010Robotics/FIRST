@@ -18,6 +18,8 @@ public class limeLight extends Subsystem {
 
   private static NetworkTableInstance table;
   
+  public double targetX;
+
   @Override
   public void initDefaultCommand() {
      setDefaultCommand(new teleopCamera());
@@ -47,8 +49,8 @@ public class limeLight extends Subsystem {
   public static double getTy(){
     return getValue("ty").getDouble(0.00);
   }
-  public double getTx(){
-    return getValue("tx").getDouble(0.00);
+  public void getTx(){
+    targetX = getValue("tx").getDouble(0);
   }
   public static double getTa(){
     return getValue("ta").getDouble(0.00);

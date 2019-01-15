@@ -6,28 +6,62 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.Robot;
-import frc.robot.subsystems.limeLight.CameraMode;
-import edu.wpi.first.wpilibj.smartdashboard.*;
-import edu.wpi.first.wpilibj.command.Command;
 
-public class teleopCamera extends Command {
-  public teleopCamera() {
-    // Use requires() here to declare subsystem dependencies
-    requires(Robot.camera);
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
+
+public class autoTurn extends Command {
+
+  //PID Constants
+  private float kp = 0.007643f;
+  private float ki = 0.0f;
+  private float kd = 2.50463f;
+
+  //PID  Variables
+  private double angle;
+  private double error;
+  private double errorDiff;
+  private double errorSum;
+  private double errorLast;
+  private double p;
+  private double i;
+  private double d;
+  private double outputPID;
+
+  public autoTurn(double angle) {
+    requires(Robot.drive);
+    this.angle =  angle;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.drive.gyroReset();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //Robot.camera.setLedMode(CameraLightMode.light_Off);
-    Robot.camera.setCameraMode(CameraMode.mode_Driver);
-    SmartDashboard.putNumber("X Value", Robot.camera.targetX);
+    
+		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+    SmartDashboard.putNumber("Turn Error", error);
+
+    error = angle - Robot.drive.getGyroPosition();
+    errorLast = error;
+    errorDiff = error - errorLast;
+    errorSum += error;
+
+    p = kp * error;
+    i = ki * errorSum;
+    d = kd * errorDiff;
+    outputPID  = p + i + d;
+
+    if(outputPID > 1.0){outputPID = 1;}
+    if(outputPID < -1.0){outputPID = -1;}
+
+    Robot.drive.pidWrite(outputPID);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -39,12 +73,12 @@ public class teleopCamera extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.drive.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

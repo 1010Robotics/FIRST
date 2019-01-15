@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class pneumatics extends Subsystem {
   public enum solenoidState{OPEN, CLOSED, OFF}
-  public solenoidState actuatorState;
+  public solenoidState actuatorState = solenoidState.OFF;
   public DoubleSolenoid diskIntake;
   public Compressor compressor;
 
@@ -25,12 +25,12 @@ public class pneumatics extends Subsystem {
   }
   public void extendSolenoid(){
     diskIntake.set(DoubleSolenoid.Value.kForward);
-    actuatorState =  solenoidState.OPEN;
+    actuatorState =  solenoidState.CLOSED;
   }
 
   public void retractSolenoid(){
     diskIntake.set(DoubleSolenoid.Value.kReverse);
-    actuatorState = solenoidState.CLOSED;
+    actuatorState = solenoidState.OPEN;
   }
 
   public void disableSolenoid(){

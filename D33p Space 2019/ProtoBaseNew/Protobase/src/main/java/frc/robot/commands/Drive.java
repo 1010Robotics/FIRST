@@ -7,31 +7,27 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import frc.robot.Robot;
+import frc.robot.subsystems.driveBase;
 
-public class teleopSolenoid extends Command {
+public class Drive extends Command {
 
-  public teleopSolenoid() {
-    requires(Robot.solenoid);
+  private double target;
+
+  public Drive(double target) {
+    requires(Robot.drivebase);
+    this.target = target;
   }
 
   // Called just before this Command runs the first time
   protected void initialize() {
-    Robot.solenoid.startCompressor();
+   Robot.drivebase.resetEnc(); 
   }
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
-    if(Robot.oi.main.getAButton()){
-			Robot.solenoid.extendSolenoid();
-		}
-		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
-    }
-    SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
-    
+    Robot.drivebase.moveStraight(target);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -40,15 +36,12 @@ public class teleopSolenoid extends Command {
   }
 
   // Called once after isFinished returns true
-  
   protected void end() {
-
+    Robot.drivebase.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
-  
   protected void interrupted() {
-    end();
   }
 }

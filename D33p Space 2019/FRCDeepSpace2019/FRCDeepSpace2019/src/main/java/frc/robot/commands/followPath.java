@@ -7,48 +7,56 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import frc.robot.Robot;
+import jaci.pathfinder.Pathfinder;
 
-public class teleopSolenoid extends Command {
+public class followPath extends Command {
 
-  public teleopSolenoid() {
-    requires(Robot.solenoid);
+  public followPath() {
+    requires(Robot.drive);
+    requires(Robot.path);
   }
 
   // Called just before this Command runs the first time
+  @Override
   protected void initialize() {
-    Robot.solenoid.startCompressor();
+    Robot.drive.resetEnc();
+    Robot.drive.gyroReset();
   }
 
   // Called repeatedly when this Command is scheduled to run
+  @Override
   protected void execute() {
-    if(Robot.oi.main.getAButton()){
-			Robot.solenoid.extendSolenoid();
-		}
-		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
-    }
-    SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
-    
+    double l = Robot.path.leftEnc.calculate(Robot.drive.getLeftPositionRaw());
+    double r = Robot.path.rightEnc.calculate(Robot.drive.getRightPositionRaw());
+
+    double gyro_heading = Robot.drive.getGyroPosition();    // Assuming the gyro is giving a value in degrees
+    double desired_heading = Pathfinder.r2d(Robot.path.leftEnc.getHeading());  // Should also be in degrees
+
+    double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+    double turn = 0.8 * (-1.0/80.0) * angleDifference;
+
+    Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);
   }
 
   // Make this return true when this Command no longer needs to run execute()
+  @Override
   protected boolean isFinished() {
     return false;
   }
 
   // Called once after isFinished returns true
-  
+  @Override
   protected void end() {
-
+    Robot.drive.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
-  
+  @Override
   protected void interrupted() {
-    end();
   }
 }

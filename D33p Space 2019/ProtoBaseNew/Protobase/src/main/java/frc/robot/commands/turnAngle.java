@@ -7,48 +7,56 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
-import edu.wpi.first.wpilibj.command.Command;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
-public class teleopSolenoid extends Command {
+import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-  public teleopSolenoid() {
-    requires(Robot.solenoid);
+public class turnAngle extends Command {
+
+  private double angle;
+
+  public turnAngle(double angle) {
+    requires(Robot.drivebase);
+    this.angle = angle;
   }
 
   // Called just before this Command runs the first time
+  @Override
   protected void initialize() {
-    Robot.solenoid.startCompressor();
+    Robot.drivebase.gyroReset();
+    Robot.drivebase.rotateDegrees(angle);
   }
 
   // Called repeatedly when this Command is scheduled to run
+  @Override
   protected void execute() {
-    if(Robot.oi.main.getAButton()){
-			Robot.solenoid.extendSolenoid();
-		}
-		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
-    }
-    SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
-    
+    SmartDashboard.putNumber("Gyro Angle", (Robot.drivebase.getGyroPosition()));
+    double power = Robot.drivebase.turnController.get();
+    //float kp = (float)0.004;
+    //double error = angle - Robot.drivebase.getGyroPosition();
+    //double power = error * kp;
+    Robot.drivebase.set(ControlMode.PercentOutput, (power), -(power));
   }
 
   // Make this return true when this Command no longer needs to run execute()
+  @Override
   protected boolean isFinished() {
     return false;
   }
 
   // Called once after isFinished returns true
-  
+  @Override
   protected void end() {
-
+    Robot.drivebase.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
-  
+  @Override
   protected void interrupted() {
-    end();
+ 
   }
 }

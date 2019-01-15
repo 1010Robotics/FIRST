@@ -7,8 +7,11 @@
 
 package frc.robot;
 
+import frc.robot.commands.autoTurn;
+import frc.robot.commands.followPath;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.limeLight;
+import frc.robot.subsystems.pathfinder;
 import frc.robot.subsystems.pneumatics;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -16,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -30,9 +34,13 @@ public class Robot extends TimedRobot {
 
 	public static OI oi;
 
+	DriverStation.Alliance colour;
+	private boolean isBlue;
+
 	public static driveBase drive;
 	public static limeLight camera;
 	public static pneumatics solenoid;
+	public static pathfinder path;
 
 	Command autonomousCommand;
 	Command arcadeDrive;
@@ -57,14 +65,21 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		//create new objects
+		
 		oi = new OI();
 		drive = new driveBase();
 		solenoid = new pneumatics();
 		camera = new limeLight();
-		//autonomousCommand = new Drive(3);
-	  	//autoSelector = new SendableChooser();
+		path =  new pathfinder();
+
+		//autoSelector = new SendableChooser();
+
+		colour = DriverStation.getInstance().getAlliance();
+		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
+
 		SmartDashboard.putData(drive);
-		//SmartDashboard.putData(camera);
+		SmartDashboard.putData(camera);
+		SmartDashboard.putData(solenoid);
 	}
 
 	@Override
@@ -79,6 +94,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
+		if(isBlue){}
+		//autonomousCommand = new followPath();
 		//autonomousCommand.start();
 	}
 
