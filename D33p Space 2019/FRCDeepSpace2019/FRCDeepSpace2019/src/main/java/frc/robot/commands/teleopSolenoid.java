@@ -14,21 +14,21 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 public class teleopSolenoid extends Command {
 
   public teleopSolenoid() {
-    requires(Robot.solenoid);
+    requires(Robot.intake);
   }
 
   protected void initialize() {
-    Robot.solenoid.startCompressor();
+    Robot.intake.startCompressor();
   }
 
   protected void execute() {
     if(Robot.oi.main.getAButton()){
-			Robot.solenoid.extendSolenoid();
+			Robot.intake.extendSolenoid();
 		}
 		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
+      Robot.intake.retractSolenoid();
     }
-    SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
+    SmartDashboard.putString("Solenoid State", Robot.intake.actuatorState.toString());
     
   }
 

@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.driveBase;
 
 public class autoAlign extends Command {
 
@@ -36,7 +35,8 @@ public class autoAlign extends Command {
 
   @Override
   protected void execute() {
-    if(Robot.camera.isTarget() == true){
+
+    if(Robot.camera.isTarget() == true) {
       moveError = -12-Robot.camera.getTy();
       headingError = 1.37-Robot.camera.getTx();
       headingOutput = headingError * headingKp;
@@ -44,10 +44,10 @@ public class autoAlign extends Command {
 
       Robot.drive.set(ControlMode.PercentOutput, moveOutput-headingOutput, moveOutput+headingOutput);
     }
-    else{
+    else {
       Robot.drive.set(ControlMode.PercentOutput, -0.3, 0.3);
     }
-    
+
   }
 
   @Override
@@ -57,6 +57,7 @@ public class autoAlign extends Command {
 
   @Override
   protected void end() {
+    Robot.drive.stop();
   }
 
   @Override

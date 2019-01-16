@@ -18,6 +18,7 @@ public enum RobotMap
 	LEFT_MOTOR(1), 
 	RIGHT_MOTORF(8), 
 	RIGHT_MOTOR(2),
+	ELEVATOR_MOTOR(3),
 	//Controllers Mapping
 	LEFT_JOYSTICK(0),
 	RIGHT_JOYSTICK(1);

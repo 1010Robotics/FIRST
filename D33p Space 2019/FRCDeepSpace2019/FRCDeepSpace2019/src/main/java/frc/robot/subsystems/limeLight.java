@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.commands.teleopCamera;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -71,7 +69,7 @@ public class limeLight extends Subsystem {
 
   	@Override
  	 public void initDefaultCommand() {
-  	  setDefaultCommand(new teleopCamera());
+  	  //setDefaultCommand(new teleopCamera());
  	}
   
 }

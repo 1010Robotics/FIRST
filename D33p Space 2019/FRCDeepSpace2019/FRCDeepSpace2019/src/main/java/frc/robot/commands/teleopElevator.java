@@ -6,26 +6,47 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
+
 import frc.robot.Robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.*;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 
-public class teleopCamera extends Command {
-  public teleopCamera() {
-    requires(Robot.camera);
+public class teleopElevator extends Command {
+
+  //Variables
+  int currentHeight;
+
+  //Controller Buttons
+  boolean joyA = Robot.oi.main.getAButton();
+  boolean joyB = Robot.oi.main.getBButton();
+  boolean joyX = Robot.oi.main.getXButton();
+
+  public teleopElevator() {
+    requires(Robot.elevator);
   }
 
   @Override
   protected void initialize() {
+    
   }
 
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("X Value", Robot.camera.getTx());
+    
+    if(joyA==true){
+      currentHeight = Robot.elevator.LOW_GOAL;
+    }
+    else if(joyB==true){
+      currentHeight = Robot.elevator.MID_GOAL;
+    }
+    else if(joyX==true){
+      currentHeight = Robot.elevator.HIGH_GOAL;
+    }
+
+    Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
+
   }
 
   @Override
@@ -35,10 +56,10 @@ public class teleopCamera extends Command {
 
   @Override
   protected void end() {
+    Robot.elevator.stop();
   }
 
   @Override
   protected void interrupted() {
-    end();
   }
 }

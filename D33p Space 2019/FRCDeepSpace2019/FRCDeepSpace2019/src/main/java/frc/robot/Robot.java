@@ -9,6 +9,7 @@ package frc.robot;
 
 import frc.robot.commands.autoAlign;
 import frc.robot.subsystems.driveBase;
+import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.pathfinder;
 import frc.robot.subsystems.pneumatics;
@@ -38,7 +39,8 @@ public class Robot extends TimedRobot {
 
 	public static driveBase drive;
 	public static limeLight camera;
-	public static pneumatics solenoid;
+	public static elevatorBase elevator;
+	public static pneumatics intake;
 	public static pathfinder path;
 
 	Command autonomousCommand;
@@ -67,9 +69,10 @@ public class Robot extends TimedRobot {
 		
 		oi = new OI();
 		drive = new driveBase();
-		solenoid = new pneumatics();
+		intake = new pneumatics();
 		camera = new limeLight();
 		path =  new pathfinder();
+		elevator = new elevatorBase();
 
 		//autoSelector = new SendableChooser();
 
@@ -78,7 +81,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(camera);
-		SmartDashboard.putData(solenoid);
+		SmartDashboard.putData(intake);
 	}
 
 	@Override
@@ -155,5 +158,20 @@ public class Robot extends TimedRobot {
 		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
 		motor.configMotionAcceleration(6000, kTimeoutMs);
 		motor.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
+	}
+
+	public static void initMasterElevatorMotor(TalonSRX motor){
+		motor.setNeutralMode(NeutralMode.Brake);
+		motor.configNominalOutputForward(0, kTimeoutMs);
+		motor.configNominalOutputReverse(0, kTimeoutMs);
+		motor.configPeakOutputForward(1, kTimeoutMs);
+		motor.configPeakOutputReverse(-1, kTimeoutMs);
+		motor.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
+		motor.config_kF(0, 0.2, kTimeoutMs);
+		motor.config_kP(0, 0.2, kTimeoutMs);
+		motor.config_kI(0, 0, kTimeoutMs);
+		motor.config_kD(0, 0, kTimeoutMs);
+		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
+		motor.configMotionAcceleration(6000, kTimeoutMs);
 	}
 }
