@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -38,15 +39,15 @@ public class teleopElevator extends Command {
     
     if(joyA==true){
       currentHeight = Robot.elevator.LOW_GOAL;
-      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.LOW;
+      Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
     else if(joyB==true){
       currentHeight = Robot.elevator.MID_GOAL;
-      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.MID;
+      Robot.elevator.elevatorState = elevatorPosition.MID;
     }
     else if(joyX==true){
       currentHeight = Robot.elevator.HIGH_GOAL;
-      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.HIGH;
+      Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
     SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
     Robot.elevator.set(ControlMode.MotionMagic, currentHeight);

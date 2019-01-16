@@ -14,10 +14,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 public class arcadeDrive extends Command {
 
-	//Expo Variables
 	private final double JoyDead = 0.15;
 
 	//Exponential Function
@@ -32,30 +32,35 @@ public class arcadeDrive extends Command {
 		return power;
 	}
 
-	//Controller Input Variables
+
 	double joyYval = Robot.oi.main.getY(Hand.kLeft);
 	double joyXval = Robot.oi.main.getX(Hand.kRight);
 
-	public arcadeDrive() {
+	public arcadeDrive() { // Called when initialize arcadeDrive
 		requires(Robot.drive);
 	}
 
-	protected void initialize() {
-		//Reset Sensors
-		Robot.drive.resetEnc();
-		Robot.drive.gyroReset();
+	protected void initialize() { // Called when first run command
+
 	}
 
-	protected void execute() {
-
-		//Controller Deadzone
+	protected void execute() { // Run periodically as command goes
 		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
+		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
 		
-		//Arcade Drive
-		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval));
+		//Robot.drive.startCompressor();
+
+		//shuffleboard stuff to test 
+		Shuffleboard.getTab("Teleop Tab")
+			.add("Left Position", Robot.drive.getLeftPosition());
+		Shuffleboard.getTab("Teleop Tab")
+			.add("Right Position", Robot.drive.getRightPosition());
+		Shuffleboard.getTab("Teleop Tab")
+			.add("Joystick Left", joyYval);
+			Shuffleboard.getTab("Teleop Tab")
+			.add("Left Position", joyXval);
 		
-		//SmartDashboard 
 		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);
@@ -64,15 +69,11 @@ public class arcadeDrive extends Command {
 		
 	}
 
-	protected boolean isFinished() {
+	protected boolean isFinished() { // Tell if it's finished
 		return false;
 	}
 
-	protected void end() {
-		Robot.drive.stop();
-	}
-
-	protected void interrupted() {
+	protected void interrupted() { // Ends command when interrupted
 		end();
 	}
 }
