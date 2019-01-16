@@ -7,8 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.autoTurn;
-import frc.robot.commands.followPath;
+import frc.robot.commands.autoAlign;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.pathfinder;
@@ -96,8 +95,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 		if(isBlue){}
-		//autonomousCommand = new followPath();
-		//autonomousCommand.start();
+		autonomousCommand = new autoAlign();
+		autonomousCommand.start();
 	}
 
 	@Override
@@ -107,7 +106,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		//autonomousCommand.cancel();
+		autonomousCommand.cancel();
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class limeLight extends Subsystem {
 			table = NetworkTableInstance.getDefault();
 		}
 
-		return table.getTable("limelight").getEntry(key);
+		return table.getTable("limelight-tenton").getEntry(key);
   	}
 
   	@Override

@@ -7,7 +7,11 @@
 
 package frc.robot.commands;
 import frc.robot.Robot;
+
 import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class teleopCamera extends Command {

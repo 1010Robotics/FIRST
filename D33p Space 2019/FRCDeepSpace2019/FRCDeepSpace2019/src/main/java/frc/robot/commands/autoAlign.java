@@ -7,10 +7,24 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.driveBase;
 
 public class autoAlign extends Command {
+
+  //PID Constants
+  private float headingKp = 0.014f;
+  private float moveKp = 0.039f;
+
+  //PID Variables
+  private double headingError;
+  private double moveError;
+  private double headingOutput;
+  private double moveOutput;
+
   public autoAlign() {
     requires(Robot.drive);
     requires(Robot.camera);
@@ -22,6 +36,18 @@ public class autoAlign extends Command {
 
   @Override
   protected void execute() {
+    if(Robot.camera.isTarget() == true){
+      moveError = -12-Robot.camera.getTy();
+      headingError = 1.37-Robot.camera.getTx();
+      headingOutput = headingError * headingKp;
+      moveOutput = moveError * moveKp;
+
+      Robot.drive.set(ControlMode.PercentOutput, moveOutput-headingOutput, moveOutput+headingOutput);
+    }
+    else{
+      Robot.drive.set(ControlMode.PercentOutput, -0.3, 0.3);
+    }
+    
   }
 
   @Override
