@@ -20,14 +20,12 @@ public class followPath extends Command {
     requires(Robot.path);
   }
 
-  // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     Robot.drive.resetEnc();
     Robot.drive.gyroReset();
   }
 
-  // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     double l = Robot.path.leftEnc.calculate(Robot.drive.getLeftPositionRaw());
@@ -42,20 +40,16 @@ public class followPath extends Command {
     Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     return false;
   }
 
-  // Called once after isFinished returns true
   @Override
   protected void end() {
     Robot.drive.stop();
   }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
   @Override
   protected void interrupted() {
   }

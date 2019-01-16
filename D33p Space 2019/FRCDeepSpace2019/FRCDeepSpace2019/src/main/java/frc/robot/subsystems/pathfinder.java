@@ -26,52 +26,51 @@ public class pathfinder extends Subsystem {
 	public EncoderFollower leftEnc;
 	public EncoderFollower rightEnc;
 
-public pathfinder(){
+  public pathfinder(){
 
-  points = new Waypoint[] {
-    new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-    new Waypoint(5, 0, Pathfinder.d2r(-45))                         // Waypoint @ x=-2, y=-2, exit angle=0 radians
-  };
+    points = new Waypoint[] {
+      new Waypoint(0, 0, Pathfinder.d2r(-45)),
+      new Waypoint(5, 0, Pathfinder.d2r(-45)) 
+     };
 
-  config  = new Trajectory.Config(
-    Trajectory.FitMethod.HERMITE_CUBIC,
-    Trajectory.Config.SAMPLES_HIGH, 
-    0.05, 
-    1.7, 
-    2.0, 
-    60.0
-  );
+    config  = new Trajectory.Config(
+      Trajectory.FitMethod.HERMITE_CUBIC,
+      Trajectory.Config.SAMPLES_HIGH, 
+      0.05, 
+      1.7, 
+      2.0, 
+      60.0
+    );
 
-  trajectory = Pathfinder.generate(points, config);
+    trajectory = Pathfinder.generate(points, config);
 
-  modifier = new TankModifier(trajectory).modify(Robot.drive.baseWidth);
+    modifier = new TankModifier(trajectory).modify(Robot.drive.baseWidth);
 
-  leftEnc = new EncoderFollower(modifier.getLeftTrajectory());
-  rightEnc = new EncoderFollower(modifier.getRightTrajectory());
+    leftEnc = new EncoderFollower(modifier.getLeftTrajectory());
+    rightEnc = new EncoderFollower(modifier.getRightTrajectory());
 
-  leftEnc.configureEncoder(Robot.drive.getLeftPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
-  rightEnc.configureEncoder(Robot.drive.getRightPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
+    leftEnc.configureEncoder(Robot.drive.getLeftPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
+    rightEnc.configureEncoder(Robot.drive.getRightPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
 
-  leftEnc.configurePIDVA(
-    0.0, //kP
-    0.0, //kI
-    0.0, //kD
-    1 / Robot.drive.maxVelocity, //Max Velocity Ratio
-    1 //Acceleration Gain
-  );
-  rightEnc.configurePIDVA(
-    0.0, //kP
-    0.0, //kI
-    0.0, ///kD
-    1 / Robot.drive.maxVelocity, //Max Velocity Ratio
-    1 //Acceleration Gain
-  );
+    leftEnc.configurePIDVA(
+      0.0, //kP
+      0.0, //kI
+      0.0, //kD
+      1 / Robot.drive.maxVelocity, //Max Velocity Ratio
+      1 //Acceleration Gain
+    );
+    rightEnc.configurePIDVA(
+      0.0, //kP
+      0.0, //kI
+      0.0, ///kD
+      1 / Robot.drive.maxVelocity, //Max Velocity Ratio
+      1 //Acceleration Gain
+    );
 
-}
+  }
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
   }
+  
 }

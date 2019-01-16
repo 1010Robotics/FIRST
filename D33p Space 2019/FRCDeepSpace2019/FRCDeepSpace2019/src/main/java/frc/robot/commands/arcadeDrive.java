@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class arcadeDrive extends Command {
 
+	//Expo Variables
 	private final double JoyDead = 0.15;
 
 	//Exponential Function
@@ -31,25 +32,30 @@ public class arcadeDrive extends Command {
 		return power;
 	}
 
-
+	//Controller Input Variables
 	double joyYval = Robot.oi.main.getY(Hand.kLeft);
 	double joyXval = Robot.oi.main.getX(Hand.kRight);
 
-	public arcadeDrive() { // Called when initialize arcadeDrive
+	public arcadeDrive() {
 		requires(Robot.drive);
 	}
 
-	protected void initialize() { // Called when first run command
-
+	protected void initialize() {
+		//Reset Sensors
+		Robot.drive.resetEnc();
+		Robot.drive.gyroReset();
 	}
 
-	protected void execute() { // Run periodically as command goes
+	protected void execute() {
+
+		//Controller Deadzone
 		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
 		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
-		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
 		
-		//Robot.drive.startCompressor();
-
+		//Arcade Drive
+		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval));
+		
+		//SmartDashboard 
 		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);
@@ -58,11 +64,15 @@ public class arcadeDrive extends Command {
 		
 	}
 
-	protected boolean isFinished() { // Tell if it's finished
+	protected boolean isFinished() {
 		return false;
 	}
 
-	protected void interrupted() { // Ends command when interrupted
+	protected void end() {
+		Robot.drive.stop();
+	}
+
+	protected void interrupted() {
 		end();
 	}
 }
