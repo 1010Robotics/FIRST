@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class teleopElevator extends Command {
 
@@ -37,14 +38,17 @@ public class teleopElevator extends Command {
     
     if(joyA==true){
       currentHeight = Robot.elevator.LOW_GOAL;
+      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.LOW;
     }
     else if(joyB==true){
       currentHeight = Robot.elevator.MID_GOAL;
+      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.MID;
     }
     else if(joyX==true){
       currentHeight = Robot.elevator.HIGH_GOAL;
+      Robot.elevator.elevatorState = Robot.elevator.elevatorPosition.HIGH;
     }
-
+    SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
     Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
 
   }
