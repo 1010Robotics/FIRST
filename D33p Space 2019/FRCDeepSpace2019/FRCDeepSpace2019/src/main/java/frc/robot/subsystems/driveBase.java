@@ -38,6 +38,7 @@ public class driveBase extends Subsystem implements PIDOutput {
 	private AHRS ahrs;
 
 	private Spark testmotor;
+	private Spark testmotor2;
 
 	public driveBase() {
 
@@ -67,10 +68,12 @@ public class driveBase extends Subsystem implements PIDOutput {
 
 		//Test Spark
 		testmotor = new Spark(9);
-
+		testmotor2 = new Spark(8);
+		
 		//Test Mode Variable Send
 		LiveWindow.addSensor("drivebase", "Gyro", ahrs);
 		LiveWindow.addActuator("drivebase", "Test Motor", testmotor);
+		LiveWindow.addActuator("drivebase", "Test Motor2", testmotor2);
 	}
 
 	public double getLeftPosition() {

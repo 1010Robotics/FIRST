@@ -52,7 +52,7 @@ public class arcadeDrive extends Command {
 		//Robot.drive.startCompressor();
 
 		//shuffleboard stuff to test 
-		Shuffleboard.getTab("Teleop Tab")
+		/*Shuffleboard.getTab("Teleop Tab")
 			.add("Left Position", Robot.drive.getLeftPosition());
 		Shuffleboard.getTab("Teleop Tab")
 			.add("Right Position", Robot.drive.getRightPosition());
@@ -60,7 +60,7 @@ public class arcadeDrive extends Command {
 			.add("Joystick Left", joyYval);
 			Shuffleboard.getTab("Teleop Tab")
 			.add("Left Position", joyXval);
-		
+		*/
 		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 		SmartDashboard.putNumber("Joystick Left", joyYval);

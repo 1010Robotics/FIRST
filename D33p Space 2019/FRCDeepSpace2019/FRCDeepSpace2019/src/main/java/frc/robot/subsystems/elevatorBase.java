@@ -16,13 +16,16 @@ import frc.robot.RobotMap;
 import frc.robot.commands.teleopElevator;
 
 public class elevatorBase extends Subsystem {
-  //constants 
+
+  //Constants 
   public enum elevatorPosition{LOW, MID, HIGH} 
   public elevatorPosition elevatorState = elevatorPosition.LOW;
-  //preset positions
+
+  //Preset Heights
   public int LOW_GOAL = 0;
-  public int MID_GOAL = 1000;
-  public int HIGH_GOAL = 2000;
+  public int MID_GOAL = 10000;
+  public int HIGH_GOAL = 20000;
+
   //Hardware
   private TalonSRX encMotor;
 
@@ -32,9 +35,8 @@ public class elevatorBase extends Subsystem {
     encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value); //declare new Talon
 
     //Initialize Motors
-    Robot.initTalon(encMotor, false); //initialize a new Talon
+    Robot.initTalon(encMotor, true); //initialize a new Talon
     Robot.initMasterElevatorMotor(encMotor); //see Robot.java
-
   }
 
   public void set(ControlMode mode, double output) {
@@ -46,7 +48,11 @@ public class elevatorBase extends Subsystem {
   }
 
   public double getElevatorPosition() {
-    return encMotor.getSensorCollection().getPulseWidthPosition();
+    return encMotor.getSensorCollection().getQuadraturePosition();
+  }
+
+  public double getElevatorOutput() {
+    return encMotor.getMotorOutputPercent();
   }
 
   public void resetEnc() {

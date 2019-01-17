@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(camera);
-		SmartDashboard.putData(intake);
+		//SmartDashboard.putData(intake);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 		if(isBlue){}
 		autonomousCommand = new autoAlign();
-		autonomousCommand.start();
+		//autonomousCommand.start();
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		autonomousCommand.cancel();
+		//autonomousCommand.cancel();
 	}
 
 	@Override
@@ -173,5 +173,6 @@ public class Robot extends TimedRobot {
 		motor.config_kD(0, 0, kTimeoutMs);
 		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
 		motor.configMotionAcceleration(6000, kTimeoutMs);
+		motor.setSelectedSensorPosition(0);
 	}
 }

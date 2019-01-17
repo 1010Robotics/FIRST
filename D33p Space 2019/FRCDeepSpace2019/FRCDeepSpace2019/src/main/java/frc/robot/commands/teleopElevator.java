@@ -10,20 +10,43 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class teleopElevator extends Command {
 
-  //Variables
-  int currentHeight;
+  //PID Constants
+  private float kp = 0.00025f; //0.0003 and 0.00025
+  private float ki = 0.0f;
+  private float kd = 0.0f;
 
-  //Controller Buttons
-  boolean joyA = Robot.oi.main.getAButton();
-  boolean joyB = Robot.oi.main.getBButton();
-  boolean joyX = Robot.oi.main.getXButton();
+  //PID  Variables
+  private double target;
+  private double error;
+  private double errorDiff;
+  private double errorSum;
+  private double errorLast;
+  private double p;
+  private double i;
+  private double d;
+  private double outputPID;
+
+  //double speed;
+  //ShuffleboardTab tab = Shuffleboard.getTab("elevator");
+  /*  NetworkTableEntry motorOutput = tab
+      .add("Output", 0)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", -1, "max", 1))
+      .getEntry();
+*/
 
   public teleopElevator() {
     requires(Robot.elevator);
@@ -31,27 +54,44 @@ public class teleopElevator extends Command {
 
   @Override
   protected void initialize() {
-    
+    Robot.elevator.resetEnc();
   }
 
   @Override
   protected void execute() {
-    
-    if(joyA==true){
-      currentHeight = Robot.elevator.LOW_GOAL;
+
+    if(Robot.oi.main.getAButton()){
+      target = Robot.elevator.LOW_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
-    else if(joyB==true){
-      currentHeight = Robot.elevator.MID_GOAL;
+    else if(Robot.oi.main.getBButton()){
+      target = Robot.elevator.MID_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.MID;
     }
-    else if(joyX==true){
-      currentHeight = Robot.elevator.HIGH_GOAL;
+    else if(Robot.oi.main.getYButton()){
+      target = Robot.elevator.HIGH_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
+    
+    SmartDashboard.putNumber("Elevator Pos", Robot.elevator.getElevatorPosition());
+    SmartDashboard.putNumber("Elevator Speed", Robot.elevator.getElevatorOutput());
     SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
-    Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
 
+    error = target - Robot.elevator.getElevatorPosition();
+    errorLast = error;
+    errorDiff = error - errorLast;
+    errorSum += error;
+
+    p = kp * error;
+    i = ki * errorSum;
+    d = kd * errorDiff;
+    outputPID  = p + i + d;
+
+    if(outputPID > 1.0){outputPID = 1;}
+    if(outputPID < -1.0){outputPID = -1;}
+
+    Robot.elevator.set(ControlMode.PercentOutput, outputPID);
+    //Robot.elevator.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
