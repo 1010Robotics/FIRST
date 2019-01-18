@@ -15,47 +15,47 @@ public class limeLight extends Subsystem {
 
 	private static NetworkTableInstance table = null;
 
-	public static enum LightMode {
+	public enum LightMode {
 		eOn, eOff, eBlink
 	}
 
-	public static enum CameraMode {
+	public enum CameraMode {
 		eVision, eDriver
 	}
 
-	public static boolean isTarget() {
+	public boolean isTarget() {
 		return getValue("tv").getDouble(0) == 1;
 	}
 
-	public static double getTx() {
+	public double getTx() {
 		return getValue("tx").getDouble(0.00);
 	}
 
-	public static double getTy() {
+	public double getTy() {
 		return getValue("ty").getDouble(0.00);
 	}
 
-	public static double getTa() {
+	public double getTa() {
 		return getValue("ta").getDouble(0.00);
 	}
 
-	public static double getTs() {
+	public double getTs() {
 		return getValue("ts").getDouble(0.00);
 	}
 
-	public static double getTl() {
+	public double getTl() {
 		return getValue("tl").getDouble(0.00);
 	}
 
-	public static void setLedMode(LightMode mode) {
+	public void setLedMode(LightMode mode) {
 		getValue("ledMode").setNumber(mode.ordinal());
 	}
 
-	public static void setCameraMode(CameraMode mode) {
+	public void setCameraMode(CameraMode mode) {
 		getValue("camMode").setNumber(mode.ordinal());
 	}
 
-	public static void setPipeline(int number) {
+	public void setPipeline(int number) {
 		getValue("pipeline").setNumber(number);
 	}
 

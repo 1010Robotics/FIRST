@@ -11,13 +11,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.teleopElevator;
 
 public class elevatorBase extends Subsystem {
 
-  //Constants 
+  //Variables 
   public enum elevatorPosition{LOW, MID, HIGH} 
   public elevatorPosition elevatorState = elevatorPosition.LOW;
 
@@ -26,41 +27,48 @@ public class elevatorBase extends Subsystem {
   public int MID_GOAL = 10000;
   public int HIGH_GOAL = 20000;
 
-  //Hardware
+  //Motors
   private TalonSRX encMotor;
 
   public elevatorBase() {
 
-    //Create Objects
-    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value); //declare new Talon
+    //Define Motors
+    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value);
 
     //Initialize Motors
-    Robot.initTalon(encMotor, true); //initialize a new Talon
-    Robot.initMasterElevatorMotor(encMotor); //see Robot.java
-    encMotor.setSensorPhase(true);
-    
+    Robot.initTalon(encMotor, true);
+
+    //Set Closed Control Loop and Motion Magic Configuration
+    Robot.initMasterElevatorMotor(encMotor);
+  
   }
 
+  //Set Motors
   public void set(ControlMode mode, double output) {
     encMotor.set(mode, output);
   }
 
+  //Stop Motors
   public void stop() {
     encMotor.set(ControlMode.PercentOutput, 0);
   }
 
+  //Get Current Position in Encoder Units
   public double getElevatorPosition() {
     return encMotor.getSensorCollection().getQuadraturePosition();
   }
 
+  //Get Current Output in Percent (-1 to 1)
   public double getElevatorOutput() {
     return encMotor.getMotorOutputPercent();
   }
 
+  //Reset Encoder
   public void resetEnc() {
     encMotor.setSelectedSensorPosition(0);
   }
 
+  //Default Command
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new teleopElevator());

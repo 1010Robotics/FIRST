@@ -14,39 +14,54 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 public class pneumatics extends Subsystem {
+
+  //Variables
   public enum solenoidState{OPEN, CLOSED, OFF}
   public solenoidState actuatorState = solenoidState.OFF;
+
+  //Solenoids
   public DoubleSolenoid diskIntake;
+
+  //Compressor
   public Compressor compressor;
 
   public pneumatics(){
+    //Define Solenoid
     diskIntake = new DoubleSolenoid(0, 1);
-    compressor = new Compressor();
+    //Define Compressor
+    compressor = new Compressor(21);
   }
+
+  //Extend Solenoid
   public void extendSolenoid(){
     diskIntake.set(DoubleSolenoid.Value.kForward);
     actuatorState =  solenoidState.CLOSED;
   }
 
+  //Retract Solenoid
   public void retractSolenoid(){
     diskIntake.set(DoubleSolenoid.Value.kReverse);
     actuatorState = solenoidState.OPEN;
   }
 
+  //Disable Solenoid
   public void disableSolenoid(){
     diskIntake.set(DoubleSolenoid.Value.kOff);
     actuatorState = solenoidState.OFF;
   }
 
+  //Start Compressor
   public void startCompressor(){
     compressor.setClosedLoopControl(true);
   }
 
+  //Stop Compressor
   public void stopCompressor(){
     compressor.setClosedLoopControl(false);
     compressor.stop();
   }
 
+  //Default Command
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new teleopSolenoid());

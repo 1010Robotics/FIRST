@@ -7,12 +7,15 @@
 
 package frc.robot;
 
-import frc.robot.commands.auto.autoTurn;
+import frc.robot.commands.auto.autoAlign;
+
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
+import frc.robot.subsystems.intakeBase;
 import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.pathfinder;
 import frc.robot.subsystems.pneumatics;
+import frc.robot.subsystems.wristBase;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,20 +31,25 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class Robot extends TimedRobot {
 
-	public static OI oi;
-
+	//Auto Selector
 	DriverStation.Alliance colour;
 	private boolean isBlue;
 
+	//Create Objects
+	public static OI oi;
 	public static driveBase drive;
 	public static limeLight camera;
 	public static elevatorBase elevator;
-	public static pneumatics intake;
+	public static pneumatics solenoid;
 	public static pathfinder path;
+	public static wristBase wrist;
+	public static intakeBase intake;
 
+	//Create Commands
 	Command autonomousCommand;
 	Command arcadeDrive;
 	Command teleopSolenoid;
+
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
 
@@ -61,23 +69,26 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
-		//create new objects
-		
+
+		//Define Objects
 		oi = new OI();
 		drive = new driveBase();
-		intake = new pneumatics();
+		solenoid = new pneumatics();
 		camera = new limeLight();
 		path =  new pathfinder();
 		elevator = new elevatorBase();
+		wrist = new wristBase();
+		intake = new intakeBase();
 
+		//Auto Selector
 		//autoSelector = new SendableChooser();
-
 		colour = DriverStation.getInstance().getAlliance();
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 
+		//SmartDashboard Subsystem 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(camera);
-		//SmartDashboard.putData(intake);
+		SmartDashboard.putData(solenoid);
 	}
 
 	@Override
@@ -94,7 +105,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 		if(isBlue){}
-		autonomousCommand = new autoTurn(90);
+		//Set Autonomous Command
+		autonomousCommand = new autoAlign();
 		autonomousCommand.start();
 	}
 
@@ -105,19 +117,17 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		//Stop Autonomous Command
 		autonomousCommand.cancel();
 	}
 
 	@Override
 	public void teleopPeriodic() {
-
 		Scheduler.getInstance().run();
-
 	}
 
 	@Override  
 	public void testPeriodic() {
-		
 	}
 	
 	public static void initTalon(TalonSRX motor, boolean invert) {
@@ -161,6 +171,8 @@ public class Robot extends TimedRobot {
 	}
 
 	public static void initMasterElevatorMotor(TalonSRX motor){
+		//Set Sensor Phase
+		motor.setSensorPhase(true);
 		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Brake);
 		//Factory default hardware to prevent unexpected behavior
