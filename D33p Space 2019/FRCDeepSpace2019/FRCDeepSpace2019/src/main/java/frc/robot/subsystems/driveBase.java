@@ -84,6 +84,14 @@ public class driveBase extends Subsystem implements PIDOutput {
 		return ((rightMotor.getSensorCollection().getPulseWidthPosition()/talonTPR)*1.57);
 	}
 
+	public double feetToTics(double value){
+		return ((value/1.57)*talonTPR);
+	}
+
+	public double ticsToFeet(double value){
+		return ((value/talonTPR)*1.57);
+	}
+
 	public int getLeftPositionRaw(){
 		return -(leftMotor.getSensorCollection().getPulseWidthPosition());
 	}

@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -37,8 +39,8 @@ public class autoAlign extends Command {
   protected void execute() {
 
     if(Robot.camera.isTarget() == true) {
-      moveError = -12-Robot.camera.getTy();
-      headingError = 1.37-Robot.camera.getTx();
+      moveError = -12 - Robot.camera.getTy();
+      headingError = 1.37 - Robot.camera.getTx();
       headingOutput = headingError * headingKp;
       moveOutput = moveError * moveKp;
 
@@ -48,6 +50,8 @@ public class autoAlign extends Command {
       Robot.drive.set(ControlMode.PercentOutput, -0.3, 0.3);
     }
 
+    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    catch (Exception e) { /* Do Nothing */ } 
   }
 
   @Override

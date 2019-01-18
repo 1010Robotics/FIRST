@@ -37,6 +37,8 @@ public class elevatorBase extends Subsystem {
     //Initialize Motors
     Robot.initTalon(encMotor, true); //initialize a new Talon
     Robot.initMasterElevatorMotor(encMotor); //see Robot.java
+    encMotor.setSensorPhase(true);
+    
   }
 
   public void set(ControlMode mode, double output) {

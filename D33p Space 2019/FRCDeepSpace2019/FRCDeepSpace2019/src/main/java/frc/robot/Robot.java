@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.autoAlign;
+import frc.robot.commands.autoTurn;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.limeLight;
@@ -16,6 +16,7 @@ import frc.robot.subsystems.pneumatics;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -26,11 +27,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class Robot extends TimedRobot {
-
-	//Constants
-	public static final int kSlotIdx = 0; //Which PID Slot to pull gains from (0,1,2,3)
-	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
-	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for c<onfirmation
 
 	public static OI oi;
 
@@ -98,8 +94,8 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 		if(isBlue){}
-		autonomousCommand = new autoAlign();
-		//autonomousCommand.start();
+		autonomousCommand = new autoTurn(90);
+		autonomousCommand.start();
 	}
 
 	@Override
@@ -109,7 +105,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		//autonomousCommand.cancel();
+		autonomousCommand.cancel();
 	}
 
 	@Override
@@ -126,53 +122,67 @@ public class Robot extends TimedRobot {
 	
 	public static void initTalon(TalonSRX motor, boolean invert) {
 		motor.setInverted(invert);
-		motor.setNeutralMode(NeutralMode.Coast);
+		motor.setNeutralMode(NeutralMode.Brake);
 		motor.neutralOutput();
-		motor.setSensorPhase(false);
 		motor.configNominalOutputForward(0.0, 0);
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
-		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
 	public static void initVictor(VictorSPX motor, boolean invert) {
 		motor.setInverted(invert);
-		motor.setNeutralMode(NeutralMode.Coast);
+		motor.setNeutralMode(NeutralMode.Brake);
 		motor.neutralOutput();
-		motor.setSensorPhase(false);
 		motor.configNominalOutputForward(0.0, 0);
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
 	}
 
 	public static void initMasterDriveMotor(TalonSRX motor){
+		motor.setSensorPhase(true);
+		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Brake);
-		motor.configNominalOutputForward(0, kTimeoutMs);
-		motor.configNominalOutputReverse(0, kTimeoutMs);
-		motor.configPeakOutputForward(1, kTimeoutMs);
-		motor.configPeakOutputReverse(-1, kTimeoutMs);
-		motor.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		motor.config_kF(0, 0.2, kTimeoutMs);
-		motor.config_kP(0, 0.2, kTimeoutMs);
-		motor.config_kI(0, 0, kTimeoutMs);
-		motor.config_kD(0, 0, kTimeoutMs);
-		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
-		motor.configMotionAcceleration(6000, kTimeoutMs);
-		motor.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
+		//Output Settings
+		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		//PID Gain Settings
+		motor.selectProfileSlot(Constants.kDriveSlotIdx, Constants.kPIDLoopIdx);
+		motor.config_kF(Constants.kDriveSlotIdx, Constants.kDriveGains.kF, Constants.kTimeoutMs);
+		motor.config_kP(Constants.kDriveSlotIdx, Constants.kDriveGains.kP, Constants.kTimeoutMs);
+		motor.config_kI(Constants.kDriveSlotIdx, Constants.kDriveGains.kI, Constants.kTimeoutMs);
+		motor.config_kD(Constants.kDriveSlotIdx, Constants.kDriveGains.kD, Constants.kTimeoutMs);
+		//Motion Magic Max Velocity and Acceleration
+		motor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
+		motor.configMotionAcceleration(6000, Constants.kTimeoutMs);
+		//Reset Encoder
+		motor.setSelectedSensorPosition(0);
 	}
 
 	public static void initMasterElevatorMotor(TalonSRX motor){
+		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Brake);
-		motor.configNominalOutputForward(0, kTimeoutMs);
-		motor.configNominalOutputReverse(0, kTimeoutMs);
-		motor.configPeakOutputForward(1, kTimeoutMs);
-		motor.configPeakOutputReverse(-1, kTimeoutMs);
-		motor.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		motor.config_kF(0, 0.2, kTimeoutMs);
-		motor.config_kP(0, 0.2, kTimeoutMs);
-		motor.config_kI(0, 0, kTimeoutMs);
-		motor.config_kD(0, 0, kTimeoutMs);
-		motor.configMotionCruiseVelocity(15000, kTimeoutMs);
-		motor.configMotionAcceleration(6000, kTimeoutMs);
+		//Factory default hardware to prevent unexpected behavior
+		motor.configFactoryDefault();
+		//Set relevant frame periods to be at least as fast as periodic rate
+		motor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+		motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+		//Output Settings
+		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		//PID Gain Settings
+		motor.selectProfileSlot(Constants.kElevatorSlotIdx, Constants.kPIDLoopIdx);
+		motor.config_kF(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kF, Constants.kTimeoutMs);
+		motor.config_kP(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kP, Constants.kTimeoutMs);
+		motor.config_kI(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kI, Constants.kTimeoutMs);
+		motor.config_kD(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kD, Constants.kTimeoutMs);
+		//Motion Magic Max Velocity and Acceleration
+		motor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
+		motor.configMotionAcceleration(6000, Constants.kTimeoutMs);
+		//Reset Encoder
 		motor.setSelectedSensorPosition(0);
 	}
 }

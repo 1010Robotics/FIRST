@@ -69,7 +69,6 @@ public class limeLight extends Subsystem {
 
   	@Override
  	 public void initDefaultCommand() {
-  	  //setDefaultCommand(new teleopCamera());
  	}
   
 }

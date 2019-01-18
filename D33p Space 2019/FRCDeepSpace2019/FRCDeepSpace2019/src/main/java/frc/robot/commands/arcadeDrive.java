@@ -9,71 +9,80 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 public class arcadeDrive extends Command {
 
-	private final double JoyDead = 0.15;
+	//Exponential Variables
+	private final double JoyDead = 0.1;
+	private final double DriveExp = 1.4;
+	private final double MotorMin = 0.01;
 
 	//Exponential Function
-	float exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
+	private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
 		double joySign;
 		double joyMax = 1 - joyDead;
 		double joyLive = Math.abs(joystickVal) - joyDead;
 		if (joystickVal > 0) {joySign = 1;}
 		else if (joystickVal < 0) {joySign = -1;}
 		else {joySign = 0;}
-		float power = (float) (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
+		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
+		if(Double.isNaN(power)){power = 0;}
+		try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    	catch (Exception e) { /*Delay*/ }
 		return power;
 	}
 
+	//Joystick OI Variables
+	private double correction = 0;
+	private double joyYval;
+	private double joyXval;
+	private double yOutput;
+	private double xOutput;
 
-	double joyYval = Robot.oi.main.getY(Hand.kLeft);
-	double joyXval = Robot.oi.main.getX(Hand.kRight);
-
-	public arcadeDrive() { // Called when initialize arcadeDrive
+	public arcadeDrive() {
 		requires(Robot.drive);
 	}
 
-	protected void initialize() { // Called when first run command
+	protected void initialize() {
 
 	}
 
-	protected void execute() { // Run periodically as command goes
-		joyYval = (Math.abs(Robot.oi.main.getY(Hand.kLeft)) > JoyDead ? Robot.oi.main.getY(Hand.kLeft) : 0);
-		joyXval = (Math.abs(Robot.oi.main.getX(Hand.kRight)) > JoyDead ? Robot.oi.main.getX(Hand.kRight) : 0);
-		Robot.drive.set(ControlMode.PercentOutput, (joyYval + joyXval), (joyYval - joyXval)); //arcade drive, mode is percent output
-		
-		//Robot.drive.startCompressor();
+	protected void execute() {
 
-		//shuffleboard stuff to test 
-		/*Shuffleboard.getTab("Teleop Tab")
-			.add("Left Position", Robot.drive.getLeftPosition());
-		Shuffleboard.getTab("Teleop Tab")
-			.add("Right Position", Robot.drive.getRightPosition());
-		Shuffleboard.getTab("Teleop Tab")
-			.add("Joystick Left", joyYval);
-			Shuffleboard.getTab("Teleop Tab")
-			.add("Left Position", joyXval);
-		*/
+		joyYval = Robot.oi.main.getY(Hand.kLeft);
+		joyXval = Robot.oi.main.getX(Hand.kRight);
+
+		yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
+		xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
+
+		Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
+
 		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
-		SmartDashboard.putNumber("Joystick Left", joyYval);
-		SmartDashboard.putNumber("Joystick Right", joyXval);
+		SmartDashboard.putNumber("Joystick Y", yOutput);
+		SmartDashboard.putNumber("Joystick X", xOutput);
 		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
-		
+
+		try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    	catch (Exception e) { /*HAHA YOU GOT CAUGHT*/ }
 	}
 
-	protected boolean isFinished() { // Tell if it's finished
+	protected boolean isFinished() {
 		return false;
 	}
 
-	protected void interrupted() { // Ends command when interrupted
+	protected void end() {
+		Robot.drive.stop();
+	}
+
+	protected void interrupted() {
 		end();
 	}
 }

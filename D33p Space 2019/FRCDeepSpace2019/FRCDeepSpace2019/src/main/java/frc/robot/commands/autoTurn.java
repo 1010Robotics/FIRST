@@ -7,16 +7,14 @@
 
 package frc.robot.commands;
 
+import java.util.concurrent.TimeUnit;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class autoTurn extends Command {
-
-  //PID Constants
-  private float kp = 0.007643f;
-  private float ki = 0.0f;
-  private float kd = 2.50463f;
 
   //PID  Variables
   private double angle;
@@ -31,7 +29,7 @@ public class autoTurn extends Command {
 
   public autoTurn(double angle) {
     requires(Robot.drive);
-    this.angle =  angle;
+    this.angle = angle;
   }
 
   @Override
@@ -50,9 +48,9 @@ public class autoTurn extends Command {
     errorDiff = error - errorLast;
     errorSum += error;
 
-    p = kp * error;
-    i = ki * errorSum;
-    d = kd * errorDiff;
+    p = Constants.kTurnGains.kP * error;
+    i = Constants.kTurnGains.kI * errorSum;
+    d = Constants.kTurnGains.kD * errorDiff;
     outputPID  = p + i + d;
 
     if(outputPID > 1.0){outputPID = 1;}
@@ -60,6 +58,8 @@ public class autoTurn extends Command {
 
     Robot.drive.pidWrite(outputPID);
 
+    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    catch (Exception e) { /* Do Nothing */ }
   }
 
   @Override
