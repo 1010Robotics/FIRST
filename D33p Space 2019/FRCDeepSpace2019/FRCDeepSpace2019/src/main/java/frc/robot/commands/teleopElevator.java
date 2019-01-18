@@ -11,6 +11,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -75,9 +76,11 @@ public class teleopElevator extends Command {
     //SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
     if(DriverStation.getInstance().isTest()){
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
+    }else{
+      Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
     }
-    //Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
-    
+    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    	catch (Exception e) { /*Delay*/ }
   }
 
   @Override
