@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.autoTurn;
+import frc.robot.commands.auto.autoTurn;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.limeLight;

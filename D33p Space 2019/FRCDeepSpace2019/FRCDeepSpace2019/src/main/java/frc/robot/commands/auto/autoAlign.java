@@ -5,39 +5,54 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
+
+import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import frc.robot.Robot;
-import jaci.pathfinder.Pathfinder;
 
-public class followPath extends Command {
+public class autoAlign extends Command {
 
-  public followPath() {
+  //PID Constants
+  private float headingKp = 0.014f;
+  private float moveKp = 0.039f;
+
+  //PID Variables
+  private double headingError;
+  private double moveError;
+  private double headingOutput;
+  private double moveOutput;
+
+  public autoAlign() {
     requires(Robot.drive);
-    requires(Robot.path);
+    requires(Robot.camera);
   }
 
   @Override
   protected void initialize() {
-    Robot.drive.resetEnc();
-    Robot.drive.gyroReset();
   }
 
   @Override
   protected void execute() {
-    double l = Robot.path.leftEnc.calculate(Robot.drive.getLeftPositionRaw());
-    double r = Robot.path.rightEnc.calculate(Robot.drive.getRightPositionRaw());
 
-    double gyro_heading = Robot.drive.getGyroPosition();    // Assuming the gyro is giving a value in degrees
-    double desired_heading = Pathfinder.r2d(Robot.path.leftEnc.getHeading());  // Should also be in degrees
+    if(Robot.camera.isTarget() == true) {
+      moveError = -12 - Robot.camera.getTy();
+      headingError = 1.37 - Robot.camera.getTx();
+      headingOutput = headingError * headingKp;
+      moveOutput = moveError * moveKp;
 
-    double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-    double turn = 0.8 * (-1.0/80.0) * angleDifference;
+      Robot.drive.set(ControlMode.PercentOutput, moveOutput-headingOutput, moveOutput+headingOutput);
+    }
+    else {
+      Robot.drive.set(ControlMode.PercentOutput, -0.3, 0.3);
+    }
 
-    Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);
+    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    catch (Exception e) { /* Do Nothing */ } 
   }
 
   @Override
