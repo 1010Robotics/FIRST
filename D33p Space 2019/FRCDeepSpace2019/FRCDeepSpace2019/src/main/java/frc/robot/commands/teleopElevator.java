@@ -10,16 +10,31 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class teleopElevator extends Command {
 
-  private double target;
+  //Variables
+  int currentHeight;
+  private ShuffleboardLayout elevatorPresetButtons;
+  private NetworkTableEntry elevatorMotorControl;
+  public ShuffleboardTab testTab = Shuffleboard.getTab("Test Tab");
+  //Controller Buttons
+  boolean joyA = Robot.oi.main.getAButton();
+  boolean joyB = Robot.oi.main.getBButton();
+  boolean joyX = Robot.oi.main.getXButton();
 
   public teleopElevator() {
     requires(Robot.elevator);
@@ -27,34 +42,42 @@ public class teleopElevator extends Command {
 
   @Override
   protected void initialize() {
-    Robot.elevator.resetEnc();
-    target = Robot.elevator.LOW_GOAL;
+    testTab = Shuffleboard.getTab("Test Tab");
+    
+    elevatorMotorControl = testTab
+    .add("Elevator Motor", 0)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("MIN", -1, "MAX", 1))
+    .getEntry();
+
+    elevatorPresetButtons = testTab
+    .getLayout("Current Preset", BuiltInLayouts.kList);
+    elevatorPresetButtons.add("test_1", false);
+    elevatorPresetButtons.add("test_2", true);
   }
 
   @Override
   protected void execute() {
 
-    if(Robot.oi.main.getAButton()){
-      target = Robot.elevator.LOW_GOAL;
+
+    if(joyA==true){
+      currentHeight = Robot.elevator.LOW_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
-    else if(Robot.oi.main.getBButton()){
-      target = Robot.elevator.MID_GOAL;
+    else if(joyB==true){
+      currentHeight = Robot.elevator.MID_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.MID;
     }
-    else if(Robot.oi.main.getYButton()){
-      target = Robot.elevator.HIGH_GOAL;
+    else if(joyX==true){
+      currentHeight = Robot.elevator.HIGH_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
+    //SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
+    if(DriverStation.getInstance().isTest()){
+      Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
+    }
+    //Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
     
-    SmartDashboard.putNumber("Elevator Pos", Robot.elevator.getElevatorPosition());
-    SmartDashboard.putNumber("Elevator Speed", Robot.elevator.getElevatorOutput());
-    SmartDashboard.putString("Elevator State", Robot.elevator.elevatorState.toString());
-
-    Robot.elevator.set(ControlMode.MotionMagic, target);   
-
-		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    catch (Exception e) { /* Do Nothing */ }
   }
 
   @Override
