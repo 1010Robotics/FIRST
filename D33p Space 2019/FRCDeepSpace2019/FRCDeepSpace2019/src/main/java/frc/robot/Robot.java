@@ -7,8 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.auto.autoAlign;
-
+import frc.robot.commands.auto.followPath;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.intakeBase;
@@ -23,6 +22,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 	Command autonomousCommand;
 	Command arcadeDrive;
 	Command teleopSolenoid;
+	Command dashboardCommand;
 
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
@@ -69,6 +70,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+
+		//Define Camera
+		CameraServer driverMemeCamera = CameraServer.getInstance();
+		driverMemeCamera.startAutomaticCapture();
 
 		//Define Objects
 		oi = new OI();
@@ -93,7 +98,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-
 	}
 
 	@Override
@@ -104,9 +108,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
-		if(isBlue){}
+	if(isBlue){/*run a command*/}
 		//Set Autonomous Command
-		autonomousCommand = new autoAlign();
+		autonomousCommand = new followPath();
 		autonomousCommand.start();
 	}
 
@@ -118,7 +122,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		//Stop Autonomous Command
-		autonomousCommand.cancel();
+		//autonomousCommand.cancel();
 	}
 
 	@Override

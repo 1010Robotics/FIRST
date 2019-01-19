@@ -14,7 +14,10 @@ public class Constants {
     public static final int kElevatorSlotIdx = 1; //Which PID Slot to pull gains from (0,1,2,3)
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
-
+   
+    //PID Wrist Constants
+    public static Gains kWristGains = new Gains(0.42, 0.0, 0.0, 0.2);
+    
     //PID Elevator Constants
     public static Gains kElevatorGains = new Gains(0.42, 0.0, 0.0, 0.2);
 

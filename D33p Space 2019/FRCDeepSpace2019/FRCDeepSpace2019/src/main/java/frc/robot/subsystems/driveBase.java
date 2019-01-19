@@ -106,12 +106,12 @@ public class driveBase extends Subsystem {
 
 	//Get Left Encoder in Encoder Tics
 	public int getLeftPositionRaw(){
-		return -(leftMotor.getSensorCollection().getPulseWidthPosition());
+		return -(leftMotor.getSensorCollection().getQuadraturePosition());
 	}
 
 	//Get Right Encoder in Encoder Tics
 	public int getRightPositionRaw(){
-		return rightMotor.getSensorCollection().getPulseWidthPosition();
+		return rightMotor.getSensorCollection().getQuadraturePosition();
 	}
 
 	//Reset Encoders

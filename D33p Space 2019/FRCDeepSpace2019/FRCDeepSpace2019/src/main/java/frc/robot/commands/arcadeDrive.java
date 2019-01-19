@@ -8,6 +8,8 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.limeLight.CameraMode;
+import frc.robot.subsystems.limeLight.LightMode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +23,17 @@ public class arcadeDrive extends Command {
 
 	//Exponential Variables
 	private final double JoyDead = 0.1;
-	private final double DriveExp = 1.4;
+	private final double DriveExp = 1.5;
 	private final double MotorMin = 0.01;
+
+	//Align Code
+	private float headingKp = 0.014f;
+	private float moveKp = 0.039f;  
+	private double headingError;
+	private double moveError;
+	private double headingOutput;
+	private double moveOutput;
+
 
 	//Exponential Function
 	private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
@@ -48,6 +59,7 @@ public class arcadeDrive extends Command {
 
 	public arcadeDrive() {
 		requires(Robot.drive);
+		requires(Robot.camera);
 	}
 
 	protected void initialize() {
@@ -56,19 +68,32 @@ public class arcadeDrive extends Command {
 
 	protected void execute() {
 
-		joyYval = Robot.oi.main.getY(Hand.kLeft);
-		joyXval = Robot.oi.main.getX(Hand.kRight);
+		Robot.camera.setLedMode(LightMode.eOn);
+    	Robot.camera.setCameraMode(CameraMode.eVision);
 
-		yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
-		xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
+		if(Robot.oi.main.getXButton()) {
+			moveError = -12 - Robot.camera.getTy();
+			headingError = 1.37 - Robot.camera.getTx();
+			headingOutput = headingError * headingKp;
+			moveOutput = moveError * moveKp;
+	  
+			Robot.drive.set(ControlMode.PercentOutput, moveOutput-headingOutput, moveOutput+headingOutput);
+		}
+		else {
+			joyYval = Robot.oi.main.getY(Hand.kLeft);
+			joyXval = Robot.oi.main.getX(Hand.kRight);
 
-		Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
+			yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
+			xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
 
-		SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
-		SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
-		SmartDashboard.putNumber("Joystick Y", yOutput);
-		SmartDashboard.putNumber("Joystick X", xOutput);
-		SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
+
+			SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
+			SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
+			SmartDashboard.putNumber("Joystick Y", yOutput);
+			SmartDashboard.putNumber("Joystick X", xOutput);
+			SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+		}
 
 		try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*HAHA YOU GOT CAUGHT*/ }

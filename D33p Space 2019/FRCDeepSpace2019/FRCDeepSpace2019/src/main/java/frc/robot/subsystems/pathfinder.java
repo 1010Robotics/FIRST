@@ -29,15 +29,15 @@ public class pathfinder extends Subsystem {
   public pathfinder(){
 
     points = new Waypoint[] {
-      new Waypoint(0, 0, Pathfinder.d2r(-45)),
-      new Waypoint(5, 0, Pathfinder.d2r(-45)) 
+      new Waypoint(0, 0, 0),
+      new Waypoint(5, 4, Pathfinder.d2r(-45)) 
      };
 
     config  = new Trajectory.Config(
       Trajectory.FitMethod.HERMITE_CUBIC,
       Trajectory.Config.SAMPLES_HIGH, 
       0.05, 
-      1.7, 
+      1.7,//2.8 
       2.0, 
       60.0
     );
@@ -53,17 +53,17 @@ public class pathfinder extends Subsystem {
     rightEnc.configureEncoder(Robot.drive.getRightPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
 
     leftEnc.configurePIDVA(
-      0.0, //kP
+      5.0, //kP
       0.0, //kI
       0.0, //kD
-      1 / Robot.drive.maxVelocity, //Max Velocity Ratio
+      1 / 1.7, //Max Velocity Ratio
       1 //Acceleration Gain
     );
     rightEnc.configurePIDVA(
-      0.0, //kP
+      5.0, //kP
       0.0, //kI
       0.0, ///kD
-      1 / Robot.drive.maxVelocity, //Max Velocity Ratio
+      1 / 1.7, //Max Velocity Ratio
       1 //Acceleration Gain
     );
 

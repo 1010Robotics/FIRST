@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.limeLight.CameraMode;
+import frc.robot.subsystems.limeLight.LightMode;
 
 public class autoAlign extends Command {
 
@@ -38,6 +40,9 @@ public class autoAlign extends Command {
 
   @Override
   protected void execute() {
+
+    Robot.camera.setLedMode(LightMode.eOn);
+    Robot.camera.setCameraMode(CameraMode.eVision);
 
     if(Robot.camera.isTarget() == true) {
       moveError = -12 - Robot.camera.getTy();

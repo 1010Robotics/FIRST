@@ -63,7 +63,7 @@ public class elevatorBase extends Subsystem {
     return encMotor.getMotorOutputPercent();
   }
 
-  //Reset Encoder
+  //Reset Encoder on the Elevator
   public void resetEnc() {
     encMotor.setSelectedSensorPosition(0);
   }

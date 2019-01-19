@@ -37,7 +37,7 @@ public class followPath extends Command {
     double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
     double turn = 0.8 * (-1.0/80.0) * angleDifference;
 
-    Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);
+    Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);//switch +-
   }
 
   @Override
