@@ -38,19 +38,19 @@ public class teleopElevator extends Command {
   private NetworkTableEntry  elevatorMotorControl = testTab
   .add("Elevator Motor", 0)
   .withWidget(BuiltInWidgets.kNumberSlider)
-  .withProperties(Map.of("MIN", -1, "MAX", 1))
+  //.withProperties(Map.of("MIN", -1, "MAX", 1))
   .getEntry();
 
   private NetworkTableEntry elevatorPercentOutput = teleopTab
   .add("Elevator % Output", 0)
   .withWidget(BuiltInWidgets.kDial)
-  .withProperties(Map.of("MIN", -1, "MAX", 1))
+  //.withProperties(Map.of("MIN", -1, "MAX", 1))
   .getEntry();
 
   private NetworkTableEntry elevatorPos = teleopTab
   .add("Elevator Position", 0)
   .withWidget(BuiltInWidgets.kNumberBar)
-  .withProperties(Map.of("MIN", 0, "MAX", 20000))
+  //.withProperties(Map.of("MIN", 0, "MAX", 20000))
   .getEntry();
 
   private NetworkTableEntry elevatorString = teleopTab
