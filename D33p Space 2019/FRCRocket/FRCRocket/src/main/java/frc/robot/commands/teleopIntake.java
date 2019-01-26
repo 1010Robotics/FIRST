@@ -9,60 +9,55 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 
-import java.util.concurrent.TimeUnit;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
-public class teleopWrist extends Command {
+public class teleopIntake extends Command {
 
-  //Variables
-  int currentHeight;
+  private double speed;
 
-  public teleopWrist() {
-    requires(Robot.wrist);
+
+
+  public teleopIntake() {
+    requires(Robot.intake);
   }
 
-  @Override
   protected void initialize() {
-    Robot.wrist.resetEnc();
+   
   }
 
-  @Override
   protected void execute() {
 
-    if(Robot.oi.main.getBumper(Hand.kRight )){
-      currentHeight = Robot.wrist.INTAKE_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.LOW;
+    //Get Trigger Value and Apply a Range
+    speed = (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kLeft));
+    
+    //If Left Bumper is pressed, Intake at Max Speed
+    if(Robot.oi.main.getBumper(Hand.kLeft)){
+			Robot.intake.set(-1);
     }
-    else if(Robot.oi.partner.getBButton()){
-      currentHeight = Robot.wrist.CARGO_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.MID;
+    //Otherwise Outtake at the Trigger Value
+		else if(Robot.oi.main.getTriggerAxis(Hand.kLeft) != 0){
+      Robot.intake.set(speed);
     }
-    else if(Robot.oi.partner.getYButton()){
-      currentHeight = Robot.wrist.HATCH_POS;
-   //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
+    //Otherwise set the Intake Speed to 0
+    else{
+      Robot.intake.stop();
     }
-  
-    Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
-
-    try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*Delay*/ }
+   // SmartDashboard.putNumber("Intake %Output", Robot.intake.getIntakeOutput());
   }
 
-  @Override
   protected boolean isFinished() {
     return false;
   }
 
-  @Override
   protected void end() {
-    Robot.wrist.stop();
+    Robot.intake.stop();
   }
 
-  @Override
   protected void interrupted() {
+    end();
   }
 }

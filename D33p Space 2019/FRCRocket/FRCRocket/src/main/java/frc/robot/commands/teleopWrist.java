@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class teleopWrist extends Command {
 
@@ -33,19 +34,22 @@ public class teleopWrist extends Command {
   @Override
   protected void execute() {
 
-    if(Robot.oi.main.getBumper(Hand.kRight )){
-      currentHeight = Robot.wrist.INTAKE_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.LOW;
-    }
-    else if(Robot.oi.partner.getBButton()){
+    if(Robot.oi.partner.getBButton()){
       currentHeight = Robot.wrist.CARGO_POS;
     //  Robot.elevator.elevatorState = elevatorPosition.MID;
     }
+    else if(Robot.oi.partner.getAButton()){
+      currentHeight = Robot.wrist.INTAKE_POS;
+   //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
+    }
     else if(Robot.oi.partner.getYButton()){
-      currentHeight = Robot.wrist.HATCH_POS;
+      currentHeight = Robot.wrist.HATCH_POS
+      ;
    //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
   
+    SmartDashboard.putNumber("Wrist Position", Robot.wrist.getWristPosition());
+
     Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	

@@ -7,30 +7,17 @@
 
 package frc.robot;
 
-public enum RobotMap 
+import edu.wpi.first.wpilibj.XboxController;
+
+public class OI
 {
 
-  //Controller Mapping
-	CONTROLLER_MAIN(0),
-	CONTROLLER_PARTNER(1),
-  //CAN Motors Mapping
-	LEFT_MOTORF(7),
-	LEFT_MOTOR(1), 
-	RIGHT_MOTORF(8), 
-	RIGHT_MOTOR(2),
-	ELEVATOR_MOTOR(4),
-	WRIST_MOTOR(3),
-	INTAKE_MOTOR(10),
-	INTAKE_MOTORF(11),
-	//Controllers Mapping
-	LEFT_JOYSTICK(0),
-	RIGHT_JOYSTICK(1);
+  public final XboxController main = new XboxController(RobotMap.CONTROLLER_MAIN.value);
+	public final XboxController partner = new XboxController(RobotMap.CONTROLLER_PARTNER.value);
 
-	public final int value;
-
-  RobotMap(int value) 
+  public OI() 
   {
-		this.value = value;
+    
   }
   
 }
