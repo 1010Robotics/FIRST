@@ -28,6 +28,7 @@ public class pathfinder extends Subsystem {
 
   public pathfinder(){
 
+    //configure waypoint coordinates with degrees
     points = new Waypoint[] {
       new Waypoint(0, 0, 0),
       new Waypoint(5, 4, Pathfinder.d2r(-45)) 
@@ -42,16 +43,20 @@ public class pathfinder extends Subsystem {
       60.0
     );
 
+    //create path
     trajectory = Pathfinder.generate(points, config);
 
+    //create modifier used with encoders
     modifier = new TankModifier(trajectory).modify(Robot.drive.baseWidth);
 
+    //config and define left and right encoders
     leftEnc = new EncoderFollower(modifier.getLeftTrajectory());
     rightEnc = new EncoderFollower(modifier.getRightTrajectory());
 
     leftEnc.configureEncoder(Robot.drive.getLeftPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
     rightEnc.configureEncoder(Robot.drive.getRightPositionRaw(), Robot.drive.talonTPR, Robot.drive.wheelDiameter);
 
+    //config kp, ki kd, accel ratio, accel gain
     leftEnc.configurePIDVA(
       5.0, //kP
       0.0, //kI
