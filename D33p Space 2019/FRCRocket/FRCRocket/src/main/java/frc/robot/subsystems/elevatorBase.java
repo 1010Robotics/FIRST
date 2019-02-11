@@ -33,7 +33,7 @@ public class elevatorBase extends Subsystem {
   public elevatorBase() {
 
     //Define Motors
-    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value);
+    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTORR.value);
 
     //Initialize Motors
     Robot.initTalon(encMotor, true);
