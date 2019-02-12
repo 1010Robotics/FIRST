@@ -32,6 +32,11 @@ public class teleopElevator extends Command {
   .withWidget(BuiltInWidgets.kToggleButton)
   .getEntry();
 
+  private NetworkTableEntry teleopTime = Robot.teleopTab
+  .add("Teleop Time", false)
+  .withWidget(BuiltInWidgets.kTextView)
+  .getEntry();
+
   private NetworkTableEntry  elevatorMotorControl = Robot.testTab
   .add("Elevator Motor", 0)
   .withWidget(BuiltInWidgets.kNumberSlider)
@@ -81,6 +86,7 @@ public class teleopElevator extends Command {
     }
 
     //Send Values to Dashboard
+    teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
     elevatorString.setString(Robot.elevator.elevatorState.toString());
     elevatorPos.setNumber(Robot.elevator.getElevatorPosition());
     elevatorPercentOutput.setNumber(Robot.elevator.getElevatorOutput());

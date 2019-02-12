@@ -25,6 +25,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -46,9 +47,9 @@ public class Robot extends TimedRobot {
 	public static pathfinder path;
 	public static wristBase wrist;
 	public static intakeBase intake;
-
 	public static ShuffleboardTab testTab;
 	public static ShuffleboardTab teleopTab;
+	public static Timer RobotTimer;
 
 	//Create Commands
 	Command autonomousCommand;
@@ -62,13 +63,15 @@ public class Robot extends TimedRobot {
 	public enum RobotState {
         DISABLED, AUTONOMOUS, TELEOP
     }
-	
+	public static double Time;
     public static RobotState s_robot_state = RobotState.DISABLED;
 
     public static RobotState getState() {
         return s_robot_state;
     }
-
+	public static double getTime(){
+		return Time;
+	}
     public static void setState(RobotState state) {
         s_robot_state = state;
     }
@@ -78,7 +81,7 @@ public class Robot extends TimedRobot {
 		//create tabs
 		testTab = Shuffleboard.getTab("Test Tab");
 		teleopTab = Shuffleboard.getTab("Teleop Tab");
-		
+
 		//Define Camera
 		CameraServer driverMemeCamera = CameraServer.getInstance();
 		driverMemeCamera.startAutomaticCapture();
@@ -92,7 +95,7 @@ public class Robot extends TimedRobot {
 		elevator = new elevatorBase();
 		wrist = new wristBase();
 		intake = new intakeBase();
-
+		RobotTimer = new Timer();
 		//Auto Selector
 		//autoSelector = new SendableChooser();
 		colour = DriverStation.getInstance().getAlliance();
@@ -106,6 +109,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
+		RobotTimer.reset();
+		RobotTimer.start();
 	}
 
 	@Override
@@ -115,8 +120,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		RobotTimer.reset();
+		RobotTimer.start();
+
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
-	if(isBlue){/*run a command*/}
+		if(isBlue){/*run a command*/}
 		//Set Autonomous Command
 		autonomousCommand = new followPath();
 		autonomousCommand.start();
@@ -124,11 +132,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+		Time = RobotTimer.get();
 		Scheduler.getInstance().run();
 	}
 
 	@Override
 	public void teleopInit() {
+		RobotTimer.reset();
+		RobotTimer.start();
 		//Stop Autonomous Command
 		//autonomousCommand.cancel();
 	}
@@ -140,6 +151,7 @@ public class Robot extends TimedRobot {
 
 	@Override  
 	public void testPeriodic() {
+		Time = RobotTimer.get();
 	}
 	
 	public static void initTalon(TalonSRX motor, boolean invert) {
