@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class Robot extends TimedRobot {
@@ -44,6 +46,9 @@ public class Robot extends TimedRobot {
 	public static pathfinder path;
 	public static wristBase wrist;
 	public static intakeBase intake;
+
+	public static ShuffleboardTab testTab;
+	public static ShuffleboardTab teleopTab;
 
 	//Create Commands
 	Command autonomousCommand;
@@ -70,7 +75,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
-
+		//create tabs
+		testTab = Shuffleboard.getTab("Test Tab");
+		teleopTab = Shuffleboard.getTab("Teleop Tab");
+		
 		//Define Camera
 		CameraServer driverMemeCamera = CameraServer.getInstance();
 		driverMemeCamera.startAutomaticCapture();
