@@ -29,18 +29,21 @@ public class elevatorBase extends Subsystem {
 
   //Motors
   private TalonSRX encMotor;
-
+  private TalonSRX encMotorF;
+  
   public elevatorBase() {
 
     //Define Motors
     encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value);
+    encMotorF = new TalonSRX(RobotMap.ELEVATOR_MOTORF.value);
 
     //Initialize Motors
     Robot.initTalon(encMotor, true);
+    Robot.initTalon(encMotorF, false);
 
     //Set Closed Control Loop and Motion Magic Configuration
     Robot.initMasterElevatorMotor(encMotor);
-  
+    encMotorF.follow(encMotor);
   }
 
   //Set Motors
