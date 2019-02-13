@@ -39,7 +39,7 @@ public class elevatorBase extends Subsystem {
 
     //Initialize Motors
     Robot.initTalon(encMotor, true);
-    Robot.initTalon(encMotorF, false);
+    Robot.initTalon(encMotorF, true);
 
     //Set Closed Control Loop and Motion Magic Configuration
     Robot.initMasterElevatorMotor(encMotor);

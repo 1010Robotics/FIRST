@@ -71,18 +71,23 @@ public class teleopElevator extends Command {
 
   @Override
   protected void execute() {
-
+    
     if(Robot.oi.main.getAButton()){
-      currentHeight = Robot.elevator.LOW_GOAL;
+      Robot.elevator.set(ControlMode.PercentOutput, 0.25);
+      //currentHeight = Robot.elevator.LOW_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
     else if(Robot.oi.main.getBButton()){
-      currentHeight = Robot.elevator.MID_GOAL;
+      Robot.elevator.set(ControlMode.PercentOutput, -0.25);
+      //currentHeight = Robot.elevator.MID_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.MID;
     }
-    else if(Robot.oi.main.getYButton()){
-      currentHeight = Robot.elevator.HIGH_GOAL;
+    else if (Robot.oi.main.getYButton()){
+      //currentHeight = Robot.elevator.HIGH_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
+    }
+    else{
+      Robot.elevator.set(ControlMode.PercentOutput, 0);
     }
 
     //Send Values to Dashboard
@@ -97,11 +102,11 @@ public class teleopElevator extends Command {
       }
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
-    if(DriverStation.getInstance().isFMSAttached()){
-      Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
-    }else{
+    //if(DriverStation.getInstance().isFMSAttached()){
+    //  Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
+    /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
-    }
+    }*/
 
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	

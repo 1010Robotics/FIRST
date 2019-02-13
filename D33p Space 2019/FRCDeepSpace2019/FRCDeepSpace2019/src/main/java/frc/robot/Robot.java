@@ -163,6 +163,9 @@ public class Robot extends TimedRobot {
 		motor.configClosedloopRamp(0.5, 0);
 		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
+	public static void initTalonLimitSwitch(TalonSRX motor){
+		
+	}
 	public static void initVictor(VictorSPX motor, boolean invert) {
 		motor.setInverted(invert);
 		motor.setNeutralMode(NeutralMode.Brake);
