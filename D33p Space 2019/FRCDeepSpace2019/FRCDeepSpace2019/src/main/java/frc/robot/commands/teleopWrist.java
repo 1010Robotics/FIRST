@@ -42,27 +42,18 @@ public class teleopWrist extends Command {
   @Override
   protected void execute() {
     SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
+
     wristPos.setNumber(Robot.wrist.getWristPosition());
-    if(Robot.oi.partner.getBumper(Hand.kRight )){
-     Robot.wrist.set(ControlMode.PercentOutput, 0.25);
+    if(Robot.oi.partner.getBumper(Hand.kRight)){
       currentHeight = Robot.wrist.INTAKE_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
     else if(Robot.oi.partner.getBButton()){
-      Robot.wrist.set(ControlMode.PercentOutput, -0.25);
       currentHeight = Robot.wrist.CARGO_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.MID;
     }
     else if(Robot.oi.partner.getYButton()){
       currentHeight = Robot.wrist.HATCH_POS;
-   //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
-    }
-  else{
-    Robot.wrist.set(ControlMode.PercentOutput, 0);
-  }
-
-  
-    //Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
+    }  
+    Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*Delay*/ }

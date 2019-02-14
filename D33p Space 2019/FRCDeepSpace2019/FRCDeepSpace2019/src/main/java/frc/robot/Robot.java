@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
 		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
 	public static void initTalonLimitSwitch(TalonSRX motor){
-		
+
 	}
 	public static void initVictor(VictorSPX motor, boolean invert) {
 		motor.setInverted(invert);
@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
 
 	public static void initMasterElevatorMotor(TalonSRX motor){
 		//Set Sensor Phase
-		motor.setSensorPhase(true);
+		motor.setSensorPhase(false);
 		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Brake);
 		//Factory default hardware to prevent unexpected behavior
@@ -210,8 +210,8 @@ public class Robot extends TimedRobot {
 		//Output Settings
 		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
 		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(0.25, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-0.25, Constants.kTimeoutMs);
 		//PID Gain Settings
 		motor.selectProfileSlot(Constants.kElevatorSlotIdx, Constants.kPIDLoopIdx);
 		motor.config_kF(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kF, Constants.kTimeoutMs);

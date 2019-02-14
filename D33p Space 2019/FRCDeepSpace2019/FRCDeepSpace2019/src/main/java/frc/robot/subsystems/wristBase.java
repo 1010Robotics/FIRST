@@ -27,9 +27,9 @@ public class wristBase extends Subsystem {
 
   private TalonSRX wristMotor;
 
-  public int INTAKE_POS = 0; //preset for intake (and default position)
-  public int CARGO_POS = 7000; //preset for cargo
-  public int HATCH_POS = 12000; //preset for hatch
+  public int INTAKE_POS = 6000; //preset for intake (and default position)
+  public int CARGO_POS = 4500; //preset for cargo
+  public int HATCH_POS = 0; //preset for hatch
 
   public wristBase(){
       
@@ -38,7 +38,7 @@ public class wristBase extends Subsystem {
 
     //Initialize Wrist Motor
     Robot.initTalon(wristMotor, false);
-
+    
     //Setting Closed Control Loop and MotionMagic, just like the Elevator
     Robot.initMasterElevatorMotor(wristMotor);
   }

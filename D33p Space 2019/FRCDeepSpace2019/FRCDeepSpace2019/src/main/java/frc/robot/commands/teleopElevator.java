@@ -73,17 +73,12 @@ public class teleopElevator extends Command {
   protected void execute() {
     
     if(Robot.oi.main.getAButton()){
-      Robot.elevator.set(ControlMode.PercentOutput, 0.25);
-      //currentHeight = Robot.elevator.LOW_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
     else if(Robot.oi.main.getBButton()){
-      Robot.elevator.set(ControlMode.PercentOutput, -0.25);
-      //currentHeight = Robot.elevator.MID_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.MID;
     }
     else if (Robot.oi.main.getYButton()){
-      //currentHeight = Robot.elevator.HIGH_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
     else{
