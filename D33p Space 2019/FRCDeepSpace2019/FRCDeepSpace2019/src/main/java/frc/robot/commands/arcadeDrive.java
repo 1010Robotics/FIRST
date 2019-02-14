@@ -16,10 +16,18 @@ import java.util.concurrent.TimeUnit;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 public class arcadeDrive extends Command {
+
+	private NetworkTableEntry gyroOutput = Robot.teleopTab
+	.add("Gyro Val", 0)
+	.withWidget(BuiltInWidgets.kDial)
+	//.withProperties(Map.of("MIN", -1, "MAX", 1))
+	.getEntry();
 
 	//Exponential Variables
 	private final double JoyDead = 0.1;
@@ -88,6 +96,7 @@ public class arcadeDrive extends Command {
 
 			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
 
+			gyroOutput.setNumber(Robot.drive.getGyroPosition());
 			SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
 			SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
 			SmartDashboard.putNumber("Joystick Y", yOutput);

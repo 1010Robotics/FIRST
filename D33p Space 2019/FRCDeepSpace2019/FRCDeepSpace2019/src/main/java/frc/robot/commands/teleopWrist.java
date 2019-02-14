@@ -13,10 +13,19 @@ import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class teleopWrist extends Command {
+
+  private NetworkTableEntry wristPos = Robot.teleopTab
+  .add("Wrist Position", 0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  //.withProperties(Map.of("MIN", 0, "MAX", 20000))
+  .getEntry();
 
   //Variables
   int currentHeight;
@@ -32,12 +41,15 @@ public class teleopWrist extends Command {
 
   @Override
   protected void execute() {
-
-    if(Robot.oi.main.getBumper(Hand.kRight )){
+    SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
+    wristPos.setNumber(Robot.wrist.getWristPosition());
+    if(Robot.oi.partner.getBumper(Hand.kRight )){
+     Robot.wrist.set(ControlMode.PercentOutput, 0.25);
       currentHeight = Robot.wrist.INTAKE_POS;
     //  Robot.elevator.elevatorState = elevatorPosition.LOW;
     }
     else if(Robot.oi.partner.getBButton()){
+      Robot.wrist.set(ControlMode.PercentOutput, -0.25);
       currentHeight = Robot.wrist.CARGO_POS;
     //  Robot.elevator.elevatorState = elevatorPosition.MID;
     }
@@ -45,8 +57,12 @@ public class teleopWrist extends Command {
       currentHeight = Robot.wrist.HATCH_POS;
    //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
+  else{
+    Robot.wrist.set(ControlMode.PercentOutput, 0);
+  }
+
   
-    Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
+    //Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*Delay*/ }
