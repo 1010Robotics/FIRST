@@ -11,11 +11,11 @@ import frc.robot.Robot;
 import frc.robot.subsystems.limeLight.CameraMode;
 import frc.robot.subsystems.limeLight.LightMode;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
@@ -26,7 +26,19 @@ public class arcadeDrive extends Command {
 	private NetworkTableEntry gyroOutput = Robot.teleopTab
 	.add("Gyro Val", 0)
 	.withWidget(BuiltInWidgets.kDial)
-	//.withProperties(Map.of("MIN", -1, "MAX", 1))
+	.withProperties(Map.of("MIN", -180, "MAX", 180))
+	.getEntry();
+
+	private NetworkTableEntry JoystickOutput_Y = Robot.teleopTab
+	.add("Joy L", 0)
+	.withWidget(BuiltInWidgets.kNumberBar)
+	.withProperties(Map.of("MIN", -1, "MAX", 1))
+	.getEntry();
+
+	private NetworkTableEntry JoystickOutput_X = Robot.teleopTab
+	.add("Joy R", 0)
+	.withWidget(BuiltInWidgets.kNumberBar)
+	.withProperties(Map.of("MIN", -1, "MAX", 1))
 	.getEntry();
 
 	//Exponential Variables
@@ -97,15 +109,11 @@ public class arcadeDrive extends Command {
 			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
 
 			gyroOutput.setNumber(Robot.drive.getGyroPosition());
-			SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
-			SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
-			SmartDashboard.putNumber("Joystick Y", yOutput);
-			SmartDashboard.putNumber("Joystick X", xOutput);
-			SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+			JoystickOutput_X.setNumber(xOutput);
+			JoystickOutput_Y.setNumber(yOutput);
 		}
-
 		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*HAHA YOU GOT CAUGHT*/ }
+    	catch (Exception e) { /*delay*/ }
 	}
 
 	protected boolean isFinished() {
