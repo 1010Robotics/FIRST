@@ -28,7 +28,26 @@ public class teleopWrist extends Command {
   .getEntry();
 
   //Variables
-  int currentHeight;
+  private final double JoyDead = 0.1;
+	private final double DriveExp = 1.5;
+	private final double MotorMin = 0.01;
+  double currentHeight;
+  boolean manualStatus;
+  double joyInput;
+
+  private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
+		double joySign;
+		double joyMax = 1 - joyDead;
+		double joyLive = Math.abs(joystickVal) - joyDead;
+		if (joystickVal > 0) {joySign = 1;}
+		else if (joystickVal < 0) {joySign = -1;}
+		else {joySign = 0;}
+		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
+		if(Double.isNaN(power)){power = 0;}
+		try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    	catch (Exception e) { /*Delay*/ }
+		return power;
+	}
 
   public teleopWrist() {
     requires(Robot.wrist);
@@ -41,19 +60,41 @@ public class teleopWrist extends Command {
 
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
 
+    SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
     wristPos.setNumber(Robot.wrist.getWristPosition());
-    if(Robot.oi.partner.getBumper(Hand.kRight)){
-      currentHeight = Robot.wrist.INTAKE_POS;
+    joyInput = exponential(Robot.oi.partner.getY(Hand.kRight), DriveExp, JoyDead, MotorMin);
+
+    if(manualStatus == false){
+
+      if(Robot.oi.partner.getYButton()){
+        currentHeight = Robot.wrist.INTAKE_POS;
+      }
+      else if(Robot.oi.partner.getBButton()){
+        currentHeight = Robot.wrist.CARGO_POS;
+      }
+      else if(Robot.oi.partner.getAButton()){
+        currentHeight = Robot.wrist.HATCH_POS;
+      } 
+      else if(Robot.oi.partner.getXButton()){
+        manualStatus = true;
+      }
+    
+      currentHeight = currentHeight + (joyInput*500);
+
+      Robot.wrist.set(ControlMode.MotionMagic, currentHeight); 
+      
     }
-    else if(Robot.oi.partner.getBButton()){
-      currentHeight = Robot.wrist.CARGO_POS;
+    
+    else{
+
+      if(Robot.oi.partner.getXButton()){
+        manualStatus = false;
+      }
+
+      Robot.wrist.set(ControlMode.PercentOutput, joyInput);
+
     }
-    else if(Robot.oi.partner.getYButton()){
-      currentHeight = Robot.wrist.HATCH_POS;
-    }  
-    Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*Delay*/ }

@@ -19,15 +19,15 @@ import frc.robot.commands.teleopWrist;
  * Add your docs here.
  */
 public class wristBase extends Subsystem {
+
   public enum wristPosition{INTAKE_WALL, INTAKE_FLOOR, CARGO_SCORE} //you get the idea
   
   //sets default for the enum
   public wristPosition wristState = wristPosition.INTAKE_FLOOR; 
-  
 
   private TalonSRX wristMotor;
 
-  public int INTAKE_POS = 6000; //preset for intake (and default position)
+  public int INTAKE_POS = 4500; //preset for intake (and default position)
   public int CARGO_POS = 3234; //preset for cargo
   public int HATCH_POS = 0; //preset for hatch
 

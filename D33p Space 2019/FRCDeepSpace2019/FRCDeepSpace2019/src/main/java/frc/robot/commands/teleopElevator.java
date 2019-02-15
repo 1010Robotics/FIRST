@@ -15,17 +15,14 @@ import java.util.concurrent.TimeUnit;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 
 public class teleopElevator extends Command {
 
   //Variables
   int currentHeight;
-  
   
   private NetworkTableEntry testButton = Robot.testTab
   .add("Zero Elevator", false)
@@ -56,9 +53,9 @@ public class teleopElevator extends Command {
   .getEntry();
 
   private NetworkTableEntry elevatorString = Robot.teleopTab
-    .add("Elevator State", "")
-    .withWidget(BuiltInWidgets.kTextView)
-    .getEntry();
+  .add("Elevator State", "")
+  .withWidget(BuiltInWidgets.kTextView)
+  .getEntry();
 
   
   public teleopElevator() {
@@ -67,6 +64,7 @@ public class teleopElevator extends Command {
 
   @Override
   protected void initialize() {
+    Robot.elevator.resetEnc();
   }
 
   @Override
@@ -94,7 +92,7 @@ public class teleopElevator extends Command {
     if(testButton.getBoolean(false)){
       elevatorMotorControl.setNumber(0);
       testButton.setBoolean(false);
-      }
+    }
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
     //if(DriverStation.getInstance().isFMSAttached()){
@@ -102,7 +100,6 @@ public class teleopElevator extends Command {
     /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
     }*/
-
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*Delay*/ }

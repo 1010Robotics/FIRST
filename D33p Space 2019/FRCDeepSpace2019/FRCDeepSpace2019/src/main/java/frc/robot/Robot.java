@@ -7,12 +7,11 @@
 
 package frc.robot;
 
-import frc.robot.commands.auto.followPath;
+import frc.robot.commands.auto.autoTurn;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.intakeBase;
 import frc.robot.subsystems.limeLight;
-import frc.robot.subsystems.pathfinder;
 import frc.robot.subsystems.pneumatics;
 import frc.robot.subsystems.wristBase;
 
@@ -44,7 +43,6 @@ public class Robot extends TimedRobot {
 	public static limeLight camera;
 	public static elevatorBase elevator;
 	public static pneumatics solenoid;
-	public static pathfinder path;
 	public static wristBase wrist;
 	public static intakeBase intake;
 	public static ShuffleboardTab testTab;
@@ -91,7 +89,6 @@ public class Robot extends TimedRobot {
 		drive = new driveBase();
 		solenoid = new pneumatics();
 		camera = new limeLight();
-		path =  new pathfinder();
 		elevator = new elevatorBase();
 		wrist = new wristBase();
 		intake = new intakeBase();
@@ -126,7 +123,7 @@ public class Robot extends TimedRobot {
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 		if(isBlue){/*run a command*/}
 		//Set Autonomous Command
-		autonomousCommand = new followPath();
+		autonomousCommand = new autoTurn(90);
 		autonomousCommand.start();
 	}
 
