@@ -17,7 +17,7 @@ public class followPath extends Command {
 
   public followPath() {
     requires(Robot.drive);
-    requires(Robot.path);
+  //  requires(Robot.path);
   }
 
   @Override
@@ -28,16 +28,16 @@ public class followPath extends Command {
 
   @Override
   protected void execute() {
-    double l = Robot.path.leftEnc.calculate(Robot.drive.getLeftPositionRaw());
-    double r = Robot.path.rightEnc.calculate(Robot.drive.getRightPositionRaw());
+  //  double l = Robot.path.leftEnc.calculate(Robot.drive.getLeftPositionRaw());
+  //  double r = Robot.path.rightEnc.calculate(Robot.drive.getRightPositionRaw());
 
     double gyro_heading = Robot.drive.getGyroPosition();    // Assuming the gyro is giving a value in degrees
-    double desired_heading = Pathfinder.r2d(Robot.path.leftEnc.getHeading());  // Should also be in degrees
+    //double desired_heading = Pathfinder.r2d(Robot.path.leftEnc.getHeading());  // Should also be in degrees
 
-    double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-    double turn = 0.8 * (-1.0/80.0) * angleDifference;
+   // double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+   // double turn = 0.8 * (-1.0/80.0) * angleDifference;
 
-    Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);//switch +-
+   // Robot.drive.set(ControlMode.PercentOutput, r-turn, l+turn);//switch +-
   }
 
   @Override

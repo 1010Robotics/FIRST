@@ -79,9 +79,6 @@ public class teleopElevator extends Command {
     else if (Robot.oi.main.getYButton()){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
-    else{
-      Robot.elevator.set(ControlMode.PercentOutput, 0);
-    }
 
     //Send Values to Dashboard
     teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
@@ -96,7 +93,7 @@ public class teleopElevator extends Command {
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
     //if(DriverStation.getInstance().isFMSAttached()){
-    //  Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
+     Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
     /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
     }*/
