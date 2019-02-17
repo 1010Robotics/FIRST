@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
@@ -22,7 +23,7 @@ public class teleopSolenoid extends Command {
   }
 
   protected void execute() {
-    if(Robot.oi.partner.getAButton()){
+    if(Robot.oi.partner.getBumper(Hand.kRight)){
 			Robot.solenoid.extendSolenoid();
 		}
     
@@ -44,4 +45,5 @@ public class teleopSolenoid extends Command {
   protected void interrupted() {
     end();
   }
+  
 }
