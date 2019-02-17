@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
@@ -23,28 +22,21 @@ import frc.robot.commands.teleopIntake;
 public class intakeBase extends Subsystem {
 
   private TalonSRX intakeMotor;
-  private VictorSPX intakeMotorF;
 
   public intakeBase(){
     //Define Motors
     intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);
-    intakeMotorF = new VictorSPX(RobotMap.INTAKE_MOTORF.value);
 
     //Initialize Intake Motors
     Robot.initTalon(intakeMotor, false);
-    Robot.initVictor(intakeMotorF, false);
 
     //Sets the NeutralMode to Coast
     intakeMotor.setNeutralMode(NeutralMode.Coast);
-    intakeMotor.setNeutralMode(NeutralMode.Coast);
-
-    //Enslave Victor to Talon
-    intakeMotorF.follow(intakeMotor);
   }
 
   //Set Motors
-  public void set(ControlMode mode, double output){
-    intakeMotor.set(mode, output);
+  public void set(double output){
+    intakeMotor.set(ControlMode.PercentOutput, output);
   }
 
   //Stop Motors
@@ -56,7 +48,6 @@ public class intakeBase extends Subsystem {
   public double getIntakeOutput(){
     return intakeMotor.getMotorOutputPercent();
   }
-
 
   @Override
   public void initDefaultCommand() {

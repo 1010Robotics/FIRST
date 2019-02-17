@@ -207,8 +207,8 @@ public class Robot extends TimedRobot {
 		//Output Settings
 		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
 		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(0.25, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-0.25, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
 		//PID Gain Settings
 		motor.selectProfileSlot(Constants.kElevatorSlotIdx, Constants.kPIDLoopIdx);
 		motor.config_kF(Constants.kElevatorSlotIdx, Constants.kElevatorGains.kF, Constants.kTimeoutMs);

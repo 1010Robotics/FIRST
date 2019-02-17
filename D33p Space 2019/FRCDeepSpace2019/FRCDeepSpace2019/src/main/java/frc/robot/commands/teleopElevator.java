@@ -16,8 +16,10 @@ import java.util.concurrent.TimeUnit;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class teleopElevator extends Command {
@@ -76,7 +78,7 @@ public class teleopElevator extends Command {
   @Override
   protected void execute() {
     
-    if(Robot.oi.main.getAButton()){
+    if(Robot.oi.main.getBumper(Hand.kRight)){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
       currentHeight = Robot.elevator.LOW_GOAL;
     }
@@ -88,7 +90,7 @@ public class teleopElevator extends Command {
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
       currentHeight = Robot.elevator.HIGH_GOAL;
     }
-
+    
     //Send Values to Dashboard
     teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
     elevatorString.setString(Robot.elevator.elevatorState.toString());
@@ -102,13 +104,12 @@ public class teleopElevator extends Command {
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
     //if(DriverStation.getInstance().isFMSAttached()){
-      //Robot.elevator.set(ControlMode.Position, currentHeight);
       error = currentHeight - Robot.elevator.getElevatorPosition();
       error_last = error;
       error_diff = error - error_last;
       error_sum += error;
       power = (error*Constants.kElevatorGains.kP)+(error_sum*Constants.kElevatorGains.kI)+(error_diff*Constants.kElevatorGains.kD);
-      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      power = (power > 0.75 ? 0.75 : power < -0.5 ? -0.5 : power);
       Robot.elevator.set(ControlMode.PercentOutput, power);
     /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
