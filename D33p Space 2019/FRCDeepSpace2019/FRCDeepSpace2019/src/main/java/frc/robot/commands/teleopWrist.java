@@ -64,8 +64,6 @@ public class teleopWrist extends Command {
     SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
     wristPos.setNumber(Robot.wrist.getWristPosition());
     joyInput = exponential(Robot.oi.partner.getY(Hand.kRight), DriveExp, JoyDead, MotorMin);
-    SmartDashboard.putBoolean("Button?", Robot.oi.main.getRawButton(1));
-    SmartDashboard.putBoolean("Joy Button", Robot.oi.partner.getStickButtonPressed(Hand.kLeft));
     if(manualStatus == false){
 
       if(Robot.oi.partner.getYButton()){

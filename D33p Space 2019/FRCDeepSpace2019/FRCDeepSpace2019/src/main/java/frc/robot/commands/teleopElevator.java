@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class teleopElevator extends Command {
 
   //Variables
-  double currentHeight;
+  double count = 0;
   private double error;
   private double error_sum;
   private double error_diff;
@@ -78,17 +78,39 @@ public class teleopElevator extends Command {
   @Override
   protected void execute() {
     
+    //ask Caden about this if you need to know
+    if(Robot.oi.main.getBButton()){
+      if(count % 2 == 0){
+        count = -1;
+      }
+      count += 2;
+      if(count > 5){
+        count = -1;
+      }
+    }
+    if(Robot.oi.main.getYButton()){
+      if(count % 2 != 0){
+        count = 0;
+      }
+      count += 2;
+      if(count > 6){
+        count = 0;
+      }
+    }
+
+    SmartDashboard.putNumber("count", count);
+
     if(Robot.oi.main.getBumper(Hand.kRight)){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
-      currentHeight = Robot.elevator.LOW_GOAL;
+      Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL;
     }
     else if(Robot.oi.main.getBButton()){
       Robot.elevator.elevatorState = elevatorPosition.MID;
-      currentHeight = Robot.elevator.MID_GOAL;
+      Robot.elevator.currentHeight = Robot.elevator.MID_GOAL;
     }
     else if (Robot.oi.main.getYButton()){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
-      currentHeight = Robot.elevator.HIGH_GOAL;
+      Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL;
     }
     
     //Send Values to Dashboard
@@ -104,7 +126,7 @@ public class teleopElevator extends Command {
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
     //if(DriverStation.getInstance().isFMSAttached()){
-      error = currentHeight - Robot.elevator.getElevatorPosition();
+      error = Robot.elevator.currentHeight - Robot.elevator.getElevatorPosition();
       error_last = error;
       error_diff = error - error_last;
       error_sum += error;

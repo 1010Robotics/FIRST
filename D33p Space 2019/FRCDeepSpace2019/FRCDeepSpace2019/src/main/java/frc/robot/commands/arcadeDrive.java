@@ -20,6 +20,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class arcadeDrive extends Command {
 
@@ -87,7 +88,8 @@ public class arcadeDrive extends Command {
 	}
 
 	protected void execute() {
-
+		SmartDashboard.putNumber("Button?", Robot.oi.main.getPOV());
+    	SmartDashboard.putBoolean("Joy Button", Robot.oi.partner.getStickButtonPressed(Hand.kLeft));
 		Robot.camera.setLedMode(LightMode.eOn);
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
