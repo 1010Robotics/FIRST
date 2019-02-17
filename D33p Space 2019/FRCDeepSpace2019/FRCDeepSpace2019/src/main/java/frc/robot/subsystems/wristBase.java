@@ -40,7 +40,7 @@ public class wristBase extends Subsystem {
     Robot.initTalon(wristMotor, false);
     
     //Setting Closed Control Loop and MotionMagic, just like the Elevator
-    Robot.initMasterElevatorMotor(wristMotor);
+    Robot.initMasterWristMotor(wristMotor);
   }
 
  

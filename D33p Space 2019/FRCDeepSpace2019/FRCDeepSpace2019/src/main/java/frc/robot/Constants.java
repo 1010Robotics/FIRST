@@ -12,6 +12,7 @@ public class Constants {
     //Talon Setting Constants
     public static final int kDriveSlotIdx = 0; //Which PID Slot to pull gains from (0,1,2,3)
     public static final int kElevatorSlotIdx = 1; //Which PID Slot to pull gains from (0,1,2,3)
+    public static final int kWristSlotIdx = 2;
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
    
@@ -19,7 +20,7 @@ public class Constants {
     public static Gains kWristGains = new Gains(0.42, 0.0, 0.0, 0.2);
     
     //PID Elevator Constants
-    public static Gains kElevatorGains = new Gains(0.42, 0.0, 0.0, 0.2);
+    public static Gains kElevatorGains = new Gains(0.00007, 0.0, 0, 20);
 
     //PID Drive Constants
     public static Gains kDriveGains = new Gains(0.03, 0.0, 0.0, 0.3);

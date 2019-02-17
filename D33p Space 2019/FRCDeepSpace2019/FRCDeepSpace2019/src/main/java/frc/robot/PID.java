@@ -7,8 +7,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 /**
  * Add your docs here.
  */
 public class PID {
+    public PID(float kp, float ki, float kd, float kf, TalonSRX inputSensor, double target){
+        
+    }
 }

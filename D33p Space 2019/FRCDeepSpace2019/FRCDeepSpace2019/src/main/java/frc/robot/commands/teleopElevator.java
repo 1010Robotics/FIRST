@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
@@ -22,7 +23,12 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 public class teleopElevator extends Command {
 
   //Variables
-  int currentHeight;
+  double currentHeight;
+  private double error;
+  private double error_sum;
+  private double error_diff;
+  private double error_last = 0;
+  double power;
   
   private NetworkTableEntry testButton = Robot.testTab
   .add("Zero Elevator", false)
@@ -72,15 +78,15 @@ public class teleopElevator extends Command {
     
     if(Robot.oi.main.getAButton()){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
+      currentHeight = Robot.elevator.LOW_GOAL;
     }
     else if(Robot.oi.main.getBButton()){
       Robot.elevator.elevatorState = elevatorPosition.MID;
+      currentHeight = Robot.elevator.MID_GOAL;
     }
     else if (Robot.oi.main.getYButton()){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
-    }
-    else{
-      Robot.elevator.set(ControlMode.PercentOutput, 0);
+      currentHeight = Robot.elevator.HIGH_GOAL;
     }
 
     //Send Values to Dashboard
@@ -96,7 +102,14 @@ public class teleopElevator extends Command {
    
     //If the Robot is Connected to the field, doesn't run the Motor Test Program
     //if(DriverStation.getInstance().isFMSAttached()){
-    //  Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
+      //Robot.elevator.set(ControlMode.Position, currentHeight);
+      error = currentHeight - Robot.elevator.getElevatorPosition();
+      error_last = error;
+      error_diff = error - error_last;
+      error_sum += error;
+      power = (error*Constants.kElevatorGains.kP)+(error_sum*Constants.kElevatorGains.kI)+(error_diff*Constants.kElevatorGains.kD);
+      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      Robot.elevator.set(ControlMode.PercentOutput, power);
     /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
     }*/

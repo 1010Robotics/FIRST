@@ -22,12 +22,14 @@ public class teleopSolenoid extends Command {
   }
 
   protected void execute() {
-    if(Robot.oi.main.getAButton()){
+    if(Robot.oi.partner.getAButton()){
 			Robot.solenoid.extendSolenoid();
 		}
-		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
+    
+    else{
+      Robot.solenoid.disableSolenoid();
     }
+    
     SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
   }
 
@@ -36,7 +38,7 @@ public class teleopSolenoid extends Command {
   }
 
   protected void end() {
-    Robot.solenoid.retractSolenoid();
+    Robot.solenoid.disableSolenoid();
   }
 
   protected void interrupted() {

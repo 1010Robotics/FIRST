@@ -221,4 +221,31 @@ public class Robot extends TimedRobot {
 		//Reset Encoder
 		motor.setSelectedSensorPosition(0);
 	}
+	public static void initMasterWristMotor(TalonSRX motor){
+		//Set Sensor Phase
+		motor.setSensorPhase(false);
+		//Brake Mode
+		motor.setNeutralMode(NeutralMode.Brake);
+		//Factory default hardware to prevent unexpected behavior
+		motor.configFactoryDefault();
+		//Set relevant frame periods to be at least as fast as periodic rate
+		motor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+		motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+		//Output Settings
+		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(0.25, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-0.25, Constants.kTimeoutMs);
+		//PID Gain Settings
+		motor.selectProfileSlot(Constants.kElevatorSlotIdx, Constants.kPIDLoopIdx);
+		motor.config_kF(Constants.kWristSlotIdx, Constants.kWristGains.kF, Constants.kTimeoutMs);
+		motor.config_kP(Constants.kWristSlotIdx, Constants.kWristGains.kP, Constants.kTimeoutMs);
+		motor.config_kI(Constants.kWristSlotIdx, Constants.kWristGains.kI, Constants.kTimeoutMs);
+		motor.config_kD(Constants.kWristSlotIdx, Constants.kWristGains.kD, Constants.kTimeoutMs);
+		//Motion Magic Max Velocity and Acceleration
+		motor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
+		motor.configMotionAcceleration(6000, Constants.kTimeoutMs);
+		//Reset Encoder
+		motor.setSelectedSensorPosition(0);
+	}
 }
