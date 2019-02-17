@@ -5,12 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+//Creating a public object named "limeLight" which is a Subsystem with properties for getting values fromt he limelight sensor
 public class limeLight extends Subsystem {
 
 	private static NetworkTableInstance table = null;

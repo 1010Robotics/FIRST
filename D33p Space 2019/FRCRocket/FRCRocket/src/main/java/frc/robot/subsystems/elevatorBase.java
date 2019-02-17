@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -16,6 +17,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.teleopElevator;
 
+//Creating a public object named "elevatorBase" which is a Subsystem with properties for controlling the robot elavator
 public class elevatorBase extends Subsystem {
 
   //Variables 

@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -18,6 +19,8 @@ import frc.robot.commands.teleopWrist;
 /**
  * Add your docs here.
  */
+
+//Creating a public object named "wristBase" which is a Subsystem with properties for controlling the robot wrist
 public class wristBase extends Subsystem {
   public enum wristPosition{INTAKE_WALL, INTAKE_FLOOR, CARGO_SCORE} //you get the idea
   public wristPosition wristState = wristPosition.INTAKE_FLOOR;

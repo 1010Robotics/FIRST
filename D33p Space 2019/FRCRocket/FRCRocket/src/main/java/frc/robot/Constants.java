@@ -5,8 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
+//Creating a public object named "Constants" with properties that set new constants using Gains.java to be used for a PID
 public class Constants {
 
     //Talon Setting Constants

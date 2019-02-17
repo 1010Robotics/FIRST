@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -20,6 +21,8 @@ import frc.robot.commands.teleopIntake;
 /**
  * Add your docs here.
  */
+
+ //Creating a public object named "intakeBase" which is a Subsystem with properties for controlling the robot intake
 public class intakeBase extends Subsystem {
 
   private TalonSRX intakeMotor;

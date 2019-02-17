@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Import
 package frc.robot.commands;
 
 import frc.robot.Robot;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+//Creating a public object named "teleopWrist" which is a Command with properties for creating robot wrist controls
 public class teleopWrist extends Command {
 
   //Variables

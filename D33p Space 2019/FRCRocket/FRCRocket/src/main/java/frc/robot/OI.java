@@ -5,10 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 
+//Creating a public object named "OI" with properties that create the controlers
 public class OI
 {
 

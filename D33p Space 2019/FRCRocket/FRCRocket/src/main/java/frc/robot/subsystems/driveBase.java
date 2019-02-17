@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-
+//Imports
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.livewindow.*;
 
 @SuppressWarnings( "deprecation" ) //Supress the LiveWindow deprecation warnings
 
+//Creating a public object named "driveBase" which is a Subsystem with properties for controlling the robot base
 public class driveBase extends Subsystem {
 
 	//Variables

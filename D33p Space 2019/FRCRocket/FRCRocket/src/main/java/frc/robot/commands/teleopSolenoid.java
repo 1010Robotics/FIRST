@@ -5,12 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
+//Creating a public object named "teleopSolenoid" which is a Command with properties for creating robot solenoid controls
 public class teleopSolenoid extends Command {
 
   public teleopSolenoid() {

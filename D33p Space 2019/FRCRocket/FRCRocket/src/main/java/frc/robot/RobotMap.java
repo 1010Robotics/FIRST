@@ -5,8 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
+//RobotMap deffinitions
 public enum RobotMap 
 {
 

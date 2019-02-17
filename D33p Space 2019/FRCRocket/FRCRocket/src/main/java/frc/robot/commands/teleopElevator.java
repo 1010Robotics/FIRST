@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
+//Creating a public object named "teleopElevator" which is a Command with properties for creating robot elevator controls
 public class teleopElevator extends Command {
 
   //Variables

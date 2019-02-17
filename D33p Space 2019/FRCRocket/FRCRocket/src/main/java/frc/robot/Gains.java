@@ -5,8 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
+//Creating a public object named "Gains" with properties that sets doubles to specific values (used in Constants.java)
 public class Gains {
 	public final double kP;
 	public final double kI;
