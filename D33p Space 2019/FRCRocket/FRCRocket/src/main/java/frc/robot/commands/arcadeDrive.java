@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
+//Creating a public object named "arcadeDrive" which is a Command with properties for creating robot arcade driving controls
 public class arcadeDrive extends Command {
 
 	//Exponential Variables

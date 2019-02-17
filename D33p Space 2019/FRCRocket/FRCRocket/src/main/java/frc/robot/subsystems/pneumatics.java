@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -12,7 +13,7 @@ import frc.robot.commands.teleopSolenoid;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-
+//Creating a public object named "pneumatics" which is a Subsystem with properties for controlling the robot pneumatics
 public class pneumatics extends Subsystem {
 
   //Variables
@@ -25,6 +26,7 @@ public class pneumatics extends Subsystem {
   //Compressor
   public Compressor compressor;
 
+  //Creates public command for definitions
   public pneumatics(){
     //Define Solenoid
     diskIntake = new DoubleSolenoid(0, 1);

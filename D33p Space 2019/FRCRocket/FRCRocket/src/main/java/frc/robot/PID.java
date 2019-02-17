@@ -5,10 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
 /**
  * Add your docs here.
  */
+
+//Creates a public object named "PID" with properties...
 public class PID {
 }
