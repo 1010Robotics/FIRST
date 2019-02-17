@@ -28,13 +28,13 @@ public class intakeBase extends Subsystem {
 
   //Creates public intake function
   public intakeBase(){
-    //Define Motors
+    //Declares intakeMotor as a TalonSRX motor
     intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);    
     
-    //Initialize Intake Motors
+    //Initialize intake motors
     Robot.initTalon(intakeMotor, false);
 
-    //Sets the NeutralMode to Coast
+    //Sets the neutral mode to coast
     intakeMotor.setNeutralMode(NeutralMode.Coast);
   }
 
@@ -43,7 +43,7 @@ public class intakeBase extends Subsystem {
     intakeMotor.set(ControlMode.PercentOutput, output);
   }
 
-  //Stops motor by settign percentage output to 0%
+  //Stops motor by setting percentage output to 0%
   public void stop(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
   }

@@ -38,10 +38,10 @@ public class wristBase extends Subsystem {
     //Define wrist motor
     wristMotor = new TalonSRX(RobotMap.WRIST_MOTOR.value);
 
-    //Initialize Wrist Motor
+    //Initialize wrist motor
     Robot.initTalon(wristMotor, false);
 
-    //Setting Closed Control Loop and MotionMagic, just like the Elevator
+    //Setting closed control loop and motion magic, just like the Elevator
     Robot.initMasterWristMotor(wristMotor);
   }
 
@@ -55,17 +55,17 @@ public class wristBase extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  //Get Current Position in Encoder Units
+  //Get current position in encoder units
   public double getWristPosition(){
     return wristMotor.getSensorCollection().getQuadraturePosition();
   }
 
-   //Get Current Output in Percent (-1 to 1)
+   //Get current output in percent (-1 to 1)
   public double getWristOutput() {
     return wristMotor.getMotorOutputPercent();
   }
 
-  //Reset Encoder on the Wrist
+  //Reset encoder on the wrist
   public void resetEnc() {
     wristMotor.setSelectedSensorPosition(0);
   }

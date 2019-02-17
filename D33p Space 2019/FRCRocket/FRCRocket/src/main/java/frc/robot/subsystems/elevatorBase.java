@@ -45,27 +45,27 @@ public class elevatorBase extends Subsystem {
   
   }
 
-  //Set Motors
+  //Set motors configs / settings
   public void set(ControlMode mode, double output) {
     encMotor.set(mode, output);
   }
 
-  //Stop Motors
+  //Stop Motors via settign output to 0%
   public void stop() {
     encMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  //Get Current Position in Encoder Units
+  //Get current position in encoder units
   public double getElevatorPosition() {
     return encMotor.getSensorCollection().getQuadraturePosition();
   }
 
-  //Get Current Output in Percent (-1 to 1)
+  //Get current output in percent (-1 to 1)
   public double getElevatorOutput() {
     return encMotor.getMotorOutputPercent();
   }
 
-  //Reset Encoder on the Elevator
+  //Reset encoder on the elevator
   public void resetEnc() {
     encMotor.setSelectedSensorPosition(0);
   }

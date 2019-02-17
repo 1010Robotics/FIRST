@@ -26,6 +26,7 @@ public class pneumatics extends Subsystem {
   //Compressor
   public Compressor compressor;
 
+  //Creates public command for definitions
   public pneumatics(){
     //Define Solenoid
     diskIntake = new DoubleSolenoid(0, 1);
