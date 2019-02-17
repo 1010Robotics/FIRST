@@ -12,6 +12,6 @@ package frc.robot;
  * Add your docs here.
  */
 
-//Creating a public object named "PID" with properties...
+//Creates a public object named "PID" with properties...
 public class PID {
 }

@@ -8,7 +8,7 @@
 //Imports
 package frc.robot;
 
-//Creating a public object named "Constants" with properties that set new constants using Gains.java to be used for a PID
+//Creates a public object named "Constants" with properties that set new constants using Gains.java to be used for a PID
 public class Constants {
 
     //Talon Setting Constants
@@ -19,16 +19,16 @@ public class Constants {
     public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
    
-    //PID Wrist Constants
+    //PID wrist constants made from gains.java
     public static Gains kWristGains = new Gains(0.6, 0.0, 0.0, 0.6);
     
-    //PID Elevator Constants
+    //PID elevator constants made from gains.java
     public static Gains kElevatorGains = new Gains(0.42, 0.0, 0.0, 0.2);
 
-    //PID Drive Constants
+    //PID Drive constants made from gains.java
     public static Gains kDriveGains = new Gains(0.03, 0.0, 0.0, 0.3);
 
-    //PID Turn Constants
+    //PID turn constants made from gains.java
     public static Gains kTurnGains= new Gains(0.007643, 0.0, 2.50463, 0.2);
 
 }

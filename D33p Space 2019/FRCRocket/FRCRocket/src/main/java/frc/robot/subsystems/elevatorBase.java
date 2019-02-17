@@ -29,7 +29,7 @@ public class elevatorBase extends Subsystem {
   public int MID_GOAL = 10000;
   public int HIGH_GOAL = 20000;
 
-  //Motors
+  //Declares encMotor as a TalonSRX motor
   private TalonSRX encMotor;
 
   public elevatorBase() {

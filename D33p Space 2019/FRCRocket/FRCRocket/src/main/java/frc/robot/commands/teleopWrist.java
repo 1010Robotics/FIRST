@@ -16,27 +16,28 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Creating a public object named "teleopWrist" which is a Command with properties for creating robot wrist controls
 public class teleopWrist extends Command {
 
-  //Variables
+  //Variables used
   int currentHeight;
   double speed;
 
+  //Specifies connection to Robot.java - wrist
   public teleopWrist() {
     requires(Robot.wrist);
   }
 
   @Override
+  //Resets the wrist encoders upon initialization which will not be changed afterwards
   protected void initialize() {
     Robot.wrist.resetEnc();
   }
 
   @Override
+  //Executes teleopWrist code
   protected void execute() {
-
     //Get Trigger Value and Apply a Range
     speed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
@@ -78,11 +79,13 @@ public class teleopWrist extends Command {
   }
 
   @Override
+  //Will return false to "isFinished"
   protected boolean isFinished() {
     return false;
   }
 
   @Override
+  //Ends code teleopWrist
   protected void end() {
     Robot.wrist.stop();
   }

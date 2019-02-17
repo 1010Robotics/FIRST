@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//Imports
 package frc.robot;
 
 import frc.robot.commands.auto.followPath;
@@ -29,13 +30,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
+//Creates a public object named "Robot" which is part of TimedRobot with properties that handles game information and initialization
 public class Robot extends TimedRobot {
 
-	//Auto Selector
+	//Auto selector definitions based on game data
 	DriverStation.Alliance colour;
 	private boolean isBlue;
 
-	//Create Objects
+	//Create all objects
 	public static OI oi;
 	public static driveBase drive;
 	public static limeLight camera;
@@ -45,7 +47,7 @@ public class Robot extends TimedRobot {
 	public static wristBase wrist;
 	public static intakeBase intake;
 
-	//Create Commands
+	//Create all commands
 	Command autonomousCommand;
 	Command arcadeDrive;
 	Command teleopSolenoid;
@@ -54,28 +56,33 @@ public class Robot extends TimedRobot {
 	/*@SuppressWarnings("rawtypes")
 	SendableChooser autoSelector;*/
 
+	//Sets all possible states of RobotState
 	public enum RobotState {
         DISABLED, AUTONOMOUS, TELEOP
     }
 	
+	//Sets the RobotState known as "s_robot_state" as RobotState.DISABLED
     public static RobotState s_robot_state = RobotState.DISABLED;
 
+	//Sets the RobotState state to returns s_robot_state
     public static RobotState getState() {
         return s_robot_state;
     }
 
+	//Sets the state for RobotState, used in initialization 
     public static void setState(RobotState state) {
         s_robot_state = state;
     }
 
 	@Override
+	//Initializes robot, contains vital definitions
 	public void robotInit() {
 
-		//Define Camera
+		//Defines camera and begins capture
 		CameraServer driverMemeCamera = CameraServer.getInstance();
 		driverMemeCamera.startAutomaticCapture();
 
-		//Define Objects
+		//Defines all ojects
 		oi = new OI();
 		drive = new driveBase();
 		solenoid = new pneumatics();
@@ -85,12 +92,14 @@ public class Robot extends TimedRobot {
 		wrist = new wristBase();
 		intake = new intakeBase();
 
-		//Auto Selector
+		//Auto selector
 		//autoSelector = new SendableChooser();
+		//Creates string finding either: DriverStation.Alliance.Blue or DriverStation.Alliance.Red
 		colour = DriverStation.getInstance().getAlliance();
+		//Creates bool to find, from game information, if the alliance is blue
 		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 
-		//SmartDashboard Subsystem 
+		//SmartDashboard subsystem initialization
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(camera);
 		SmartDashboard.putData(solenoid);
@@ -134,6 +143,7 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 	
+	//Initializes the talon motors with the given properties
 	public static void initTalon(TalonSRX motor, boolean invert) {
 		motor.setInverted(invert);
 		motor.setNeutralMode(NeutralMode.Brake);
@@ -143,6 +153,7 @@ public class Robot extends TimedRobot {
 		motor.configClosedloopRamp(0.5, 0);
 		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
+	//Initializes the victor motors with the given properties
 	public static void initVictor(VictorSPX motor, boolean invert) {
 		motor.setInverted(invert);
 		motor.setNeutralMode(NeutralMode.Brake);
@@ -152,6 +163,7 @@ public class Robot extends TimedRobot {
 		motor.configClosedloopRamp(0.5, 0);
 	}
 
+	//Initializes the talon drive motors with the given settings
 	public static void initMasterDriveMotor(TalonSRX motor){
 		motor.setSensorPhase(true);
 		//Brake Mode
@@ -174,6 +186,7 @@ public class Robot extends TimedRobot {
 		motor.setSelectedSensorPosition(0);
 	}
 
+	//Initializes the talon elevator motors with the given settings
 	public static void initMasterElevatorMotor(TalonSRX motor){
 		//Set Sensor Phase
 		motor.setSensorPhase(true);
@@ -201,6 +214,8 @@ public class Robot extends TimedRobot {
 		//Reset Encoder
 		motor.setSelectedSensorPosition(0);
 	}
+
+	//Initializes the talon wrist motors with the given settings
 	public static void initMasterWristMotor(TalonSRX motor){
 		//Set Sensor Phase
 		motor.setSensorPhase(false);

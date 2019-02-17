@@ -25,12 +25,15 @@ public class wristBase extends Subsystem {
   public enum wristPosition{INTAKE_WALL, INTAKE_FLOOR, CARGO_SCORE} //you get the idea
   public wristPosition wristState = wristPosition.INTAKE_FLOOR;
 
+  //Declares wristMotor as a TalonSRX motor
   private TalonSRX wristMotor;
 
-  public int INTAKE_POS = 400;
+  //Creates public integers
+  public int INTAKE_POS = 400; 
   public int CARGO_POS = 3200; //once again, you get the idea
   public int HATCH_POS = 4600; //once again, you get the idea
 
+  //Creates public function "wristBase"
   public wristBase(){
     //Define wrist motor
     wristMotor = new TalonSRX(RobotMap.WRIST_MOTOR.value);
@@ -42,18 +45,16 @@ public class wristBase extends Subsystem {
     Robot.initMasterWristMotor(wristMotor);
   }
 
- 
-  //Set Motors
+  //Set motors settigns (mode and output %)
   public void set(ControlMode mode, double output) {
     wristMotor.set(mode, output);
   }
 
-  //Stop Motors
+  //Set motor output to 0% to stop motor
   public void stop() {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  
   //Get Current Position in Encoder Units
   public double getWristPosition(){
     return wristMotor.getSensorCollection().getQuadraturePosition();

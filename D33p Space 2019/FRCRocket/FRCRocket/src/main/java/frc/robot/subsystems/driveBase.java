@@ -33,22 +33,23 @@ public class driveBase extends Subsystem {
 	public final double baseWidth = 0.64; //64cm
 	public final int maxVelocity = 14; //(CIM RPM / Gearbox Ratio) / 60sec * (Diamater of Wheel in Meters * Pi) * 60 Percent
 
-	//Motors
+  	//Declares leftMotor and rightMotor as TalonSRX motors (does not change)
 	private TalonSRX leftMotor, rightMotor;
+	//Declares leftMotorF, rigthMotorF, leftMotorF2, and rigthMotorF2 as VictorSPX motors(does not change)
 	private VictorSPX leftMotorF, rightMotorF, leftMotorF2, rightMotorF2;
 
-	//Sensors
+	//Declares AHRS as ahrs (AHRS refers to Attitude and Heading Reference System)
 	private AHRS ahrs;
 
-	//Test Motors
+	//Declares test motors (does not change)
 	private Spark testmotor1;
 	private Spark testmotor2;
 	private Spark testmotor3;
 	private Spark testmotor4;
 
+	//Creates public function for the driveBase
 	public driveBase() {
-		
-		//Define Motors
+		//Define motors from ports
 		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.value);
 		leftMotorF2 = new VictorSPX(RobotMap.LEFT_MOTORF2.value);
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
@@ -56,10 +57,10 @@ public class driveBase extends Subsystem {
 		rightMotorF2 = new VictorSPX(RobotMap.RIGHT_MOTORF2.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 
-		//Define Sensors
+		//Define sensors from port
     	ahrs = new AHRS(SPI.Port.kMXP);
     
-		//Initialize Drive Motors
+		//Initialize the following drive motors
 		Robot.initVictor(leftMotorF, true);
 		Robot.initVictor(leftMotorF2, true);
 		Robot.initTalon(leftMotor, true);
@@ -67,23 +68,23 @@ public class driveBase extends Subsystem {
 		Robot.initVictor(rightMotorF2, false);
 		Robot.initTalon(rightMotor, false);
 
-		//Enslave Victors to Talon (Master Motors)
+		//Enslave VictorsSPX to TalonSRX (Master Motors)
 		leftMotorF.follow(leftMotor);
 		rightMotorF.follow(rightMotor);
 		leftMotorF2.follow(leftMotor);
 		rightMotorF2.follow(rightMotor);
 
-		//Set Closed Control Loop and Motion Magic Configuration
+		//Set closed control loop and motion magic configuration
 		Robot.initMasterDriveMotor(leftMotor);
 		Robot.initMasterDriveMotor(rightMotor);
 
-		//Define Test Motors
+		//Define spark test motors from ports
 		testmotor1 = new Spark(5);
 		testmotor2 = new Spark(1);
 		testmotor3 = new Spark(2);
 		testmotor4 = new Spark(3);
 		
-		//Test Mode Variable Send
+		//Test mode variable send
 		LiveWindow.addSensor("drivebase", "Gyro", ahrs);
 		LiveWindow.addActuator("drivebase", "Test Motor1", testmotor1);
 		LiveWindow.addActuator("drivebase", "Test Motor2", testmotor2);
@@ -91,65 +92,65 @@ public class driveBase extends Subsystem {
 		LiveWindow.addActuator("drivebase", "Test Motor4", testmotor4);
 	}
 
-	//Get Left Encoder in Feet
+	//Get left encoder values in Feet
 	public double getLeftPosition() {
 		return -((leftMotor.getSensorCollection().getPulseWidthPosition()/talonTPR)*1.57);
 	}  
 
-	//Get Right Encoder in Feet
+	//Get right encoder values in Feet
 	public double getRightPosition(){
 		return ((rightMotor.getSensorCollection().getPulseWidthPosition()/talonTPR)*1.57);
 	}
 
-	//Convert Feet to Encoder Tics
+	//Public function to convert feet back to to encoder tics
 	public double feetToTics(double value){
 		return ((value/1.57)*talonTPR);
 	}
 
-	//Convert Encoder Tics to Feet
+	//Public funtion to convert encoder tics into feet
 	public double ticsToFeet(double value){
 		return ((value/talonTPR)*1.57);
 	}
 
-	//Get Left Encoder in Encoder Tics
+	//Get left encoder in encoder tics
 	public int getLeftPositionRaw(){
 		return -(leftMotor.getSensorCollection().getQuadraturePosition());
 	}
 
-	//Get Right Encoder in Encoder Tics
+	//Get right encoder in encoder tics
 	public int getRightPositionRaw(){
 		return rightMotor.getSensorCollection().getQuadraturePosition();
 	}
 
-	//Reset Encoders
+	//Reset encoders to 0
 	public void resetEnc(){
 		leftMotor.setSelectedSensorPosition(0, 0, 10);
 		rightMotor.setSelectedSensorPosition(0, 0, 10);
 	}
 
-	//Reset Gyro
+	//Reset gyro to 0
 	public void gyroReset(){
 		ahrs.reset();
 	}
 
-	//Get Angle
+	//Gets angle of the AHRS guidance
 	public double getGyroPosition(){
 		return ahrs.getAngle();
 	}
 
-	//Set Motors
+	//Public function to set motors config
 	public void set(ControlMode mode, double rightValue, double leftValue) {
 		leftMotor.set(mode, leftValue); 
 		rightMotor.set(mode, rightValue);
 	}
 
-	//Stop Motors
+	//Stop motors by setting output to 0%
 	public void stop() {
 		leftMotor.set(ControlMode.PercentOutput, 0); 
 		rightMotor.set(ControlMode.PercentOutput, 0); 
 	}
 
-	//PID Turn
+	//Public function to change control config for turning
 	public void pidWrite(double output) {
 		set(ControlMode.PercentOutput, (output/1), -(output/1));
 	}
