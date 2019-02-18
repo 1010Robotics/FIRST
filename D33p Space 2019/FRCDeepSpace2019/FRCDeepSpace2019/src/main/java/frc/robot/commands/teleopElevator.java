@@ -77,38 +77,28 @@ public class teleopElevator extends Command {
 
   @Override
   protected void execute() {
-    
-    //ask Caden about this if you need to know
-    if(Robot.oi.main.getBButton()){
-      if(count % 2 == 0){
-        count = -1;
-      }
-      count += 2;
-      if(count > 5){
-        count = 1;
-      }
-    }
-    if(Robot.oi.main.getYButton()){
-      if(count % 2 != 0){
-        count = 0;
-      }
-      count += 2;
-      if(count > 6){
-        count = 2;
-      }
-    }
-
-    SmartDashboard.putNumber("count", count);
-
-    if(Robot.oi.main.getBumper(Hand.kRight)){
+  
+    if(Robot.oi.partner.getBumper(Hand.kRight)){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
       Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL;
     }
-    else if(Robot.oi.main.getBButton()){
+    else if(Robot.oi.partner.getBButton()){
       Robot.elevator.elevatorState = elevatorPosition.MID;
       Robot.elevator.currentHeight = Robot.elevator.MID_GOAL;
     }
-    else if (Robot.oi.main.getYButton()){
+    else if(Robot.oi.partner.getAButton()){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.MID_GOAL_FRONT;
+    }
+    else if(Robot.oi.partner.getXButton()){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL_FRONT;
+    }
+    else if(Robot.oi.partner.getTriggerAxis(Hand.kRight) > 0.1){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL_FRONT;
+    }
+    else if (Robot.oi.partner.getYButton()){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
       Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL;
     }
@@ -137,7 +127,7 @@ public class teleopElevator extends Command {
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
     }*/
 
-    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    try { TimeUnit.MILLISECONDS.sleep(20); } 	
     	catch (Exception e) { /*Delay*/ }
   }
 

@@ -23,7 +23,7 @@ public class teleopSolenoid extends Command {
   }
 
   protected void execute() {
-    if(Robot.oi.partner.getBumper(Hand.kRight)){
+    if(Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1){
 			Robot.solenoid.extendSolenoid();
 		}
     

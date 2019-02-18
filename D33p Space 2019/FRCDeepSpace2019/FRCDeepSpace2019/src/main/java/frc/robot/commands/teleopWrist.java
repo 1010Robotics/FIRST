@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,12 @@ public class teleopWrist extends Command {
   //Variables
   private final double JoyDead = 0.1;
 	private final double DriveExp = 1.5;
-	private final double MotorMin = 0.01;
+  private final double MotorMin = 0.01;
+  private double error;
+  private double error_sum;
+  private double error_diff;
+  private double error_last = 0;
+  double power;
   double currentHeight;
   boolean manualStatus;
   double joyInput;
@@ -63,25 +69,34 @@ public class teleopWrist extends Command {
 
     SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
     wristPos.setNumber(Robot.wrist.getWristPosition());
-    joyInput = exponential(Robot.oi.partner.getY(Hand.kRight), DriveExp, JoyDead, MotorMin);
+    joyInput = exponential(Robot.oi.partner.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
     if(manualStatus == false){
 
-      if(Robot.oi.partner.getYButton()){
-        currentHeight = Robot.wrist.INTAKE_POS;
+      if(Robot.oi.partner.getPOV() == 0){
+        currentHeight = Robot.wrist.SCORE_BALL;
       }
-      else if(Robot.oi.partner.getBButton()){
-        currentHeight = Robot.wrist.CARGO_POS;
+      else if(Robot.oi.partner.getPOV() == 180){
+        currentHeight = Robot.wrist.INTAKE_HATCH;
       }
-      else if(Robot.oi.partner.getBumper(Hand.kLeft)){
-        currentHeight = Robot.wrist.HATCH_POS;
+      else if(Robot.oi.partner.getPOV() == 90){
+        currentHeight = Robot.wrist.INTAKE_BALL;
       } 
-      else if(Robot.oi.partner.getXButton()){
+      else if(Robot.oi.partner.getBumper(Hand.kLeft)){
+        currentHeight = Robot.wrist.SCORE_HATCH;
+      } 
+      else if(Robot.oi.partner.getStickButton(Hand.kLeft)){
         manualStatus = true;
       }
     
       currentHeight += (joyInput*250);
 
-      Robot.wrist.set(ControlMode.MotionMagic, currentHeight); 
+      error = currentHeight - Robot.wrist.getWristPosition();
+      error_last = error;
+      error_diff = error - error_last;
+      error_sum += error;
+      power = (error*Constants.kWristGains.kP)+(error_sum*Constants.kWristGains.kI)+(error_diff*Constants.kWristGains.kD);
+      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      Robot.wrist.set(ControlMode.PercentOutput, power);
       
     }
     

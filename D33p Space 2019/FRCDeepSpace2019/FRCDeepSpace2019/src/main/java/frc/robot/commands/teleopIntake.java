@@ -28,14 +28,14 @@ public class teleopIntake extends Command {
   protected void execute() {
 
     //Get Trigger Value and Apply a Range
-    speed = (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kLeft));
+    speed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
     //If Left Bumper is pressed, Intake at Max Speed
-    if(Robot.oi.main.getBumper(Hand.kLeft)){
+    if(Robot.oi.main.getBumper(Hand.kRight)){
 			Robot.intake.set(-1);
     }
     //Otherwise Outtake at the Trigger Value
-		else if(Robot.oi.main.getTriggerAxis(Hand.kLeft) != 0){
+		else if(Robot.oi.main.getTriggerAxis(Hand.kRight) != 0){
       Robot.intake.set(speed);
     }
     //Otherwise set the Intake Speed to 0

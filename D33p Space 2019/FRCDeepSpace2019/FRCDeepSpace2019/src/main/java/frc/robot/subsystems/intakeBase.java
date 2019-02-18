@@ -28,7 +28,7 @@ public class intakeBase extends Subsystem {
     intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);
 
     //Initialize Intake Motors
-    Robot.initTalon(intakeMotor, false);
+    Robot.initTalon(intakeMotor, true);
 
     //Sets the NeutralMode to Coast
     intakeMotor.setNeutralMode(NeutralMode.Coast);
