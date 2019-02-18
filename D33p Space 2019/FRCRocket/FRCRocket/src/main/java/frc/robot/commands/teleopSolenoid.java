@@ -15,14 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 //Creating a public object named "teleopSolenoid" which is a Command with properties for creating robot solenoid controls
 public class teleopSolenoid extends Command {
 
+  //Specifies the required files
   public teleopSolenoid() {
     requires(Robot.solenoid);
   }
 
+  //Creates unchanging function to begin compressor
   protected void initialize() {
     Robot.solenoid.startCompressor();
   }
 
+  //Creates unchanging function to run code under specific situations
   protected void execute() {
     if(Robot.oi.main.getAButton()){
 			Robot.solenoid.extendSolenoid();
@@ -33,10 +36,12 @@ public class teleopSolenoid extends Command {
     SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
   }
 
+  //Creates an unchanging boolean that is false
   protected boolean isFinished() {
     return false;
   }
 
+  //Creates an unchangin function for retracting solenoid 
   protected void end() {
     Robot.solenoid.retractSolenoid();
   }

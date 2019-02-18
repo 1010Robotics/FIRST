@@ -23,12 +23,12 @@ import edu.wpi.first.wpilibj.command.Command;
 //Creating a public object named "arcadeDrive" which is a Command with properties for creating robot arcade driving controls
 public class arcadeDrive extends Command {
 
-	//Exponential Variables
+	//Exponential variables
 	private final double JoyDead = 0.1;
 	private final double DriveExp = 1.5;
 	private final double MotorMin = 0.01;
 
-	//Align Code
+	//Alignment code
 	private float headingKp = 0.014f;
 	private float moveKp = 0.039f;  
 	private double headingError;
@@ -37,7 +37,7 @@ public class arcadeDrive extends Command {
 	private double moveOutput;
 
 
-	//Exponential Function
+	//Exponential control function
 	private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
 		double joySign;
 		double joyMax = 1 - joyDead;
@@ -52,27 +52,32 @@ public class arcadeDrive extends Command {
 		return power;
 	}
 
-	//Joystick OI Variables
+	//Joystick OI variables
 	private double correction = 0;
 	private double joyYval;
 	private double joyXval;
 	private double yOutput;
 	private double xOutput;
 
+	//Specifies needed files for "arcadeDrive.java"
 	public arcadeDrive() {
 		requires(Robot.drive);
 		requires(Robot.camera);
 	}
 
+	//Initialization which does not change
 	protected void initialize() {
-
 	}
 
+	//Execute command function which does not change
 	protected void execute() {
 
+		//Specifies camera modes
 		Robot.camera.setLedMode(LightMode.eOn);
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
+
+	//Robot control
 		if(Robot.oi.main.getXButton()) {
 			moveError = -12 - Robot.camera.getTy();
 			headingError = 1.37 - Robot.camera.getTx();
@@ -101,10 +106,12 @@ public class arcadeDrive extends Command {
     	catch (Exception e) { /*HAHA YOU GOT CAUGHT*/ }
 	}
 
+	//An unchanging boolean for "isFinished" which returns false
 	protected boolean isFinished() {
 		return false;
 	}
 
+	//End function which ceases robot drive commands
 	protected void end() {
 		Robot.drive.stop();
 	}

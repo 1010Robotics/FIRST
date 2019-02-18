@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Import
+//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
@@ -38,18 +38,18 @@ public class teleopWrist extends Command {
   @Override
   //Executes teleopWrist code
   protected void execute() {
-    //Get Trigger Value and Apply a Range
+    //Get trigger value and apply a range
     speed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
-    //If Left Bumper is pressed, Intake at Max Speed
+    //If left bumper is pressed, intake at max speed
     if(Robot.oi.main.getBumper(Hand.kRight)){
 			Robot.wrist.set(ControlMode.PercentOutput, -0.25);
     }
-    //Otherwise Outtake at the Trigger Value
+    //Otherwise outtake at the trigger value
 		else if(Robot.oi.main.getTriggerAxis(Hand.kRight) != 0){
       Robot.wrist.set(ControlMode.PercentOutput, speed/4);
     }
-    //Otherwise set the Intake Speed to 0
+    //Otherwise set the intake speed to 0
     else{
       Robot.wrist.stop();
     }

@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //Creating a public object named "teleopElevator" which is a Command with properties for creating robot elevator controls
 public class teleopElevator extends Command {
 
-  //Variables
+  //Creates variables
   int currentHeight;
   private ShuffleboardTab testTab = Shuffleboard.getTab("Test Tab");
   private ShuffleboardTab teleopTab = Shuffleboard.getTab("Teleop Tab");
@@ -59,18 +59,21 @@ public class teleopElevator extends Command {
     .withWidget(BuiltInWidgets.kTextView)
     .getEntry();
 
-  
+  //Specifies required files
   public teleopElevator() {
     requires(Robot.elevator);
   }
 
   @Override
+  //Creates unchanging function which executes on start
   protected void initialize() {
   }
 
   @Override
+  //Creates unchanging function which begins after initialize
   protected void execute() {
 
+    //Robot control code
     if(Robot.oi.main.getAButton()){
       currentHeight = Robot.elevator.LOW_GOAL;
       Robot.elevator.elevatorState = elevatorPosition.LOW;
@@ -84,22 +87,22 @@ public class teleopElevator extends Command {
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
     }
 
-    //Send Values to Dashboard
+    //Send values to dashboard
     elevatorString.setString(Robot.elevator.elevatorState.toString());
     elevatorPos.setNumber(Robot.elevator.getElevatorPosition());
     elevatorPercentOutput.setNumber(Robot.elevator.getElevatorOutput());
     
-    //Reset Button for Motor Test
+    //Reset button for motor test
     if(testButton.getBoolean(false)){
       elevatorMotorControl.setNumber(0);
       testButton.setBoolean(false);
     }
    
-    //If the Robot is Connected to the field, doesn't run the Motor Test Program
+    //If the robot is connected to the field, doesn't run the motor test program
     if(DriverStation.getInstance().isFMSAttached()){
       Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
     }
-    //Otherwise Test Motors
+    //Otherwise test motors
     else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
     }
@@ -109,11 +112,13 @@ public class teleopElevator extends Command {
   }
 
   @Override
+  //Creates protected false bool
   protected boolean isFinished() {
     return false;
   }
 
   @Override
+  //creates end command to stop elevator commands
   protected void end() {
     Robot.elevator.stop();
   }
