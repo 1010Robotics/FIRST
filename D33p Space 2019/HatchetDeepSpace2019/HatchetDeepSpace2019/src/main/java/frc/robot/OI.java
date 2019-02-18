@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class OI {
 
-  public final XboxController main = new XboxController(RobotMap.CONTROLLER_MAIN.value);
-	public final XboxController partner = new XboxController(RobotMap.CONTROLLER_PARTNER.value);
+  public final XboxController main = new XboxController(RobotMap.CONTROLLER_MAIN.getValue());
+	public final XboxController partner = new XboxController(RobotMap.CONTROLLER_PARTNER.getValue());
 
   public OI() 
   {

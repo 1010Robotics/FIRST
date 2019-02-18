@@ -18,7 +18,7 @@ import frc.robot.Robot;
 public class arcadeDrive extends Command {
   //Exponential Variables
 	private final double JoyDead = 0.1;
-	private final double DriveExp = 1.5;//!!!!!!
+	private final double DriveExp = 1.5;//!!!!!! {1,2} controls how fast robot goes based on joystick movements//TUNE
 	private final double MotorMin = 0.01;
 
 	//Exponential Function

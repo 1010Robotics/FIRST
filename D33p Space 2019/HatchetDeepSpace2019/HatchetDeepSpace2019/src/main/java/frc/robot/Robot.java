@@ -17,9 +17,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.driveBase;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,10 +33,13 @@ public class Robot extends TimedRobot {
   //public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
   public static driveBase drive;
-  public static Pneumatics p;
+  public static Pneumatics pneumatics;
+  public static Elevator elevator;
+  public static Intake intake;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -45,7 +49,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_oi = new OI();
     drive = new driveBase();
-    p = new Pneumatics();
+    pneumatics = new Pneumatics();
+    elevator = new Elevator();
+    intake = new Intake();
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -149,7 +155,7 @@ public class Robot extends TimedRobot {
 		motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 	}
 	public static void initVictor(VictorSPX motor, boolean invert) {
-		motor.setInverted(invert);
+		motor.setInverted(invert); 
 		motor.setNeutralMode(NeutralMode.Brake);
 		motor.neutralOutput();
 		motor.configNominalOutputForward(0.0, 0);

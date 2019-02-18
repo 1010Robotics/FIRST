@@ -33,10 +33,10 @@ public class driveBase extends Subsystem {
   public driveBase() {
 		
 		//Define Motors
-		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.value);
-		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
-		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
-		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
+		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.getValue());//defining front left motor
+		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.getValue());//defining back left motor
+		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.getValue());//defining right front motor
+		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.getValue());//defining back right motor
 
 		//Define Sensors
     ahrs = new AHRS(SPI.Port.kMXP);
@@ -48,7 +48,7 @@ public class driveBase extends Subsystem {
 		Robot.initTalon(rightMotor, false);
 
 		//Enslave Victors to Talon (Master Motors)
-		leftMotorF.follow(leftMotor);
+		leftMotorF.follow(leftMotor); 
 		rightMotorF.follow(rightMotor);
 
 		//Set Closed Control Loop and Motion Magic Configuration
@@ -105,8 +105,8 @@ public class driveBase extends Subsystem {
 
 	//Set Motors
 	public void set(ControlMode mode, double rightValue, double leftValue) {
-		leftMotor.set(mode, leftValue); 
-		rightMotor.set(mode, rightValue);
+		leftMotor.set(mode, leftValue*0.75); //TUNE MOTOR SPEED (0 TO 1)
+		rightMotor.set(mode, rightValue*0.75); //TUNE 
 	}
 
 	//Stop Motors
@@ -125,4 +125,3 @@ public class driveBase extends Subsystem {
 		setDefaultCommand(new arcadeDrive());
 	}
 }
-  

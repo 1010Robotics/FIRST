@@ -12,13 +12,13 @@ import frc.robot.Robot;
 
 public class PneumaticsCommand extends Command {
   public PneumaticsCommand() {
-    requires(Robot.p);
+    requires(Robot.pneumatics);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.p.startCompressor();
+    Robot.pneumatics.startCompressor();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -26,10 +26,10 @@ public class PneumaticsCommand extends Command {
   protected void execute() {
     
     if(Robot.m_oi.main.getAButton()){
-      Robot.p.retractSolenoid();
+      Robot.pneumatics.retractSolenoid();
     }
     else if(Robot.m_oi.main.getBButton()){
-      Robot.p.extendSolenoid();
+      Robot.pneumatics.extendSolenoid();
     }
   }
 
@@ -42,7 +42,7 @@ public class PneumaticsCommand extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.p.stopCompressor();
+    Robot.pneumatics.stopCompressor();
   }
 
   // Called when another command which requires one or more of the same
