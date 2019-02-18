@@ -85,7 +85,7 @@ public class teleopElevator extends Command {
       }
       count += 2;
       if(count > 5){
-        count = -1;
+        count = 1;
       }
     }
     if(Robot.oi.main.getYButton()){
@@ -94,7 +94,7 @@ public class teleopElevator extends Command {
       }
       count += 2;
       if(count > 6){
-        count = 0;
+        count = 2;
       }
     }
 
