@@ -15,33 +15,33 @@ import edu.wpi.first.wpilibj.command.Command;
 
 //Creating a public object named "teleopIntake" which is a Command with properties for creating robot intake controls
 public class teleopIntake extends Command {
-
+  //Defines a local (private) variable (double) named "speed"
   private double speed;
 
-
-
+  //Specifies required files
   public teleopIntake() {
     requires(Robot.intake);
   }
 
+  //Creates unchanging function that plays on startup
   protected void initialize() {
-   
   }
 
+  //Creates unchanging function which executes code until it is completed or canceled
   protected void execute() {
 
-    //Get Trigger Value and Apply a Range
+    //Get trigger value and apply a range
     speed = (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kLeft));
     
-    //If Left Bumper is pressed, Intake at Max Speed
+    //If left bumper is pressed, intake at max speed
     if(Robot.oi.main.getBumper(Hand.kLeft)){
 			Robot.intake.set(-1);
     }
-    //Otherwise Outtake at the Trigger Value
+    //Otherwise outtake at the trigger value
 		else if(Robot.oi.main.getTriggerAxis(Hand.kLeft) != 0){
       Robot.intake.set(speed);
     }
-    //Otherwise set the Intake Speed to 0
+    //Otherwise set the intake Speed to 0
     else{
       Robot.intake.stop();
     }
