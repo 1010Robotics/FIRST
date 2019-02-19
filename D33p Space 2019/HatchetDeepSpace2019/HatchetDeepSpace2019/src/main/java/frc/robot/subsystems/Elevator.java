@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -24,10 +24,9 @@ public class Elevator extends Subsystem {
 
       //Motors
     private TalonSRX elevatorMotor;
-    private VictorSPX elevatorMotorF;   
-
+    private VictorSP elevatorWheel;
     
-      //Variables
+     //Variables
     private float P = 0.0f; //NOTE: TUNE (around 0.0001)
     private float I = 0.0f;//TUNE
     private float D = 0.0f; //TUNE
@@ -40,12 +39,9 @@ public class Elevator extends Subsystem {
 
     public Elevator() {
         elevatorMotor = new TalonSRX(RobotMap.ELEVATOR.getValue());// defining elevator talon
-        elevatorMotorF = new VictorSPX(RobotMap.ELEVATORF.getValue());// defining elevator victor
+        elevatorWheel = new VictorSP(8);
 
         Robot.initTalon(elevatorMotor, false);
-        Robot.initVictor(elevatorMotorF, false);
-
-        elevatorMotorF.follow(elevatorMotor);
 
         Robot.initMasterDriveMotor(elevatorMotor);
     }
@@ -82,5 +78,20 @@ public class Elevator extends Subsystem {
         executePIDToPosition(ELEVATORDOWNPRESET);
     }
 
+    public void set(double speed){
+        elevatorMotor.set(ControlMode.PercentOutput, speed);
+    }
+
+    public void driveElevatorForward(){
+        elevatorWheel.set(1);
+    }
+
+    public void driveElevatorBack(){
+        elevatorWheel.set(-1);
+    }
+
+    public void driveElevatorStop(){
+        elevatorWheel.set(0);
+    }
 
 }

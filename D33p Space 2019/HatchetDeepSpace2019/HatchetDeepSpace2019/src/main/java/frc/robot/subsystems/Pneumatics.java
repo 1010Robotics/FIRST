@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.PneumaticsCommand;
 
@@ -19,20 +20,20 @@ public class Pneumatics extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   Compressor c;
-  DoubleSolenoid doublesolenoid;
+  Solenoid solenoid;
 
   public Pneumatics() {
     c = new Compressor(20);
-    doublesolenoid = new DoubleSolenoid(0,1);
+    solenoid = new Solenoid(1);
 
   }
 
   public void extendSolenoid(){
-    doublesolenoid.set(DoubleSolenoid.Value.kForward);
+    solenoid.set(true);
   }
 
   public void retractSolenoid(){
-    doublesolenoid.set(DoubleSolenoid.Value.kReverse);
+    solenoid.set(false);
   }
  
   public void startCompressor(){

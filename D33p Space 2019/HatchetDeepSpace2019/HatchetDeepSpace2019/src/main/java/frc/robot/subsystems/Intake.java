@@ -47,8 +47,8 @@ public class Intake extends Subsystem {
   public void initDefaultCommand() {
     setDefaultCommand(new IntakeCommand());
   }
-
-  public void executePIDToPosition(double desiredPosition)
+  
+  public void executePIDToPosition(double desiredPosition) 
   {
       
       while (getIntakePosition() != desiredPosition) {

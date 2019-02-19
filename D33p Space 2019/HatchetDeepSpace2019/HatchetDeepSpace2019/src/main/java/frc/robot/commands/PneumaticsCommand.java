@@ -26,10 +26,10 @@ public class PneumaticsCommand extends Command {
   protected void execute() {
     
     if(Robot.m_oi.main.getAButton()){
-      Robot.pneumatics.retractSolenoid();
-    }
-    else if(Robot.m_oi.main.getBButton()){
       Robot.pneumatics.extendSolenoid();
+    }
+    else{
+      Robot.pneumatics.retractSolenoid();
     }
   }
 

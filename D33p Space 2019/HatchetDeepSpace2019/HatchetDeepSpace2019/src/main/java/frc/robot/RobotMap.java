@@ -17,12 +17,14 @@ public enum RobotMap
 	CONTROLLER_PARTNER(1),
   //CAN Motors Mapping
 	LEFT_MOTORF(7),
-	LEFT_MOTOR(1), 
-	RIGHT_MOTORF(8), 
+	LEFT_MOTORF2(8),
+	LEFT_MOTOR(5), 
+	RIGHT_MOTORF(4), 
+	RIGHT_MOTORF2(3), 
 	RIGHT_MOTOR(2), 
-	ELEVATOR(4),
-	ELEVATORF(5),
-	INTAKE(6);
+	ELEVATOR(1),
+	INTAKE(6),
+	elevatorWheel(8);
 
 	private final int value;
 
