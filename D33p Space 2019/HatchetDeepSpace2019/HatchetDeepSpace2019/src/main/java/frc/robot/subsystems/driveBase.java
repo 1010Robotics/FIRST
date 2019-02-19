@@ -25,7 +25,7 @@ public class driveBase extends Subsystem {
 
   //Motors
 	private TalonSRX leftMotor, rightMotor;
-	private VictorSPX leftMotorF, rightMotorF;
+	private VictorSPX leftMotorF, leftMotorF2, rightMotorF2, rightMotorF;
 
 	//Sensors
 	private AHRS ahrs;
@@ -33,23 +33,29 @@ public class driveBase extends Subsystem {
   public driveBase() {
 		
 		//Define Motors
-		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.value);
-		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
-		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
-		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
+		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.getValue());//defining front left motor
+		leftMotorF2 = new VictorSPX(RobotMap.LEFT_MOTORF2.getValue());//defining front left motor
+		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.getValue());//defining back left motor
+		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.getValue());//defining right front motor
+		rightMotorF2 = new VictorSPX(RobotMap.RIGHT_MOTORF2.getValue());//defining right front motor
+		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.getValue());//defining back right motor
 
 		//Define Sensors
     ahrs = new AHRS(SPI.Port.kMXP);
     
 		//Initialize Drive Motors
+		Robot.initVictor(leftMotorF2, true);
 		Robot.initVictor(leftMotorF, true);
 		Robot.initTalon(leftMotor, true);
+		Robot.initVictor(rightMotorF2, false);
 		Robot.initVictor(rightMotorF, false);
 		Robot.initTalon(rightMotor, false);
 
 		//Enslave Victors to Talon (Master Motors)
-		leftMotorF.follow(leftMotor);
+		leftMotorF.follow(leftMotor); 
+		leftMotorF2.follow(leftMotor); 
 		rightMotorF.follow(rightMotor);
+		rightMotorF2.follow(rightMotor);
 
 		//Set Closed Control Loop and Motion Magic Configuration
 		Robot.initMasterDriveMotor(leftMotor);
@@ -105,8 +111,8 @@ public class driveBase extends Subsystem {
 
 	//Set Motors
 	public void set(ControlMode mode, double rightValue, double leftValue) {
-		leftMotor.set(mode, leftValue); 
-		rightMotor.set(mode, rightValue);
+		leftMotor.set(mode, leftValue*0.75); //TUNE MOTOR SPEED (0 TO 1)
+		rightMotor.set(mode, rightValue*0.75); //TUNE 
 	}
 
 	//Stop Motors
@@ -125,4 +131,3 @@ public class driveBase extends Subsystem {
 		setDefaultCommand(new arcadeDrive());
 	}
 }
-  

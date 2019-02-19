@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Talon;
+
 public enum RobotMap 
 {
 
@@ -15,15 +17,34 @@ public enum RobotMap
 	CONTROLLER_PARTNER(1),
   //CAN Motors Mapping
 	LEFT_MOTORF(7),
-	LEFT_MOTOR(1), 
-	RIGHT_MOTORF(8), 
-	RIGHT_MOTOR(2);
+	LEFT_MOTORF2(8),
+	LEFT_MOTOR(5), 
+	RIGHT_MOTORF(4), 
+	RIGHT_MOTORF2(3), 
+	RIGHT_MOTOR(2), 
+	ELEVATOR(1),
+	INTAKE(6),
+	elevatorWheel(8);
 
-	public final int value;
+	private final int value;
 
   RobotMap(int value) 
   {
+
+	
+
 		this.value = value;
   }
+
+
+	public int getValue() {
+		return this.value;
+	}
+
+
+	public static void initTalon(Talon elevator2, boolean b) {
+	}
+
+
   
 }
