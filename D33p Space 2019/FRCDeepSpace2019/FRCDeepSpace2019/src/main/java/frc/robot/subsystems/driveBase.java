@@ -33,7 +33,7 @@ public class driveBase extends Subsystem {
 
 	//Motors
 	private TalonSRX leftMotor, rightMotor;
-	private VictorSPX leftMotorF, rightMotorF;
+	private VictorSPX leftMotorF, rightMotorF, leftMotorF2, rightMotorF2;
 
 	//Sensors
 	private AHRS ahrs;
@@ -48,8 +48,10 @@ public class driveBase extends Subsystem {
 		
 		//Define Motors
 		leftMotorF = new VictorSPX(RobotMap.LEFT_MOTORF.value);
+		leftMotorF2 = new VictorSPX(RobotMap.LEFT_MOTORF2.value);
 		leftMotor = new TalonSRX(RobotMap.LEFT_MOTOR.value);
 		rightMotorF = new VictorSPX(RobotMap.RIGHT_MOTORF.value);
+		rightMotorF2 = new VictorSPX(RobotMap.RIGHT_MOTORF2.value);
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 
 		//Define Sensors
@@ -57,13 +59,17 @@ public class driveBase extends Subsystem {
     
 		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
+		Robot.initVictor(leftMotorF2, true);
 		Robot.initTalon(leftMotor, true);
 		Robot.initVictor(rightMotorF, false);
+		Robot.initVictor(rightMotorF2, false);
 		Robot.initTalon(rightMotor, false);
 
 		//Enslave Victors to Talon (Master Motors)
 		leftMotorF.follow(leftMotor);
+		leftMotorF2.follow(leftMotor);
 		rightMotorF.follow(rightMotor);
+		rightMotorF2.follow(rightMotor);
 
 		//Set Closed Control Loop and Motion Magic Configuration
 		Robot.initMasterDriveMotor(leftMotor);

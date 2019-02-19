@@ -38,7 +38,7 @@ public class wristBase extends Subsystem {
     wristMotor = new TalonSRX(RobotMap.WRIST_MOTOR.value);
 
     //Initialize Wrist Motor
-    Robot.initTalon(wristMotor, false);
+    Robot.initTalon(wristMotor, true);
     
     //Setting Closed Control Loop and MotionMagic, just like the Elevator
     Robot.initMasterWristMotor(wristMotor);
