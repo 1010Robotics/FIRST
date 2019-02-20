@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
@@ -25,7 +26,7 @@ public class PneumaticsCommand extends Command {
   @Override
   protected void execute() {
     
-    if(Robot.m_oi.main.getAButton()){
+    if(Robot.m_oi.main.getTriggerAxis(Hand.kRight) > 0.1){
       Robot.pneumatics.extendSolenoid();
     }
     else{

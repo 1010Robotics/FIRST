@@ -25,7 +25,6 @@ public class Pneumatics extends Subsystem {
   public Pneumatics() {
     c = new Compressor(20);
     solenoid = new Solenoid(1);
-
   }
 
   public void extendSolenoid(){

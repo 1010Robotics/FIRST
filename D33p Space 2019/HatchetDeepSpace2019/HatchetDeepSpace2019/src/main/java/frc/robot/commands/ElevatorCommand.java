@@ -33,7 +33,7 @@ public class ElevatorCommand extends Command {
 	@Override
 	protected void execute() {
 	
-		if(Robot.m_oi.main.getXButton()){
+		if(Robot.m_oi.main.getAButton()){
 			Robot.elevator.set(1);
 			//Robot.intake.moveIntakeOutOfWay();
 			//Robot.elevator.moveElevatorToDownPreset();
@@ -43,12 +43,14 @@ public class ElevatorCommand extends Command {
 			//Robot.intake.moveIntakeOutOfWay();
 			//Robot.elevator.moveElevatorToUpPreset();
 		}
-
-		if(Robot.m_oi.partner.getYButton()) {
-			Robot.elevator.driveElevatorForward();
+		else{
+			Robot.elevator.set(0);
 		}
 
-		else if (Robot.m_oi.partner.getXButton()) {
+		if(Robot.m_oi.main.getBButton()) {
+			Robot.elevator.driveElevatorForward();
+		}
+		else if (Robot.m_oi.main.getXButton()) {
 			Robot.elevator.driveElevatorBack();
 		}
 		else{

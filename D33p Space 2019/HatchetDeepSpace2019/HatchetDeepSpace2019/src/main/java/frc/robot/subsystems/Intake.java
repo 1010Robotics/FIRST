@@ -47,6 +47,10 @@ public class Intake extends Subsystem {
   public void initDefaultCommand() {
     setDefaultCommand(new IntakeCommand());
   }
+
+  public void set(double speed){
+    intakeMotor.set(ControlMode.PercentOutput,speed);
+  }
   
   public void executePIDToPosition(double desiredPosition) 
   {

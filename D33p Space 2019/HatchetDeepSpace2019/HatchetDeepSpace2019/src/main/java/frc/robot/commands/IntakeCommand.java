@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
@@ -26,13 +27,17 @@ public class IntakeCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.main.getStartButton()) {
-      Robot.intake.moveIntakeToFloorPreset();
+    if(Robot.m_oi.main.getBumper(Hand.kRight)) {
+      Robot.intake.set(0.5);
+      //Robot.intake.moveIntakeToFloorPreset();
     }
-
-    else if(Robot.m_oi.main.getBackButton()){
-			Robot.intake.moveIntakeToUpPreset();
-		}
+    else if(Robot.m_oi.main.getBumper(Hand.kLeft)){
+      Robot.intake.set(-0.5);
+			//Robot.intake.moveIntakeToUpPreset();
+    }
+    else{
+      Robot.intake.set(0.0);
+    }
 
   }
 
