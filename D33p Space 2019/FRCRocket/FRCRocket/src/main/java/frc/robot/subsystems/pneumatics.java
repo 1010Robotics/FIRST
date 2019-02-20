@@ -5,15 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.teleopSolenoid;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 
-//Creating a public object named "pneumatics" which is a Subsystem with properties for controlling the robot pneumatics
+
 public class pneumatics extends Subsystem {
 
   //Variables
@@ -21,34 +20,27 @@ public class pneumatics extends Subsystem {
   public solenoidState actuatorState = solenoidState.OFF;
 
   //Solenoids
-  public DoubleSolenoid diskIntake;
+  public Solenoid diskIntake;
 
   //Compressor
   public Compressor compressor;
 
-  //Creates public command for definitions
   public pneumatics(){
     //Define Solenoid
-    diskIntake = new DoubleSolenoid(0, 1);
+    diskIntake = new Solenoid (0);
     //Define Compressor
     compressor = new Compressor(21);
   }
 
   //Extend Solenoid
   public void extendSolenoid(){
-    diskIntake.set(DoubleSolenoid.Value.kForward);
+    diskIntake.set(true);
     actuatorState =  solenoidState.CLOSED;
-  }
-
-  //Retract Solenoid
-  public void retractSolenoid(){
-    diskIntake.set(DoubleSolenoid.Value.kReverse);
-    actuatorState = solenoidState.OPEN;
   }
 
   //Disable Solenoid
   public void disableSolenoid(){
-    diskIntake.set(DoubleSolenoid.Value.kOff);
+    diskIntake.set(false);
     actuatorState = solenoidState.OFF;
   }
 

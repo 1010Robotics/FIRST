@@ -5,30 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.limeLight.CameraMode;
 import frc.robot.subsystems.limeLight.LightMode;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//Creating a public object named "arcadeDrive" which is a Command with properties for creating robot arcade driving controls
 public class arcadeDrive extends Command {
 
-	//Exponential variables
+	private NetworkTableEntry gyroOutput = Robot.teleopTab
+	.add("Gyro Val", 0)
+	.withWidget(BuiltInWidgets.kDial)
+	.withProperties(Map.of("MIN", -180, "MAX", 180))
+	.getEntry();
+
+	private NetworkTableEntry JoystickOutput_Y = Robot.teleopTab
+	.add("Joy L", 0)
+	.withWidget(BuiltInWidgets.kNumberBar)
+	.withProperties(Map.of("MIN", -1, "MAX", 1))
+	.getEntry();
+
+	private NetworkTableEntry JoystickOutput_X = Robot.teleopTab
+	.add("Joy R", 0)
+	.withWidget(BuiltInWidgets.kNumberBar)
+	.withProperties(Map.of("MIN", -1, "MAX", 1))
+	.getEntry();
+
+	//Exponential Variables
 	private final double JoyDead = 0.1;
-	private final double DriveExp = 1.5;
+	private final double DriveExp = 1.5;//!!!!!!
 	private final double MotorMin = 0.01;
 
-	//Alignment code
+	//Align Code
 	private float headingKp = 0.014f;
 	private float moveKp = 0.039f;  
 	private double headingError;
@@ -37,7 +56,7 @@ public class arcadeDrive extends Command {
 	private double moveOutput;
 
 
-	//Exponential control function
+	//Exponential Function
 	private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
 		double joySign;
 		double joyMax = 1 - joyDead;
@@ -52,32 +71,28 @@ public class arcadeDrive extends Command {
 		return power;
 	}
 
-	//Joystick OI variables
+	//Joystick OI Variables
 	private double correction = 0;
 	private double joyYval;
 	private double joyXval;
 	private double yOutput;
 	private double xOutput;
 
-	//Specifies needed files for "arcadeDrive.java"
 	public arcadeDrive() {
 		requires(Robot.drive);
 		requires(Robot.camera);
 	}
 
-	//Initialization which does not change
 	protected void initialize() {
+
 	}
 
-	//Execute command function which does not change
 	protected void execute() {
-
-		//Specifies camera modes
+		SmartDashboard.putNumber("Button?", Robot.oi.main.getPOV());
+    	SmartDashboard.putBoolean("Joy Button", Robot.oi.partner.getStickButtonPressed(Hand.kLeft));
 		Robot.camera.setLedMode(LightMode.eOn);
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
-
-	//Robot control
 		if(Robot.oi.main.getXButton()) {
 			moveError = -12 - Robot.camera.getTy();
 			headingError = 1.37 - Robot.camera.getTx();
@@ -95,23 +110,18 @@ public class arcadeDrive extends Command {
 
 			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
 
-			SmartDashboard.putNumber("Left Position", (Robot.drive.getLeftPosition()));
-			SmartDashboard.putNumber("Right Position", (Robot.drive.getRightPosition()));
-			SmartDashboard.putNumber("Joystick Y", yOutput);
-			SmartDashboard.putNumber("Joystick X", xOutput);
-			SmartDashboard.putNumber("Gyro Angle", (Robot.drive.getGyroPosition()));
+			gyroOutput.setNumber(Robot.drive.getGyroPosition());
+			JoystickOutput_X.setNumber(xOutput);
+			JoystickOutput_Y.setNumber(yOutput);
 		}
-
 		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*HAHA YOU GOT CAUGHT*/ }
+    	catch (Exception e) { /*delay*/ }
 	}
 
-	//An unchanging boolean for "isFinished" which returns false
 	protected boolean isFinished() {
 		return false;
 	}
 
-	//End function which ceases robot drive commands
 	protected void end() {
 		Robot.drive.stop();
 	}

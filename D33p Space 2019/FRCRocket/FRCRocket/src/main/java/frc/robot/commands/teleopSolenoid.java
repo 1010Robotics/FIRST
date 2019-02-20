@@ -5,48 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
-//Creating a public object named "teleopSolenoid" which is a Command with properties for creating robot solenoid controls
 public class teleopSolenoid extends Command {
 
-  //Specifies the required files
   public teleopSolenoid() {
     requires(Robot.solenoid);
   }
 
-  //Creates unchanging function to begin compressor
   protected void initialize() {
     Robot.solenoid.startCompressor();
   }
 
-  //Creates unchanging function to run code under specific situations
   protected void execute() {
-    if(Robot.oi.main.getAButton()){
+    if(Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1){
 			Robot.solenoid.extendSolenoid();
 		}
-		else if(Robot.oi.main.getBButton()){
-      Robot.solenoid.retractSolenoid();
+    
+    else{
+      Robot.solenoid.disableSolenoid();
     }
+    
     SmartDashboard.putString("Solenoid State", Robot.solenoid.actuatorState.toString());
   }
 
-  //Creates an unchanging boolean that is false
   protected boolean isFinished() {
     return false;
   }
 
-  //Creates an unchangin function for retracting solenoid 
   protected void end() {
-    Robot.solenoid.retractSolenoid();
+    Robot.solenoid.disableSolenoid();
   }
 
   protected void interrupted() {
     end();
   }
+  
 }

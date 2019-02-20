@@ -5,9 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
@@ -16,109 +16,126 @@ import java.util.concurrent.TimeUnit;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-//Creating a public object named "teleopElevator" which is a Command with properties for creating robot elevator controls
+
 public class teleopElevator extends Command {
 
-  //Creates variables
-  int currentHeight;
-  private ShuffleboardTab testTab = Shuffleboard.getTab("Test Tab");
-  private ShuffleboardTab teleopTab = Shuffleboard.getTab("Teleop Tab");
-
-  private NetworkTableEntry testButton = testTab
+  //Variables
+  double count = 0;
+  private double error;
+  private double error_sum;
+  private double error_diff;
+  private double error_last = 0;
+  double power;
+  
+  private NetworkTableEntry testButton = Robot.testTab
   .add("Zero Elevator", false)
   .withWidget(BuiltInWidgets.kToggleButton)
   .getEntry();
 
-  private NetworkTableEntry  elevatorMotorControl = testTab
+  private NetworkTableEntry teleopTime = Robot.teleopTab
+  .add("Teleop Time", false)
+  .withWidget(BuiltInWidgets.kTextView)
+  .getEntry();
+
+  private NetworkTableEntry  elevatorMotorControl = Robot.testTab
   .add("Elevator Motor", 0)
   .withWidget(BuiltInWidgets.kNumberSlider)
   //.withProperties(Map.of("MIN", -1, "MAX", 1))
   .getEntry();
 
-  private NetworkTableEntry elevatorPercentOutput = teleopTab
+  private NetworkTableEntry elevatorPercentOutput = Robot.teleopTab
   .add("Elevator % Output", 0)
   .withWidget(BuiltInWidgets.kDial)
   //.withProperties(Map.of("MIN", -1, "MAX", 1))
   .getEntry();
 
-  private NetworkTableEntry elevatorPos = teleopTab
+  private NetworkTableEntry elevatorPos = Robot.teleopTab
   .add("Elevator Position", 0)
   .withWidget(BuiltInWidgets.kNumberBar)
   //.withProperties(Map.of("MIN", 0, "MAX", 20000))
   .getEntry();
 
-  private NetworkTableEntry elevatorString = teleopTab
-    .add("Elevator State", "")
-    .withWidget(BuiltInWidgets.kTextView)
-    .getEntry();
+  private NetworkTableEntry elevatorString = Robot.teleopTab
+  .add("Elevator State", "")
+  .withWidget(BuiltInWidgets.kTextView)
+  .getEntry();
 
-  //Specifies required files
+  
   public teleopElevator() {
     requires(Robot.elevator);
   }
 
   @Override
-  //Creates unchanging function which executes on start
   protected void initialize() {
+    Robot.elevator.resetEnc();
   }
 
   @Override
-  //Creates unchanging function which begins after initialize
   protected void execute() {
-
-    //Robot control code
-    if(Robot.oi.main.getAButton()){
-      currentHeight = Robot.elevator.LOW_GOAL;
+  
+    if(Robot.oi.partner.getBumper(Hand.kRight)){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
+      Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL;
     }
-    else if(Robot.oi.main.getBButton()){
-      currentHeight = Robot.elevator.MID_GOAL;
+    else if(Robot.oi.partner.getBButton()){
       Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.MID_GOAL;
     }
-    else if(Robot.oi.main.getYButton()){
-      currentHeight = Robot.elevator.HIGH_GOAL;
+    else if(Robot.oi.partner.getAButton()){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.MID_GOAL_FRONT;
+    }
+    else if(Robot.oi.partner.getXButton()){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL_FRONT;
+    }
+    else if(Robot.oi.partner.getTriggerAxis(Hand.kRight) > 0.1){
+      Robot.elevator.elevatorState = elevatorPosition.MID;
+      Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL_FRONT;
+    }
+    else if (Robot.oi.partner.getYButton()){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
+      Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL;
     }
-
-    //Send values to dashboard
+    
+    //Send Values to Dashboard
+    teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
     elevatorString.setString(Robot.elevator.elevatorState.toString());
     elevatorPos.setNumber(Robot.elevator.getElevatorPosition());
     elevatorPercentOutput.setNumber(Robot.elevator.getElevatorOutput());
-    
-    //Reset button for motor test
+
     if(testButton.getBoolean(false)){
       elevatorMotorControl.setNumber(0);
       testButton.setBoolean(false);
     }
    
-    //If the robot is connected to the field, doesn't run the motor test program
-    if(DriverStation.getInstance().isFMSAttached()){
-      Robot.elevator.set(ControlMode.MotionMagic, currentHeight);
-    }
-    //Otherwise test motors
-    else{
+    //If the Robot is Connected to the field, doesn't run the Motor Test Program
+    //if(DriverStation.getInstance().isFMSAttached()){
+      error = Robot.elevator.currentHeight - Robot.elevator.getElevatorPosition();
+      error_last = error;
+      error_diff = error - error_last;
+      error_sum += error;
+      power = (error*Constants.kElevatorGains.kP)+(error_sum*Constants.kElevatorGains.kI)+(error_diff*Constants.kElevatorGains.kD);
+      power = (power > 0.75 ? 0.75 : power < -0.5 ? -0.5 : power);
+      Robot.elevator.set(ControlMode.PercentOutput, power);
+    /*}else{
       Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
-    }
+    }*/
 
-    try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    try { TimeUnit.MILLISECONDS.sleep(20); } 	
     	catch (Exception e) { /*Delay*/ }
   }
 
   @Override
-  //Creates protected false bool
   protected boolean isFinished() {
     return false;
   }
 
   @Override
-  //creates end command to stop elevator commands
   protected void end() {
     Robot.elevator.stop();
   }
@@ -128,3 +145,4 @@ public class teleopElevator extends Command {
     end();
   }
 }
+
