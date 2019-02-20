@@ -5,7 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -17,7 +16,6 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.teleopElevator;
 
-//Creating a public object named "elevatorBase" which is a Subsystem with properties for controlling the robot elavator
 public class elevatorBase extends Subsystem {
 
   //Variables 
@@ -25,47 +23,54 @@ public class elevatorBase extends Subsystem {
   public elevatorPosition elevatorState = elevatorPosition.LOW;
 
   //Preset Heights
+  public double currentHeight;
   public int LOW_GOAL = 0;
-  public int MID_GOAL = 10000;
-  public int HIGH_GOAL = 20000;
+  public int MID_GOAL = 12500;
+  public int HIGH_GOAL = 23000;
+  public int LOW_GOAL_FRONT = 5000;
+  public int MID_GOAL_FRONT = 16000;
+  public int HIGH_GOAL_FRONT = 24750;
 
-  //Declares encMotor as a TalonSRX motor
+  //Motors
   private TalonSRX encMotor;
-
+  private TalonSRX encMotorF;
+  
   public elevatorBase() {
 
     //Define Motors
-    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTORR.value);
+    encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value);
+    encMotorF = new TalonSRX(RobotMap.ELEVATOR_MOTORF.value);
 
     //Initialize Motors
-    Robot.initTalon(encMotor, true);
+    Robot.initTalon(encMotor, false);
+    Robot.initTalon(encMotorF, false);
 
     //Set Closed Control Loop and Motion Magic Configuration
     Robot.initMasterElevatorMotor(encMotor);
-  
+    encMotorF.follow(encMotor);
   }
 
-  //Set motors configs / settings
+  //Set Motors
   public void set(ControlMode mode, double output) {
     encMotor.set(mode, output);
   }
 
-  //Stop Motors via settign output to 0%
+  //Stop Motors
   public void stop() {
     encMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  //Get current position in encoder units
+  //Get Current Position in Encoder Units
   public double getElevatorPosition() {
     return encMotor.getSensorCollection().getQuadraturePosition();
   }
 
-  //Get current output in percent (-1 to 1)
+  //Get Current Output in Percent (-1 to 1)
   public double getElevatorOutput() {
     return encMotor.getMotorOutputPercent();
   }
 
-  //Reset encoder on the elevator
+  //Reset Encoder on the Elevator
   public void resetEnc() {
     encMotor.setSelectedSensorPosition(0);
   }
@@ -76,3 +81,4 @@ public class elevatorBase extends Subsystem {
     setDefaultCommand(new teleopElevator());
   }
 }
+

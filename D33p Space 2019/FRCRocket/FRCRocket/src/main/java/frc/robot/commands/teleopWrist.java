@@ -5,87 +5,121 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//Creating a public object named "teleopWrist" which is a Command with properties for creating robot wrist controls
 public class teleopWrist extends Command {
 
-  //Variables used
-  int currentHeight;
-  double speed;
+  private NetworkTableEntry wristPos = Robot.teleopTab
+  .add("Wrist Position", 0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  //.withProperties(Map.of("MIN", 0, "MAX", 20000))
+  .getEntry();
 
-  //Specifies connection to Robot.java - wrist
+  //Variables
+  private final double JoyDead = 0.1;
+	private final double DriveExp = 1.5;
+  private final double MotorMin = 0.01;
+  private double error;
+  private double error_sum;
+  private double error_diff;
+  private double error_last = 0;
+  double power;
+  double currentHeight;
+  boolean manualStatus;
+  double joyInput;
+
+  private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
+		double joySign;
+		double joyMax = 1 - joyDead;
+		double joyLive = Math.abs(joystickVal) - joyDead;
+		if (joystickVal > 0) {joySign = 1;}
+		else if (joystickVal < 0) {joySign = -1;}
+		else {joySign = 0;}
+		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
+		if(Double.isNaN(power)){power = 0;}
+		try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    	catch (Exception e) { /*Delay*/ }
+		return power;
+	}
+
   public teleopWrist() {
     requires(Robot.wrist);
   }
 
   @Override
-  //Resets the wrist encoders upon initialization which will not be changed afterwards
   protected void initialize() {
     Robot.wrist.resetEnc();
   }
 
   @Override
-  //Executes teleopWrist code
   protected void execute() {
-    //Get trigger value and apply a range
-    speed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
+
+    SmartDashboard.putNumber("Wrist", Robot.wrist.getWristPosition());
+    wristPos.setNumber(Robot.wrist.getWristPosition());
+    joyInput = exponential(Robot.oi.partner.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
+    if(manualStatus == false){
+
+      if(Robot.oi.partner.getPOV() == 0){
+        currentHeight = Robot.wrist.SCORE_BALL;
+      }
+      else if(Robot.oi.partner.getPOV() == 180){
+        currentHeight = Robot.wrist.INTAKE_HATCH;
+      }
+      else if(Robot.oi.partner.getPOV() == 90){
+        currentHeight = Robot.wrist.INTAKE_BALL;
+      } 
+      else if(Robot.oi.partner.getBumper(Hand.kLeft)){
+        currentHeight = Robot.wrist.SCORE_HATCH;
+      } 
+      else if(Robot.oi.partner.getStickButton(Hand.kLeft)){
+        manualStatus = true;
+      }
     
-    //If left bumper is pressed, intake at max speed
-    if(Robot.oi.main.getBumper(Hand.kRight)){
-			Robot.wrist.set(ControlMode.PercentOutput, -0.25);
+      currentHeight += (joyInput*250);
+
+      error = currentHeight - Robot.wrist.getWristPosition();
+      error_last = error;
+      error_diff = error - error_last;
+      error_sum += error;
+      power = (error*Constants.kWristGains.kP)+(error_sum*Constants.kWristGains.kI)+(error_diff*Constants.kWristGains.kD);
+      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      Robot.wrist.set(ControlMode.PercentOutput, power);
+      
     }
-    //Otherwise outtake at the trigger value
-		else if(Robot.oi.main.getTriggerAxis(Hand.kRight) != 0){
-      Robot.wrist.set(ControlMode.PercentOutput, speed/4);
-    }
-    //Otherwise set the intake speed to 0
+    
     else{
-      Robot.wrist.stop();
-    }
 
-    /*
-    if(Robot.oi.partner.getBButton()){
-      currentHeight = Robot.wrist.CARGO_POS;
-    //  Robot.elevator.elevatorState = elevatorPosition.MID;
-    }
-    else if(Robot.oi.partner.getAButton()){
-      currentHeight = Robot.wrist.INTAKE_POS;
-   //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
-    }
-    else if(Robot.oi.partner.getYButton()){
-      currentHeight = Robot.wrist.HATCH_POS
-      ;
-   //   Robot.elevator.elevatorState = elevatorPosition.HIGH;
-    }
-    */
-  
-    //SmartDashboard.putNumber("Wrist Position", Robot.wrist.getWristPosition());
+      if(Robot.oi.partner.getXButton()){
+        manualStatus = false;
+      }
 
-    //Robot.wrist.set(ControlMode.MotionMagic, currentHeight);  
+      Robot.wrist.set(ControlMode.PercentOutput, joyInput);
+
+    }
 
     try { TimeUnit.MILLISECONDS.sleep(10); } 	
     	catch (Exception e) { /*Delay*/ }
   }
 
   @Override
-  //Will return false to "isFinished"
   protected boolean isFinished() {
     return false;
   }
 
   @Override
-  //Ends code teleopWrist
   protected void end() {
     Robot.wrist.stop();
   }

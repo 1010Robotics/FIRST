@@ -5,8 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//Imports
 package frc.robot.subsystems;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -19,38 +19,39 @@ import frc.robot.commands.teleopIntake;
 /**
  * Add your docs here.
  */
-
- //Creating a public object named "intakeBase" which is a Subsystem with properties for controlling the robot intake
 public class intakeBase extends Subsystem {
 
-  //Declares intakeMotor as a TalonSRX motor
   private TalonSRX intakeMotor;
 
-  //Creates public intake function
   public intakeBase(){
-    //Declares intakeMotor as a TalonSRX motor
-    intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);    
-    
-    //Initialize intake motors
-    Robot.initTalon(intakeMotor, false);
+    //Define Motors
+    intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);
 
-    //Sets the neutral mode to coast
+    //Initialize Intake Motors
+    Robot.initTalon(intakeMotor, true);
+
+    //Sets the NeutralMode to Coast
     intakeMotor.setNeutralMode(NeutralMode.Coast);
   }
 
-  //Sets percent output for motors
+  //Set Motors
   public void set(double output){
     intakeMotor.set(ControlMode.PercentOutput, output);
   }
 
-  //Stops motor by setting percentage output to 0%
+  //Stop Motors
   public void stop(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
+  //Get Percent Output in a Percentage (-1 to 1)
+  public double getIntakeOutput(){
+    return intakeMotor.getMotorOutputPercent();
+  }
+
   @Override
   public void initDefaultCommand() {
-    //Set the default command for a subsystem here.
+    // Set the default command for a subsystem here.
     setDefaultCommand(new teleopIntake());
   }
 }
