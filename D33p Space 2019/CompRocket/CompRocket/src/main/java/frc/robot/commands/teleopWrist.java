@@ -95,7 +95,7 @@ public class teleopWrist extends Command {
       error_diff = error - error_last;
       error_sum += error;
       power = (error*Constants.kWristGains.kP)+(error_sum*Constants.kWristGains.kI)+(error_diff*Constants.kWristGains.kD);
-      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      power = (power > 0.75 ? 0.75 : power < -0.75 ? -0.75 : power);
       Robot.wrist.set(ControlMode.PercentOutput, power);
       
     }

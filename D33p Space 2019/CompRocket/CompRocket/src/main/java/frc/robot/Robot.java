@@ -225,7 +225,8 @@ public class Robot extends TimedRobot {
 		//Set Sensor Phase
 		motor.setSensorPhase(false);
 		//Brake Mode
-		motor.setNeutralMode(NeutralMode.Brake);
+		motor.setNeutralMode(NeutralMode
+		.Brake);
 		//Factory default hardware to prevent unexpected behavior
 		motor.configFactoryDefault();
 		//Set relevant frame periods to be at least as fast as periodic rate
@@ -234,8 +235,8 @@ public class Robot extends TimedRobot {
 		//Output Settings
 		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
 		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(0.5, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-0.5, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(0.75, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-0.75, Constants.kTimeoutMs);
 		//PID Gain Settings
 		motor.selectProfileSlot(Constants.kElevatorSlotIdx, Constants.kPIDLoopIdx);
 		motor.config_kF(Constants.kWristSlotIdx, Constants.kWristGains.kF, Constants.kTimeoutMs);

@@ -24,12 +24,12 @@ public class elevatorBase extends Subsystem {
 
   //Preset Heights
   public double currentHeight;
-  public int LOW_GOAL = 0;
-  public int MID_GOAL = 12500;
-  public int HIGH_GOAL = 23000;
-  public int LOW_GOAL_FRONT = 5000;
-  public int MID_GOAL_FRONT = 16000;
-  public int HIGH_GOAL_FRONT = 24750;
+  public int LOW_GOAL = 0; //ALL +500
+  public int MID_GOAL = 13000;
+  public int HIGH_GOAL = 23500;
+  public int LOW_GOAL_FRONT = 5500;
+  public int MID_GOAL_FRONT = 16500;
+  public int HIGH_GOAL_FRONT = 25250;
 
   //Motors
   private TalonSRX encMotor;
