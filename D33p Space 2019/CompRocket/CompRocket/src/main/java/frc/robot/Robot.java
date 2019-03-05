@@ -225,7 +225,8 @@ public class Robot extends TimedRobot {
 		//Set Sensor Phase
 		motor.setSensorPhase(false);
 		//Brake Mode
-		motor.setNeutralMode(NeutralMode.Brake);
+		motor.setNeutralMode(NeutralMode
+		.Brake);
 		//Factory default hardware to prevent unexpected behavior
 		motor.configFactoryDefault();
 		//Set relevant frame periods to be at least as fast as periodic rate
