@@ -44,7 +44,7 @@ public class arcadeDrive extends Command {
 
 	//Exponential Variables
 	private final double JoyDead = 0.1;
-	private final double DriveExp = 1.5;//!!!!!!
+	private final double DriveExp = 1.9;//!!!!!!
 	private final double MotorMin = 0.01;
 
 	//Align Code
@@ -94,7 +94,7 @@ public class arcadeDrive extends Command {
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
 		if(Robot.oi.main.getXButton()) {
-			moveError = -12 - Robot.camera.getTy();
+			moveError = -12 + Robot.camera.getTy(); 
 			headingError = 1.37 - Robot.camera.getTx();
 			headingOutput = headingError * headingKp;
 			moveOutput = moveError * moveKp;

@@ -19,17 +19,18 @@ import frc.robot.commands.teleopElevator;
 public class elevatorBase extends Subsystem {
 
   //Variables 
-  public enum elevatorPosition{LOW, MID, HIGH} 
+  public enum elevatorPosition{LOW, SCORE_LOW, MID, SCORE_MID, HIGH, SCORE_HIGH} 
   public elevatorPosition elevatorState = elevatorPosition.LOW;
 
   //Preset Heights
   public double currentHeight;
   public int LOW_GOAL = 0;
+  public int BALL_LOAD = 10200;
   public int MID_GOAL = 12500;
   public int HIGH_GOAL = 23000;
   public int LOW_GOAL_FRONT = 5000;
   public int MID_GOAL_FRONT = 16000;
-  public int HIGH_GOAL_FRONT = 24750;
+  public int HIGH_GOAL_FRONT = 23900; //was 24750
 
   //Motors
   private TalonSRX encMotor;
@@ -43,7 +44,7 @@ public class elevatorBase extends Subsystem {
 
     //Initialize Motors
     Robot.initTalon(encMotor, false);
-    Robot.initTalon(encMotorF, false);
+    Robot.initTalon(encMotorF, true); //FALSE FOR REAL BOT
 
     //Set Closed Control Loop and Motion Magic Configuration
     Robot.initMasterElevatorMotor(encMotor);

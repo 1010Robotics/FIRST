@@ -72,7 +72,7 @@ public class teleopWrist extends Command {
     joyInput = exponential(Robot.oi.partner.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
     if(manualStatus == false){
 
-      if(Robot.oi.partner.getPOV() == 0){
+      if((Robot.oi.partner.getPOV() == 0)||(Robot.oi.partner.getTriggerAxis(Hand.kLeft)>0.1)){
         currentHeight = Robot.wrist.SCORE_BALL;
       }
       else if(Robot.oi.partner.getPOV() == 180){
@@ -87,7 +87,6 @@ public class teleopWrist extends Command {
       else if(Robot.oi.partner.getStickButton(Hand.kLeft)){
         manualStatus = true;
       }
-    
       currentHeight += (joyInput*250);
 
       error = currentHeight - Robot.wrist.getWristPosition();
@@ -95,7 +94,7 @@ public class teleopWrist extends Command {
       error_diff = error - error_last;
       error_sum += error;
       power = (error*Constants.kWristGains.kP)+(error_sum*Constants.kWristGains.kI)+(error_diff*Constants.kWristGains.kD);
-      power = (power > 0.5 ? 0.5 : power < -0.5 ? -0.5 : power);
+      power = (power > 0.75 ? 0.75 : power < -0.75 ? -0.75 : power);
       Robot.wrist.set(ControlMode.PercentOutput, power);
       
     }

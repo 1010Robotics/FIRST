@@ -76,32 +76,35 @@ public class teleopElevator extends Command {
 
   @Override
   protected void execute() {
-  
-    if(Robot.oi.partner.getBumper(Hand.kRight)){
+
+    if(Robot.oi.partner.getAButton()){
       Robot.elevator.elevatorState = elevatorPosition.LOW;
       Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL;
     }
-    else if(Robot.oi.partner.getBButton()){
+    else if(Robot.oi.partner.getXButton()){
       Robot.elevator.elevatorState = elevatorPosition.MID;
       Robot.elevator.currentHeight = Robot.elevator.MID_GOAL;
     }
-    else if(Robot.oi.partner.getAButton()){
-      Robot.elevator.elevatorState = elevatorPosition.MID;
+    else if(Robot.oi.partner.getYButton()){
+      Robot.elevator.elevatorState = elevatorPosition.SCORE_MID;
       Robot.elevator.currentHeight = Robot.elevator.MID_GOAL_FRONT;
     }
-    else if(Robot.oi.partner.getXButton()){
-      Robot.elevator.elevatorState = elevatorPosition.MID;
+    else if(Robot.oi.partner.getTriggerAxis(Hand.kRight) > 0.1){
+      Robot.elevator.elevatorState = elevatorPosition.SCORE_HIGH;
       Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL_FRONT;
     }
-    else if(Robot.oi.partner.getTriggerAxis(Hand.kRight) > 0.1){
-      Robot.elevator.elevatorState = elevatorPosition.MID;
+    else if(Robot.oi.partner.getBButton()){
+      Robot.elevator.elevatorState = elevatorPosition.SCORE_LOW;
       Robot.elevator.currentHeight = Robot.elevator.LOW_GOAL_FRONT;
     }
-    else if (Robot.oi.partner.getYButton()){
+    else if (Robot.oi.partner.getBumper(Hand.kRight)){
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
       Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL;
     }
-    
+    else if(Robot.oi.partner.getTriggerAxis(Hand.kLeft)>0.1){
+      Robot.elevator.elevatorState = elevatorPosition.SCORE_MID;
+      Robot.elevator.currentHeight = Robot.elevator.BALL_LOAD;
+    }
     //Send Values to Dashboard
     teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
     elevatorString.setString(Robot.elevator.elevatorState.toString());
