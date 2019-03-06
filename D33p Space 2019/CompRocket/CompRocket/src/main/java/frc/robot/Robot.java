@@ -14,6 +14,7 @@ import frc.robot.subsystems.intakeBase;
 import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.pneumatics;
 import frc.robot.subsystems.wristBase;
+import frc.robot.subsystems.limeLight.CameraMode;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -48,7 +49,8 @@ public class Robot extends TimedRobot {
 	public static ShuffleboardTab testTab;
 	public static ShuffleboardTab teleopTab;
 	public static Timer RobotTimer;
-
+	public static CameraServer driverMemeCamera;
+	
 	//Create Commands
 	Command autonomousCommand;
 	Command arcadeDrive;
@@ -81,9 +83,9 @@ public class Robot extends TimedRobot {
 		teleopTab = Shuffleboard.getTab("Teleop Tab");
 
 		//Define Camera
-		CameraServer driverMemeCamera = CameraServer.getInstance();
+		driverMemeCamera = CameraServer.getInstance();
 		driverMemeCamera.startAutomaticCapture();
-
+		
 		//Define Objects
 		oi = new OI();
 		drive = new driveBase();
