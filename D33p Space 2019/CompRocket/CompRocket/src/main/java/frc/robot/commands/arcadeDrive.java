@@ -43,18 +43,14 @@ public class arcadeDrive extends Command {
 	.getEntry();
 
 	//Exponential Variables
-	private final double JoyDead = 0.1;
-	private final double DriveExp = 1.9;//!!!!!!
+	private final double JoyDead = 0.12; //increase by 0.1?
+	private final double DriveExp = 2.3;//!!!!!!
 	private final double MotorMin = 0.01;
 
 	//Align Code
-	private float headingKp = 0.014f;
-	private float moveKp = 0.039f;  
+	private float headingKp = 0.01f;
 	private double headingError;
-	private double moveError;
 	private double headingOutput;
-	private double moveOutput;
-
 
 	//Exponential Function
 	private double exponential(double joystickVal, double driveExp, double joyDead, double motorMin){
@@ -94,12 +90,14 @@ public class arcadeDrive extends Command {
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
 		if(Robot.oi.main.getXButton()) {
-			moveError = -12 + Robot.camera.getTy(); 
-			headingError = 1.37 - Robot.camera.getTx();
+			headingError = -11.2 - Robot.camera.getTx();
 			headingOutput = headingError * headingKp;
-			moveOutput = moveError * moveKp;
-	  
-			Robot.drive.set(ControlMode.PercentOutput, moveOutput-headingOutput, moveOutput+headingOutput);
+			Robot.drive.set(ControlMode.PercentOutput, 0.3-headingOutput, 0.3+headingOutput);
+		}
+		else if(Robot.oi.main.getYButton()){
+			headingError = -11.2 - Robot.camera.getTx();
+			headingOutput = headingError * headingKp;
+			Robot.drive.set(ControlMode.PercentOutput, 0.3-headingOutput, 0.3+headingOutput);
 		}
 		else {
 			joyYval = Robot.oi.main.getY(Hand.kLeft);

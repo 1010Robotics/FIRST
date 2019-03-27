@@ -61,7 +61,7 @@ public class teleopWrist extends Command {
 
   @Override
   protected void initialize() {
-    Robot.wrist.resetEnc();
+
   }
 
   @Override
@@ -72,7 +72,7 @@ public class teleopWrist extends Command {
     joyInput = exponential(Robot.oi.partner.getY(Hand.kLeft), DriveExp, JoyDead, MotorMin);
     if(manualStatus == false){
 
-      if((Robot.oi.partner.getPOV() == 0)||(Robot.oi.partner.getTriggerAxis(Hand.kLeft)>0.1)){
+      if((Robot.oi.partner.getPOV() == 0)/*||(Robot.oi.partner.getTriggerAxis(Hand.kLeft)>0.1)*/){
         currentHeight = Robot.wrist.SCORE_BALL;
       }
       else if(Robot.oi.partner.getPOV() == 180){
@@ -81,12 +81,20 @@ public class teleopWrist extends Command {
       else if(Robot.oi.partner.getPOV() == 90){
         currentHeight = Robot.wrist.INTAKE_BALL;
       } 
+      else if(Robot.oi.partner.getPOV() == 270){
+        currentHeight = Robot.wrist.LOAD_HATCH;
+      }
       else if(Robot.oi.partner.getBumper(Hand.kLeft)){
         currentHeight = Robot.wrist.SCORE_HATCH;
       } 
       else if(Robot.oi.partner.getStickButton(Hand.kLeft)){
         manualStatus = true;
       }
+      else if(Robot.oi.partner.getStartButton()){
+        Robot.wrist.resetEnc();
+        currentHeight = 0;
+      }
+
       currentHeight += (joyInput*250);
 
       error = currentHeight - Robot.wrist.getWristPosition();
@@ -101,7 +109,7 @@ public class teleopWrist extends Command {
     
     else{
 
-      if(Robot.oi.partner.getXButton()){
+      if(Robot.oi.partner.getStickButton(Hand.kLeft)){
         manualStatus = false;
       }
 

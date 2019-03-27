@@ -17,10 +17,10 @@ public class Constants {
 	public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
    
     //PID Wrist Constants
-    public static Gains kWristGains = new Gains(0.00055, 0.0, 0.0, 15);
+    public static Gains kWristGains = new Gains(0.00045, 0.0, 0.003, 15);
     
     //PID Elevator Constants
-    public static Gains kElevatorGains = new Gains(0.000067, 0.0, 0.0008, 15);
+    public static Gains kElevatorGains = new Gains(0.000057, 0.0, 0.003, 15);
 
     //PID Drive Constants
     public static Gains kDriveGains = new Gains(0.03, 0.0, 0.0, 0.3);

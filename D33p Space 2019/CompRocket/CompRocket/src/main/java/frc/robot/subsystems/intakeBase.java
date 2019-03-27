@@ -26,7 +26,7 @@ public class intakeBase extends Subsystem {
   public intakeBase(){
     //Define Motors
     intakeMotor = new TalonSRX(RobotMap.INTAKE_MOTOR.value);
-
+    
     //Initialize Intake Motors
     Robot.initTalon(intakeMotor, true);
 

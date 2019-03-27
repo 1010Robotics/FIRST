@@ -26,25 +26,27 @@ public class elevatorBase extends Subsystem {
   public double currentHeight;
   public int LOW_GOAL = 0;
   public int BALL_LOAD = 10200;
-  public int MID_GOAL = 12500;
+
+  public int MID_GOAL = 13600;
   public int HIGH_GOAL = 23000;
-  public int LOW_GOAL_FRONT = 5000;
-  public int MID_GOAL_FRONT = 16000;
-  public int HIGH_GOAL_FRONT = 23900; //was 24750
+
+  public int LOW_GOAL_FRONT = 5500;
+  public int MID_GOAL_FRONT = 16500;
+  public int HIGH_GOAL_FRONT = 25500; //was 24750
 
   //Motors
   private TalonSRX encMotor;
   private TalonSRX encMotorF;
-  
+
   public elevatorBase() {
 
     //Define Motors
     encMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR.value);
     encMotorF = new TalonSRX(RobotMap.ELEVATOR_MOTORF.value);
-
+   
     //Initialize Motors
     Robot.initTalon(encMotor, false);
-    Robot.initTalon(encMotorF, true); //FALSE FOR REAL BOT
+    Robot.initTalon(encMotorF, false); //FALSE FOR REAL BOT
 
     //Set Closed Control Loop and Motion Magic Configuration
     Robot.initMasterElevatorMotor(encMotor);

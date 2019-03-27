@@ -132,7 +132,7 @@ public class driveBase extends Subsystem {
 
 	//Get Angle
 	public double getGyroPosition(){
-		return ahrs.getRawGyroY();
+		return ahrs.getAngle();
 	}
 
 	//Set Motors

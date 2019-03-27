@@ -27,11 +27,11 @@ public class wristBase extends Subsystem {
 
   private TalonSRX wristMotor;
 
-  public int INTAKE_HATCH = 6100; //preset for intake (and default position)
-  public int INTAKE_BALL = 4000; //preset for cargo
+  public int INTAKE_HATCH = 5300; //preset for intake (and default position)
+  public int INTAKE_BALL = 3300; //preset for cargo
   public int SCORE_BALL = 0;
   public int SCORE_HATCH = 0;//450; //preset for hatch
-
+  public int LOAD_HATCH = 775;
   public wristBase(){
       
     //Define wrist motor

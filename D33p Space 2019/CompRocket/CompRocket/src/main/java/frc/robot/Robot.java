@@ -7,14 +7,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.auto.autoTurn;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.intakeBase;
 import frc.robot.subsystems.limeLight;
 import frc.robot.subsystems.pneumatics;
 import frc.robot.subsystems.wristBase;
-import frc.robot.subsystems.limeLight.CameraMode;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -23,7 +21,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -33,10 +30,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class Robot extends TimedRobot {
-
-	//Auto Selector
-	DriverStation.Alliance colour;
-	private boolean isBlue;
 
 	//Create Objects
 	public static OI oi;
@@ -78,6 +71,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+
 		//create tabs
 		testTab = Shuffleboard.getTab("Test Tab");
 		teleopTab = Shuffleboard.getTab("Teleop Tab");
@@ -95,11 +89,11 @@ public class Robot extends TimedRobot {
 		wrist = new wristBase();
 		intake = new intakeBase();
 		RobotTimer = new Timer();
-		//Auto Selector
-		//autoSelector = new SendableChooser();
-		colour = DriverStation.getInstance().getAlliance();
-		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
 
+			
+		Robot.elevator.resetEnc();
+		Robot.wrist.resetEnc();
+		  
 		//SmartDashboard Subsystem 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(camera);
@@ -121,12 +115,6 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		RobotTimer.reset();
 		RobotTimer.start();
-
-		isBlue = (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue);
-		if(isBlue){/*run a command*/}
-		//Set Autonomous Command
-		autonomousCommand = new autoTurn(90);
-		autonomousCommand.start();
 	}
 
 	@Override
@@ -139,8 +127,6 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		RobotTimer.reset();
 		RobotTimer.start();
-		//Stop Autonomous Command
-		//autonomousCommand.cancel();
 	}
 
 	@Override
@@ -252,3 +238,5 @@ public class Robot extends TimedRobot {
 		motor.setSelectedSensorPosition(0);
 	}
 }
+
+
