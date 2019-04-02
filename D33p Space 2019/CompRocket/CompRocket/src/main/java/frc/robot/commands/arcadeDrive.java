@@ -43,12 +43,12 @@ public class arcadeDrive extends Command {
 	.getEntry();
 
 	//Exponential Variables
-	private final double JoyDead = 0.12; //increase by 0.1?
-	private final double DriveExp = 2.3;//!!!!!!
-	private final double MotorMin = 0.01;
+	private final double JoyDead = 0.08;
+	private final double DriveExp = 2.3;
+	private final double MotorMin = 0.001;
 
 	//Align Code
-	private float headingKp = 0.01f;
+	private float headingKp = 0.0075f;
 	private double headingError;
 	private double headingOutput;
 
@@ -90,14 +90,9 @@ public class arcadeDrive extends Command {
     	Robot.camera.setCameraMode(CameraMode.eVision);
 
 		if(Robot.oi.main.getXButton()) {
-			headingError = -11.2 - Robot.camera.getTx();
+			headingError = 5.4 - Robot.camera.getTx(); //was -2 //was 4.4
 			headingOutput = headingError * headingKp;
-			Robot.drive.set(ControlMode.PercentOutput, 0.3-headingOutput, 0.3+headingOutput);
-		}
-		else if(Robot.oi.main.getYButton()){
-			headingError = -11.2 - Robot.camera.getTx();
-			headingOutput = headingError * headingKp;
-			Robot.drive.set(ControlMode.PercentOutput, 0.3-headingOutput, 0.3+headingOutput);
+			Robot.drive.set(ControlMode.PercentOutput, -0.15-headingOutput, -0.15+headingOutput);
 		}
 		else {
 			joyYval = Robot.oi.main.getY(Hand.kLeft);
@@ -106,7 +101,7 @@ public class arcadeDrive extends Command {
 			yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
 			xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
 
-			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
+			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + (xOutput)), ((yOutput - correction) - (xOutput)));
 
 			gyroOutput.setNumber(Robot.drive.getGyroPosition());
 			JoystickOutput_X.setNumber(xOutput);

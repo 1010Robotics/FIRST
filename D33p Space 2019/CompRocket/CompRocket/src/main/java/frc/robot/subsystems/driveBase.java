@@ -27,9 +27,9 @@ public class driveBase extends Subsystem {
 
 	//Variables
 	public final int talonTPR = 4096; //Full Encoder Rotation
-	public final double wheelDiameter = 0.16; //16cm
-	public final double baseWidth = 0.64; //64cm
-	public final int maxVelocity = 14; //(CIM RPM / Gearbox Ratio) / 60sec * (Diamater of Wheel in Meters * Pi) * 60 Percent
+	public final double wheelDiameter = 0.5; //6 inches
+	public final double baseWidth = 2.125; //25.5 inches
+	public final double maxVelocity = 9.25; //(CIM RPM / Gearbox Ratio) / 60sec * (Diamater of Wheel in Meters * Pi) * 60 Percent
 
 	//Motors
 	private TalonSRX leftMotor, rightMotor;
@@ -151,7 +151,7 @@ public class driveBase extends Subsystem {
 	public void pidWrite(double output) {
 		set(ControlMode.PercentOutput, (output/1), -(output/1));
 	}
-
+	
 	//Default Command
 	protected void initDefaultCommand() {
 		setDefaultCommand(new arcadeDrive());

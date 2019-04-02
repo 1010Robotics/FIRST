@@ -147,7 +147,7 @@ public class teleopElevator extends Command {
         testButton.setBoolean(false);
       }
     
-      Robot.elevator.currentHeight += (joyInput*250);
+      Robot.elevator.currentHeight += (-joyInput*1500);
 
       //If the Robot is Connected to the field, doesn't run the Motor Test Program
       //if(DriverStation.getInstance().isFMSAttached()){
@@ -169,14 +169,14 @@ public class teleopElevator extends Command {
         manualStatus = false;
       }
 
-      Robot.wrist.set(ControlMode.PercentOutput, joyInput);
+      Robot.elevator.set(ControlMode.PercentOutput, joyInput/1.2);
 
     }
 
     try { TimeUnit.MILLISECONDS.sleep(20); } 	
     catch (Exception e) { /*Delay*/ }
   }
-
+ 
   @Override
   protected boolean isFinished() {
     return false;
