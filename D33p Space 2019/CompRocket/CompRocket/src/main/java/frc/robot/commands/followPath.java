@@ -7,8 +7,6 @@
 
 package frc.robot.commands;
 
-import java.io.File;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Notifier;
@@ -17,8 +15,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 
 public class followPath extends Command {
@@ -49,7 +47,7 @@ public class followPath extends Command {
     }
   }
 
-
+  
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
