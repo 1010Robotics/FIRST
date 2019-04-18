@@ -17,7 +17,7 @@ public class limeLight extends Subsystem {
 	private static NetworkTableInstance table = null;
 
 	public limeLight(String lime){
-		this.lime = lime;
+		limeLight.lime = lime;
 	}
 
 	public enum LightMode {

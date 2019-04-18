@@ -95,7 +95,7 @@ public class arcadeDrive extends Command {
 		SmartDashboard.putNumber("Button?", Robot.oi.main.getPOV());
 		SmartDashboard.putBoolean("Joy Button", Robot.oi.partner.getStickButtonPressed(Hand.kLeft));
 
-		/*
+		
 		if(Robot.elevator.elevatorState == elevatorPosition.LOW || Robot.elevator.elevatorState == elevatorPosition.SCORE_LOW){
 			Robot.cameraTop.setLedMode(LightMode.eOn);
 			Robot.cameraBottom.setLedMode(LightMode.eOff);
@@ -110,11 +110,6 @@ public class arcadeDrive extends Command {
 			Robot.cameraTop.setCameraMode(CameraMode.eDriver);
 			Robot.cameraBottom.setCameraMode(CameraMode.eVision);
 		}
-		*/
-
-		Robot.cameraTop.setLedMode(LightMode.eOn);
-		Robot.cameraTop.setCameraMode(CameraMode.eVision);
-
 
 		if(Robot.oi.main.getXButton()) {
 			if(Robot.elevator.elevatorState == elevatorPosition.LOW || Robot.elevator.elevatorState == elevatorPosition.SCORE_LOW){
