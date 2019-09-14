@@ -129,7 +129,7 @@ public class arcadeDrive extends Command {
 
 			//Update Closed Loop Variables
 			if((Math.abs(yOutput) > JoyDead)&& (Math.abs(xOutput) > JoyDead)){
-				correction = 0;
+				correction = 0; 
 			}
 			else{
 				if(Math.abs(xOutput) > JoyDead){
