@@ -10,8 +10,6 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-import java.util.concurrent.TimeUnit;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -50,8 +48,6 @@ public class teleopWrist extends Command {
 		else {joySign = 0;}
 		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
 		if(Double.isNaN(power)){power = 0;}
-		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*Delay*/ }
 		return power;
 	}
 
@@ -106,8 +102,8 @@ public class teleopWrist extends Command {
 
     }
 
-    try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*Delay*/ }
+    //try { TimeUnit.MILLISECONDS.sleep(10); } 	
+    //	catch (Exception e) { /*Delay*/ }
   }
 
   @Override

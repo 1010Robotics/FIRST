@@ -9,8 +9,8 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
-import frc.robot.subsystems.limeLight.CameraMode;
-import frc.robot.subsystems.limeLight.LightMode;
+import frc.robot.subsystems.limeLightTop.CameraMode;
+import frc.robot.subsystems.limeLightTop.LightMode;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -44,12 +44,13 @@ public class arcadeDrive extends Command {
 	.getEntry();
 
 	//Exponential Variables
-	private final double JoyDead = 0.05;
-	private final double DriveExp = 1.9;//!!!!!!
+	private final double JoyDead = 0.015;//was 0.05????????????????????????????????????????????????????????? JOY DEAD
+	private final double DriveExp = 1.7;//was 1.9!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EXPO
 	private final double MotorMin = 0.008;
 
 	//Align Code
-	private float moveKp = 0.02f;  
+	private float moveKp = 0.008f;
+	private float trueKp = 0.008f;  
 	private double moveError;
 	private double moveOutput;
 
@@ -64,18 +65,19 @@ public class arcadeDrive extends Command {
 		else {joySign = 0;}
 		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
 		if(Double.isNaN(power)){power = 0;}
-		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*Delay*/ }
 		return power;
 	}
 
 	//Joystick OI Variables
-	private double correction = 0;
+	private boolean count;
+	private double trueAngle = 0;
+	private double correction;
+	private double kPerr;
 	private double joyYval;
 	private double joyXval;
 	private double yOutput;
 	private double xOutput;
-
+	
 	public arcadeDrive() {
 		requires(Robot.drive);
 		requires(Robot.cameraTop);
@@ -84,31 +86,26 @@ public class arcadeDrive extends Command {
 
 	protected void initialize() {
 		Robot.cameraTop.setLedMode(LightMode.eOff);
-		Robot.cameraBottom.setLedMode(LightMode.eOff);
-
+		Robot.cameraBottom.setLedMode(frc.robot.subsystems.limeLightBottom.LightMode.eOff);
 		Robot.cameraTop.setCameraMode(CameraMode.eVision);
-		Robot.cameraBottom.setCameraMode(CameraMode.eVision);
+		Robot.cameraBottom.setCameraMode(frc.robot.subsystems.limeLightBottom.CameraMode.eVision);
 	}
 
 	protected void execute() {
 
-		SmartDashboard.putNumber("Button?", Robot.oi.main.getPOV());
-		SmartDashboard.putBoolean("Joy Button", Robot.oi.partner.getStickButtonPressed(Hand.kLeft));
-
-		
 		if(Robot.elevator.elevatorState == elevatorPosition.LOW || Robot.elevator.elevatorState == elevatorPosition.SCORE_LOW){
 			Robot.cameraTop.setLedMode(LightMode.eOn);
-			Robot.cameraBottom.setLedMode(LightMode.eOff);
+			Robot.cameraBottom.setLedMode(frc.robot.subsystems.limeLightBottom.LightMode.eOff);
 
 			Robot.cameraTop.setCameraMode(CameraMode.eVision);
-			Robot.cameraBottom.setCameraMode(CameraMode.eDriver);
+			Robot.cameraBottom.setCameraMode(frc.robot.subsystems.limeLightBottom.CameraMode.eDriver);
 		}
 		else {
 			Robot.cameraTop.setLedMode(LightMode.eOff);
-			Robot.cameraBottom.setLedMode(LightMode.eOn);
+			Robot.cameraBottom.setLedMode(frc.robot.subsystems.limeLightBottom.LightMode.eOn);
 
 			Robot.cameraTop.setCameraMode(CameraMode.eDriver);
-			Robot.cameraBottom.setCameraMode(CameraMode.eVision);
+			Robot.cameraBottom.setCameraMode(frc.robot.subsystems.limeLightBottom.CameraMode.eVision);
 		}
 
 		if(Robot.oi.main.getXButton()) {
@@ -121,7 +118,7 @@ public class arcadeDrive extends Command {
 
 			moveOutput = moveError * moveKp;
 	  
-			Robot.drive.set(ControlMode.PercentOutput, -moveOutput, +moveOutput);
+			Robot.drive.set(ControlMode.PercentOutput, -0.2+moveOutput, -0.2-moveOutput);
 		}
 		else {
 			joyYval = Robot.oi.main.getY(Hand.kLeft);
@@ -130,14 +127,40 @@ public class arcadeDrive extends Command {
 			yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
 			xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
 
+			//Update Closed Loop Variables
+			if((Math.abs(yOutput) > JoyDead)&& (Math.abs(xOutput) > JoyDead)){
+				correction = 0;
+			}
+			else{
+				if(Math.abs(xOutput) > JoyDead){
+					count = false; 
+				}
+				else{
+					if(Math.abs(yOutput) > JoyDead){
+						if(count == false){
+							trueAngle = Robot.drive.getGyroPosition();
+							count = true;
+						}
+						kPerr = trueAngle - Robot.drive.getGyroPosition();
+						correction = kPerr * trueKp;
+					}
+				}
+			}
+
+			SmartDashboard.putNumber("True Gyro Variable", trueAngle);
+			SmartDashboard.putBoolean("Count Variable", count);
+			SmartDashboard.putNumber("Gyro Position", Robot.drive.getGyroPosition());
+			SmartDashboard.putNumber("KP Error", kPerr);
+			SmartDashboard.putNumber("Correction", correction);
+
 			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
 
 			gyroOutput.setNumber(Robot.drive.getGyroPosition());
+
 			JoystickOutput_X.setNumber(xOutput);
 			JoystickOutput_Y.setNumber(yOutput);
 		}
-		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*delay*/ }
+
 	}
 
 	protected boolean isFinished() {

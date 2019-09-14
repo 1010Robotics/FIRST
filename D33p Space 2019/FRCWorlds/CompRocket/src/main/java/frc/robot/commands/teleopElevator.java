@@ -11,8 +11,6 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.elevatorBase.elevatorPosition;
 
-import java.util.concurrent.TimeUnit;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -44,8 +42,6 @@ public class teleopElevator extends Command {
 		else {joySign = 0;}
 		double power = (joySign * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
 		if(Double.isNaN(power)){power = 0;}
-		try { TimeUnit.MILLISECONDS.sleep(10); } 	
-    	catch (Exception e) { /*Delay*/ }
 		return power;
 	}
   
@@ -121,6 +117,10 @@ public class teleopElevator extends Command {
       Robot.elevator.elevatorState = elevatorPosition.HIGH;
       Robot.elevator.currentHeight = Robot.elevator.HIGH_GOAL;
     }
+    else if(Robot.oi.partner.getTriggerAxis(Hand.kLeft) > 0.1){
+      Robot.elevator.elevatorState = elevatorPosition.BALL_LOAD ;
+      Robot.elevator.currentHeight = Robot.elevator.BALL_LOAD;
+    }
 
     //Send Values to Dashboard
     teleopTime.setString("Current State: "+ Robot.getState().toString() + " Current Time: " + Robot.getTime());
@@ -132,23 +132,16 @@ public class teleopElevator extends Command {
       elevatorMotorControl.setNumber(0);
       testButton.setBoolean(false);
     }
-    Robot.elevator.currentHeight += (joyInput*250);
-   
-    //If the Robot is Connected to the field, doesn't run the Motor Test Program
-    //if(DriverStation.getInstance().isFMSAttached()){
-      error = Robot.elevator.currentHeight - Robot.elevator.getElevatorPosition();
-      error_last = error;
-      error_diff = error - error_last;
-      error_sum += error;
-      power = (error*Constants.kElevatorGains.kP)+(error_sum*Constants.kElevatorGains.kI)+(error_diff*Constants.kElevatorGains.kD);
-      power = (power > 0.75 ? 0.75 : power < -0.5 ? -0.5 : power);
-      Robot.elevator.set(ControlMode.PercentOutput, power);
-    /*}else{
-      Robot.elevator.set(ControlMode.PercentOutput, elevatorMotorControl.getDouble(0.00));
-    }*/
-
-    try { TimeUnit.MILLISECONDS.sleep(20); } 	
-    	catch (Exception e) { /*Delay*/ }
+    Robot.elevator.currentHeight += (-joyInput*250);
+  
+    error = Robot.elevator.currentHeight - Robot.elevator.getElevatorPosition();
+    error_last = error;
+    error_diff = error - error_last;
+    error_sum += error;
+    power = (error*Constants.kElevatorGains.kP)+(error_sum*Constants.kElevatorGains.kI)+(error_diff*Constants.kElevatorGains.kD);
+    power = (power > 1 ? 1 : power < -0.5 ? -0.5 : power);
+    Robot.elevator.set(ControlMode.PercentOutput, power);
+    
   }
 
   @Override

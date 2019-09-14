@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -55,7 +56,8 @@ public class driveBase extends Subsystem {
 		rightMotor = new TalonSRX(RobotMap.RIGHT_MOTOR.value);
 
 		//Define Sensors
-    	ahrs = new AHRS(SPI.Port.kMXP);
+		try{ahrs = new AHRS(SPI.Port.kMXP);}
+		catch (RuntimeException ex){DriverStation.reportError("Error starting navX MXP" + ex.getMessage(), true);}
     
 		//Initialize Drive Motors
 		Robot.initVictor(leftMotorF, true);
@@ -132,7 +134,7 @@ public class driveBase extends Subsystem {
 
 	//Get Angle
 	public double getGyroPosition(){
-		return ahrs.getRawGyroY();
+		return ahrs.getYaw();
 	}
 
 	//Set Motors

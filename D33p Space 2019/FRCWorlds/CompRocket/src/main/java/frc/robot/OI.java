@@ -8,6 +8,7 @@
 //Imports
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 
 //Creates a public object named "OI" with properties that create the controlers
@@ -18,6 +19,8 @@ public class OI
   //Creates controller named partner
 	public final XboxController partner = new XboxController(RobotMap.CONTROLLER_PARTNER.value);
 
+  public final Joystick stick = new Joystick(2);
+  
   public OI() 
   {
     

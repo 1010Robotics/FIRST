@@ -10,7 +10,8 @@ package frc.robot;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.intakeBase;
-import frc.robot.subsystems.limeLight;
+import frc.robot.subsystems.limeLightBottom;
+import frc.robot.subsystems.limeLightTop;
 import frc.robot.subsystems.pneumatics;
 import frc.robot.subsystems.wristBase;
 
@@ -34,8 +35,8 @@ public class Robot extends TimedRobot {
 	//Create Objects
 	public static OI oi;
 	public static driveBase drive;
-	public static limeLight cameraTop;
-	public static limeLight cameraBottom;
+	public static limeLightTop cameraTop;
+	public static limeLightBottom cameraBottom;
 	public static elevatorBase elevator;
 	public static pneumatics solenoid;
 	public static wristBase wrist;
@@ -85,8 +86,8 @@ public class Robot extends TimedRobot {
 		oi = new OI();
 		drive = new driveBase();
 		solenoid = new pneumatics();
-		cameraTop = new limeLight("limelight-main");
-		cameraBottom = new limeLight("limelight");
+		cameraTop = new limeLightTop();
+		cameraBottom = new limeLightBottom();
 		elevator = new elevatorBase();
 		wrist = new wristBase();
 		intake = new intakeBase();

@@ -11,14 +11,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class limeLight extends Subsystem {
+public class limeLightTop extends Subsystem {
 
-	private static String lime;
+	//private static String lime;
 	private static NetworkTableInstance table = null;
-
-	public limeLight(String lime){
-		limeLight.lime = lime;
-	}
 
 	public enum LightMode {
 		eOn, eOff, eBlink
@@ -69,7 +65,7 @@ public class limeLight extends Subsystem {
 			table = NetworkTableInstance.getDefault();
 		}
 
-		return table.getTable(lime).getEntry(key);
+		return table.getTable("limelight-main").getEntry(key);
   	}
 
   	@Override

@@ -31,13 +31,13 @@ public class teleopSolenoid extends Command {
 
     if(Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1){
       Robot.solenoid.extendSolenoid();
-      try { TimeUnit.MILLISECONDS.sleep(300); } 	
+      try { TimeUnit.MILLISECONDS.sleep(150); } 	
       catch (Exception e) { /*Delay*/ }
       Robot.solenoid.extendWheelPiston();
     }
     else if(Robot.oi.main.getBumper(Hand.kLeft)){
       Robot.solenoid.disableWheelPiston();
-      try { TimeUnit.MILLISECONDS.sleep(300); } 	
+      try { TimeUnit.MILLISECONDS.sleep(150); } 	
       catch (Exception e) { /*Delay*/ }
       Robot.solenoid.disableSolenoid();
       toggle = true;

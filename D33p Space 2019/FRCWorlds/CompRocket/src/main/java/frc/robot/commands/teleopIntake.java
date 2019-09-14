@@ -40,7 +40,7 @@ public class teleopIntake extends Command {
     }
     //Otherwise set the Intake Speed to 0
     else{
-      Robot.intake.stop();
+      Robot.intake.set(-0.1);
     }
 
     SmartDashboard.putNumber("Intake %Output", Robot.intake.getIntakeOutput());

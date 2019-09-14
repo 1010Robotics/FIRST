@@ -28,10 +28,11 @@ public class pneumatics extends Subsystem {
 
   public pneumatics(){
     //Define Solenoid
-    diskIntake = new Solenoid(0);
-    wheelPiston = new Solenoid(1);
+    int pcmId = 0;
+    diskIntake = new Solenoid(pcmId, 0);
+    wheelPiston = new Solenoid(pcmId, 1);
     //Define Compressor
-    compressor = new Compressor(20);
+    compressor = new Compressor(pcmId);
   }
 
   //Extend Solenoid
