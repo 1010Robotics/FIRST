@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class arcadeDrive extends Command {
 
+	
 	private NetworkTableEntry gyroOutput = Robot.teleopTab
 	.add("Gyro Val", 0)
 	.withWidget(BuiltInWidgets.kDial)
@@ -49,7 +50,7 @@ public class arcadeDrive extends Command {
 	private final double MotorMin = 0.008;
 
 	//Align Code
-	private float moveKp = 0.008f;
+	private float moveKp = 0.0075f;
 	private float trueKp = 0.008f;  
 	private double moveError;
 	private double moveOutput;
@@ -152,8 +153,11 @@ public class arcadeDrive extends Command {
 			SmartDashboard.putNumber("Gyro Position", Robot.drive.getGyroPosition());
 			SmartDashboard.putNumber("KP Error", kPerr);
 			SmartDashboard.putNumber("Correction", correction);
+			SmartDashboard.putNumber("Left Pos", Robot.drive.getLeftPositionRaw());
+			SmartDashboard.putNumber("Right Pos", Robot.drive.getRightPositionRaw());
 
-			Robot.drive.set(ControlMode.PercentOutput, ((yOutput + correction) + xOutput), ((yOutput - correction) - xOutput));
+
+			Robot.drive.set(ControlMode.PercentOutput, ((yOutput) + xOutput), ((yOutput) - xOutput));
 
 			gyroOutput.setNumber(Robot.drive.getGyroPosition());
 
