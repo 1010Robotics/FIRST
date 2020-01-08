@@ -24,6 +24,9 @@ import frc.robot.subsystems.flywheel;
 public class RobotContainer {
 
   private final driveBase base = new driveBase();
+  private final flywheel fw = new flywheel();
+
+  private final opShooter fwTeleop = new opShooter(fw);
   private final arcadeDrive baseTeleop = new arcadeDrive(base);
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
@@ -36,6 +39,10 @@ public class RobotContainer {
 
   public Command getDriveTeleopCommand(){
     return baseTeleop;
+  }
+
+  public Command getFlywheelTeleopCommand(){
+    return fwTeleop;
   }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by

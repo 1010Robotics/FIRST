@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.CSVFile;
 import frc.robot.Constants;
 
 public class driveBase extends SubsystemBase {
@@ -21,6 +22,7 @@ public class driveBase extends SubsystemBase {
   //Declare Motors
   public CANSparkMax baseLeft, baseRight;
   public CANEncoder leftEncoder, rightEncoder;
+  public CSVFile baseData;
   
   public static void initSparkMax(final CANSparkMax Spark, CANEncoder Encoder, boolean inverted) {
     //Restores defaults
@@ -38,6 +40,9 @@ public class driveBase extends SubsystemBase {
   }
 
   public driveBase() {
+
+    //CSVFile baseData = new CSVFile("baseData");
+    //baseData.addRow(1, 1, "One", 1);
     // Define Motors
     try{baseLeft = new CANSparkMax(Constants.RobotMap.LEFT_MOTOR.value, MotorType.kBrushless);}
     catch (RuntimeException ex){DriverStation.reportError("Error Starting CANSParkMax: " + ex.getMessage(), true);}
