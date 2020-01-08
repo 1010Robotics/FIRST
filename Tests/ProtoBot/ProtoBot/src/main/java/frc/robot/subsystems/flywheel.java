@@ -10,12 +10,18 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.revrobotics.ColorSensorV3;
+
 import frc.robot.Constants;
 
 public class flywheel extends SubsystemBase {
 
-  public static void initMotor(TalonSRX motor){
+  public static void initMotor(final TalonSRX motor){
 		//Set Sensor Phase
 		motor.setSensorPhase(false);
 		//Brake Mode
@@ -32,20 +38,28 @@ public class flywheel extends SubsystemBase {
   }
 
   //Declare Motors
-  private TalonSRX flywheelMtr;
+  private final ColorSensorV3 colorSensor;
+  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  private final TalonSRX flywheelMtr;
 
+  
 
   public flywheel() {
     //Define Motors
     flywheelMtr = new TalonSRX(0);
+
+    colorSensor = new ColorSensorV3(i2cPort);
     //Initialize Motors
     initMotor(flywheelMtr);
   }
 
-  public void set(ControlMode mode, double value){
+  public void set(final ControlMode mode, final double value){
     flywheelMtr.set(mode, value);
   }
 
+  public Color getColor(){
+    return colorSensor.getColor();
+  }
   public void stop(){
     flywheelMtr.set(ControlMode.PercentOutput, 0);
   }

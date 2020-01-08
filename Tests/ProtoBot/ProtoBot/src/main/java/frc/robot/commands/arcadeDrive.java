@@ -57,7 +57,7 @@ public class arcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //SmartDashboard.putNumber("Left Enc Value", chassis.getLeftPositionRaw());
+    SmartDashboard.putNumber("Left Enc Value", chassis.getLeftPositionRaw());
 
     joyYval = Robot.oi.main.getY(Hand.kLeft);
 		joyXval = Robot.oi.main.getX(Hand.kRight);
