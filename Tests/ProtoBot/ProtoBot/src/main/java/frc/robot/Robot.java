@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     oi = new OI();
     m_robotContainer = new RobotContainer();
 
-    m_teleopBase = m_robotContainer.getTeleopCommand();
+    m_teleopBase = m_robotContainer.getDriveTeleopCommand();
   }
 
   /**

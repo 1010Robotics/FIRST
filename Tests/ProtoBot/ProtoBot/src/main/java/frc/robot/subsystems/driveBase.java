@@ -20,26 +20,32 @@ import frc.robot.Robot;
 public class driveBase extends SubsystemBase {
 
   //Declare Motors
-  public CANSparkMax baseLeft, baseRight;
-  public CANEncoder leftEncoder, rightEncoder;
+  private CANSparkMax baseLeft, baseRight;
+  private CANEncoder leftEncoder, rightEncoder;
   
   public static void initSparkMax(final CANSparkMax Spark, CANEncoder Encoder) {
+    //Restores defaults
     Spark.restoreFactoryDefaults();
+    //Declares Encoder
     Encoder = Spark.getEncoder();
     Encoder.setPosition(0);
+
+    //Sets Ramp Rate and Mode
     Spark.setOpenLoopRampRate(0);
-    Spark.setIdleMode(IdleMode.kCoast);
+    Spark.setIdleMode(IdleMode.kBrake);
   }
 
   public driveBase() {
     // Define Motors
-    baseLeft = new CANSparkMax(Constants.RobotMap.LEFT_MOTOR.value, MotorType.kBrushless);
-    baseRight = new CANSparkMax(Constants.RobotMap.RIGHT_MOTOR.value, MotorType.kBrushless);
-    
+    try{baseLeft = new CANSparkMax(Constants.RobotMap.LEFT_MOTOR.value, MotorType.kBrushless);}
+    catch (RuntimeException ex){DriverStation.reportError("Error Starting CANSParkMax: " + ex.getMessage(), true);}
+    try{baseRight = new CANSparkMax(Constants.RobotMap.RIGHT_MOTOR.value, MotorType.kBrushless);}
+    catch (RuntimeException ex){DriverStation.reportError("Error Starting CANSParkMax: " + ex.getMessage(), true);}
     // Initialize Motors
     initSparkMax(baseLeft, leftEncoder);
     initSparkMax(baseRight, rightEncoder);
 
+    //Invert our right side motor
     baseRight.setInverted(true);
   }
 

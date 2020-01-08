@@ -34,7 +34,7 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public Command getTeleopCommand(){
+  public Command getDriveTeleopCommand(){
     return baseTeleop;
   }
   /**
