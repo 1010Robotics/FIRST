@@ -14,6 +14,7 @@ import frc.robot.commands.arcadeDrive;
 import frc.robot.commands.opShooter;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.flywheel;
+import frc.robot.subsystems.limelight;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,9 +26,11 @@ public class RobotContainer {
 
   private final driveBase base = new driveBase();
   private final flywheel fw = new flywheel();
+  private final limelight camera = new limelight();
+
 
   private final opShooter fwTeleop = new opShooter(fw);
-  private final arcadeDrive baseTeleop = new arcadeDrive(base);
+  private final arcadeDrive baseTeleop = new arcadeDrive(base, camera);
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.

@@ -13,15 +13,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.CSVFile;
 import frc.robot.Robot;
 import frc.robot.subsystems.driveBase;
+import frc.robot.subsystems.limelight;
+import frc.robot.subsystems.limelight.CameraMode;
+import frc.robot.subsystems.limelight.LightMode;
 
 public class arcadeDrive extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+
   private final driveBase chassis;
+  private final limelight camera;
 
   // Exponential Variables
-  private final double JoyDead = 0.050;// was 0.05????????????????????????????????????????????????????????? JOY DEAD
-  private final double DriveExp = 1.7;// was 1.9!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! EXPO
+  private final double JoyDead = 0.050;
+  private final double DriveExp = 1.7;
   private final double MotorMin = 0.008;
 
   // Exponential Function
@@ -44,41 +49,71 @@ public class arcadeDrive extends CommandBase {
     return power;
   }
 
+  //Joy Code
   private double joyYval;
   private double joyXval;
   private double yOutput;
   private double xOutput;
+  //Align Code
+  private float moveKp = 0.01f;
+  private float moveKd = 0.06f;
+  private double moveError;
+  private double moveErrorDiff;
+  private double moveErrorLast;
+	private double moveOutput;
 
   /**
    * Creates a new arcadeDrive.
    */
-  public arcadeDrive(driveBase subsystem) {
-    chassis = subsystem;
-    addRequirements(subsystem);
+  public arcadeDrive(driveBase sub1, limelight sub2) {
+    chassis = sub1;
+    camera = sub2;
+    addRequirements(chassis);
+    addRequirements(camera);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    camera.setLedMode(LightMode.eOn);
+		camera.setCameraMode(CameraMode.eVision);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    CSVFile.addRow(1, 1, "One", 1);
+
+    //CSVFile.addRow(1, 1, "One", 1);
    // SmartDashboard.putNumber("Left Enc Value", chassis.getLeftPositionRaw());
 
-    joyYval = Robot.oi.main.getY(Hand.kLeft);
-		joyXval = Robot.oi.main.getX(Hand.kRight);
+    if(Robot.oi.main.getXButton()) {
+      SmartDashboard.putNumber("CAMERA X", camera.getTx());
+      moveError = 0 - camera.getTx();
+      moveErrorDiff = moveError - moveErrorLast;
+      moveOutput = (moveError * moveKp) + (moveErrorDiff * moveKd);
+      chassis.set(moveOutput, -moveOutput);
+      moveErrorLast = moveError;
+    }
 
-		yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
-		xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
+    else {
+      joyYval = Robot.oi.main.getY(Hand.kLeft);
+      joyXval = Robot.oi.main.getX(Hand.kRight);
+      yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
+      xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
+      chassis.set(((yOutput) - xOutput), ((yOutput) + xOutput));
+    }
 
-    //SmartDashboard.putNumber("Joystick?", joyXval);
+    if(Robot.oi.main.getAButton()){
+      chassis.intakeSet(1);
+    }
+    else if(Robot.oi.main.getBButton()){
+      chassis.intakeSet(-1);
+    }
+    else{
+      chassis.intakeSet(0);
+    }
 
-    chassis.set(-((yOutput) + xOutput), -((yOutput) - xOutput));
   }
 
   // Called once the command ends or is interrupted.

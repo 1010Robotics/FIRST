@@ -42,8 +42,7 @@ public final class Constants {
 	    RIGHT_MOTOR(1),
 	    ELEVATOR_MOTOR(4),
 	    ELEVATOR_MOTORF(5),
-	    WRIST_MOTOR(3),
-	    INTAKE_MOTOR(10),
+	    INTAKE_MOTOR(5),
 	    //Controllers Mapping
 	    LEFT_JOYSTICK(0),
 	    RIGHT_JOYSTICK(1);

@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -20,6 +23,7 @@ import frc.robot.Constants;
 public class driveBase extends SubsystemBase {
 
   //Declare Motors
+  public TalonSRX intake;
   public CANSparkMax baseLeft, baseRight;
   public CANEncoder leftEncoder, rightEncoder;
   public CSVFile baseData;
@@ -39,11 +43,29 @@ public class driveBase extends SubsystemBase {
     Spark.setInverted(inverted);
   }
 
+  public static void initMotor(final TalonSRX motor){
+		//Set Sensor Phase
+		motor.setSensorPhase(false);
+		//Brake Mode
+		motor.setNeutralMode(NeutralMode.Coast);
+		//Factory default hardware to prevent unexpected behavior
+		motor.configFactoryDefault();
+		//Output Settings
+		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		//Reset Encoder
+    motor.setSelectedSensorPosition(0);
+  }
+
   public driveBase() {
 
     //CSVFile baseData = new CSVFile("baseData");
     //baseData.addRow(1, 1, "One", 1);
     // Define Motors
+    try{intake = new TalonSRX(Constants.RobotMap.INTAKE_MOTOR.value);}
+    catch (RuntimeException ex){DriverStation.reportError("Error Starting TalonSRX: " + ex.getMessage(), true);}
     try{baseLeft = new CANSparkMax(Constants.RobotMap.LEFT_MOTOR.value, MotorType.kBrushless);}
     catch (RuntimeException ex){DriverStation.reportError("Error Starting CANSParkMax: " + ex.getMessage(), true);}
     try{baseRight = new CANSparkMax(Constants.RobotMap.RIGHT_MOTOR.value, MotorType.kBrushless);}
@@ -69,6 +91,10 @@ public class driveBase extends SubsystemBase {
   public void set(double rightVal, double leftVal){ //input between -1.0 and 1.0
     baseLeft.set(leftVal);
     baseRight.set(rightVal);
+  }
+
+  public void intakeSet(double power){
+    intake.set(ControlMode.PercentOutput, power);
   }
 
   public void stop(){

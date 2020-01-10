@@ -7,11 +7,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class limeLightTop extends Subsystem {
+public class limelight extends SubsystemBase {
 
 	//private static String lime;
 	private static NetworkTableInstance table = null;
@@ -67,9 +67,5 @@ public class limeLightTop extends Subsystem {
 
 		return table.getTable("limelight").getEntry(key);
   	}
-
-  	@Override
- 	 public void initDefaultCommand() {
- 	}
   
 }
