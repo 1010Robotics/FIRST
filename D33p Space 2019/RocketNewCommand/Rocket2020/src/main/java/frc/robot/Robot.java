@@ -28,6 +28,12 @@ public class Robot extends TimedRobot {
 
   public static RobotContainer m_robotContainer;
   public static OI oi;
+  private Command m_teleopBase;
+  private Command m_elevatorTeleop;
+  private Command m_intakeTeleop;
+  private Command m_solenoidTeleop;
+  private Command m_wristTeleop;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -45,7 +51,13 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
 	m_robotContainer = new RobotContainer();
 	oi = new OI();
-	
+
+	m_teleopBase = m_robotContainer.getDriveTeleopCommand();
+	m_elevatorTeleop = m_robotContainer.getElevatorTeleopCommand();
+	m_intakeTeleop = m_robotContainer.getIntakeTeleopCommand();
+	m_solenoidTeleop = m_robotContainer.getSolenoidTeleopCommand();
+	m_wristTeleop = m_robotContainer.getWristTeleopCommand();
+
   }
 
   /**
@@ -194,13 +206,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+	m_teleopBase.schedule();
+	m_elevatorTeleop.schedule();
+	m_wristTeleop.schedule();
+	m_solenoidTeleop.schedule();
+	m_intakeTeleop.schedule();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
   }
 
   /**

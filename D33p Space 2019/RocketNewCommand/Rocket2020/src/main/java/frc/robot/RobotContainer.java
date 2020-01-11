@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.arcadeDrive;
 import frc.robot.commands.teleopElevator;
+import frc.robot.commands.teleopIntake;
+import frc.robot.commands.teleopSolenoid;
+import frc.robot.commands.teleopWrist;
 import frc.robot.subsystems.driveBase;
 import frc.robot.subsystems.elevatorBase;
 import frc.robot.subsystems.intakeBase;
 import frc.robot.subsystems.limeLightTop;
+import frc.robot.subsystems.pneumatics;
 import frc.robot.subsystems.wristBase;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -31,18 +35,30 @@ public class RobotContainer {
   private final elevatorBase elevator = new elevatorBase();
   private final intakeBase intake = new intakeBase();
   private final wristBase wrist = new wristBase();
+  private final pneumatics solenoid = new pneumatics();
   
   private final arcadeDrive baseTeleop = new arcadeDrive(base);
   private final teleopElevator elevatorTeleop = new teleopElevator(elevator, camera);
-
+  private final teleopIntake intakeTeleop = new teleopIntake(intake);
+  private final teleopSolenoid solenoidTeleop = new teleopSolenoid(solenoid);
+  private final teleopWrist wristTeleop = new teleopWrist(wrist);
+  
+  public Command getIntakeTeleopCommand(){
+    return intakeTeleop;
+  }
+  public Command getSolenoidTeleopCommand(){
+    return solenoidTeleop;
+  }
+  public Command getWristTeleopCommand(){
+    return wristTeleop;
+  }
   public Command getDriveTeleopCommand(){
     return baseTeleop;
   }
-
   public Command getElevatorTeleopCommand(){
     return elevatorTeleop;
   }
-  
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
