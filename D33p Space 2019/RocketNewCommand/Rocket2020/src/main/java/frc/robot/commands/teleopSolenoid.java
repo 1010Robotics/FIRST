@@ -7,21 +7,23 @@
 
 package frc.robot.commands;
 
+import java.util.concurrent.TimeUnit;
+
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.flywheel;
+import frc.robot.Robot;
+import frc.robot.subsystems.pneumatics;
 
-public class opShooter extends CommandBase {
-  /**
-   * Creates a new opShooter.
-   */
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+public class teleopSolenoid extends CommandBase {
+  
+  boolean toggle = false;
 
-  private final flywheel m_flywheel; 
+  private final pneumatics solenoid;
 
-  public opShooter(flywheel subsystem) {
-    m_flywheel = subsystem;
-    addRequirements(m_flywheel);
+  public teleopSolenoid(pneumatics sub1) {
+    solenoid = sub1;
+    addRequirements(solenoid);
   }
 
   // Called when the command is initially scheduled.
@@ -33,12 +35,25 @@ public class opShooter extends CommandBase {
   @Override
   public void execute() {
     
-    SmartDashboard.putNumber("Red", m_flywheel.getColor().red);
-    SmartDashboard.putNumber("Green", m_flywheel.getColor().green);
-    SmartDashboard.putNumber("Blue", m_flywheel.getColor().blue);
-
+    if(Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1){
+      solenoid.extendSolenoid();
+      try { TimeUnit.MILLISECONDS.sleep(150); } 	
+      catch (Exception e) { /*Delay*/ }
+      solenoid.extendWheelPiston();
+    }
+    else if(Robot.oi.main.getBumper(Hand.kLeft)){
+      solenoid.disableWheelPiston();
+      try { TimeUnit.MILLISECONDS.sleep(150); } 	
+      catch (Exception e) { /*Delay*/ }
+      solenoid.disableSolenoid();
+      toggle = true;
+    }
+    else if(Robot.oi.main.getAButton()){
+      solenoid.disableWheelPiston();
+      solenoid.extendSolenoid();
+    }
     
-  
+    SmartDashboard.putString("Solenoid State", solenoid.actuatorState.toString());
   }
 
   // Called once the command ends or is interrupted.

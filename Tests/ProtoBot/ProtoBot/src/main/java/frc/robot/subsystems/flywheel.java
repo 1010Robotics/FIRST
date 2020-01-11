@@ -42,13 +42,12 @@ public class flywheel extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final TalonSRX flywheelMtr;
 
-  
-
   public flywheel() {
     //Define Motors
-    flywheelMtr = new TalonSRX(0);
+    flywheelMtr = new TalonSRX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
 
     colorSensor = new ColorSensorV3(i2cPort);
+    
     //Initialize Motors
     initMotor(flywheelMtr);
   }

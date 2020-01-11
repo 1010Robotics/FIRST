@@ -7,21 +7,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.flywheel;
+import frc.robot.Robot;
+import frc.robot.subsystems.intakeBase;
 
-public class opShooter extends CommandBase {
-  /**
-   * Creates a new opShooter.
-   */
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+public class teleopIntake extends CommandBase {
 
-  private final flywheel m_flywheel; 
-
-  public opShooter(flywheel subsystem) {
-    m_flywheel = subsystem;
-    addRequirements(m_flywheel);
+  private final intakeBase intake;
+  private double speed;
+  
+  public teleopIntake(intakeBase sub1) {
+    intake = sub1;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -33,12 +32,24 @@ public class opShooter extends CommandBase {
   @Override
   public void execute() {
     
-    SmartDashboard.putNumber("Red", m_flywheel.getColor().red);
-    SmartDashboard.putNumber("Green", m_flywheel.getColor().green);
-    SmartDashboard.putNumber("Blue", m_flywheel.getColor().blue);
-
+    //Get Trigger Value and Apply a Range
+    speed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
-  
+    //If Left Bumper is pressed, Intake at Max Speed
+    if(Robot.oi.main.getBumper(Hand.kRight)){
+			intake.set(-1);
+    }
+    //Otherwise Outtake at the Trigger Value
+		else if(Robot.oi.main.getTriggerAxis(Hand.kRight) != 0){
+      intake.set(speed);
+    }
+    //Otherwise set the Intake Speed to 0
+    else{
+      intake.set(-0.1);
+    }
+
+    SmartDashboard.putNumber("Intake %Output", intake.getIntakeOutput());
+
   }
 
   // Called once the command ends or is interrupted.

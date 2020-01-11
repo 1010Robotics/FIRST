@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2017-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,139 +7,75 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.driveBase;
-import frc.robot.subsystems.elevatorBase;
-import frc.robot.subsystems.intakeBase;
-//import frc.robot.subsystems.limeLightBottom;
-import frc.robot.subsystems.limeLightTop;
-import frc.robot.subsystems.pneumatics;
-import frc.robot.subsystems.wristBase;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+/**
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the name of this class or
+ * the package after creating this project, you must also update the build.gradle file in the
+ * project.
+ */
 public class Robot extends TimedRobot {
+  private Command m_autonomousCommand;
 
-	//Create Objects
-	public static OI oi;
-	public static driveBase drive;
-	public static limeLightTop cameraTop;
-	//public static limeLightBottom cameraBottom;
-	public static elevatorBase elevator;
-	public static pneumatics solenoid;
-	public static wristBase wrist;
-	public static intakeBase intake;
-	public static ShuffleboardTab testTab;
-	public static ShuffleboardTab teleopTab;
-	public static Timer RobotTimer;
-	public static CameraServer driverMemeCamera;
+  public static RobotContainer m_robotContainer;
+  public static OI oi;
+  /**
+   * This function is run when the robot is first started up and should be used for any
+   * initialization code.
+   */
+
+  public enum RobotState {
+    DISABLED, AUTONOMOUS, TELEOP
+  }
+
+  public static RobotState s_robot_state = RobotState.DISABLED;
+
+  @Override
+  public void robotInit() {
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+	m_robotContainer = new RobotContainer();
+	oi = new OI();
 	
-	//Create Commands
-	Command autonomousCommand;
-	Command arcadeDrive;
-	Command teleopSolenoid;
-	Command dashboardCommand;
+  }
 
-	/*@SuppressWarnings("rawtypes")
-	SendableChooser autoSelector;*/
+  /**
+   * This function is called every robot packet, no matter the mode. Use this for items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   *
+   * <p>This runs after the mode specific periodic functions, but before
+   * LiveWindow and SmartDashboard integrated updating.
+   */
+  @Override
+  public void robotPeriodic() {
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // block in order for anything in the Command-based framework to work.
+    CommandScheduler.getInstance().run();
+  }
 
-	public enum RobotState {
-        DISABLED, AUTONOMOUS, TELEOP
-    }
-	public static double Time;
-    public static RobotState s_robot_state = RobotState.DISABLED;
+  /**
+   * This function is called once each time the robot enters Disabled mode.
+   */
+  @Override
+  public void disabledInit() {
+  }
 
-	
-    public static RobotState getState() {
-        return s_robot_state;
-    }
-	public static double getTime(){
-		return Time;
-	}
-    public static void setState(RobotState state) {
-        s_robot_state = state;
-    }
+  @Override
+  public void disabledPeriodic() {
+  }
 
-	@Override
-	public void robotInit() {
-		//create tabs
-		testTab = Shuffleboard.getTab("Test Tab");
-		teleopTab = Shuffleboard.getTab("Teleop Tab");
-
-		//Define Camera
-		driverMemeCamera = CameraServer.getInstance();
-		driverMemeCamera.startAutomaticCapture();
-		
-		//Define Objects
-		oi = new OI();
-		drive = new driveBase();
-		solenoid = new pneumatics();
-		cameraTop = new limeLightTop();
-		//cameraBottom = new limeLightBottom();
-		elevator = new elevatorBase();
-		wrist = new wristBase();
-		intake = new intakeBase();
-		RobotTimer = new Timer();
-
-		//SmartDashboard Subsystem 
-		SmartDashboard.putData(drive);
-		SmartDashboard.putData(cameraTop);
-		//SmartDashboard.putData(cameraBottom);
-		SmartDashboard.putData(solenoid);
-	}
-
-	@Override
-	public void disabledInit() {
-		RobotTimer.reset();
-		RobotTimer.start();
-	}
-
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
-	@Override
-	public void autonomousInit() {
-		RobotTimer.reset();
-		RobotTimer.start();
-	}
-
-	@Override
-	public void autonomousPeriodic() {
-		Time = RobotTimer.get();
-		Scheduler.getInstance().run();
-	}
-
-	@Override
-	public void teleopInit() {
-		RobotTimer.reset();
-		RobotTimer.start();
-	}
-
-	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
-	@Override  
-	public void testPeriodic() {
-		Time = RobotTimer.get();
-	}
-	
-	public static void initTalon(TalonSRX motor, boolean invert) {
+  public static void initTalon(TalonSRX motor, boolean invert) {
 		motor.setInverted(invert);
 		motor.setNeutralMode(NeutralMode.Brake);
 		motor.neutralOutput();
@@ -213,8 +149,7 @@ public class Robot extends TimedRobot {
 		//Set Sensor Phase
 		motor.setSensorPhase(false);
 		//Brake Mode
-		motor.setNeutralMode(NeutralMode
-		.Brake);
+		motor.setNeutralMode(NeutralMode.Brake);
 		//Factory default hardware to prevent unexpected behavior
 		motor.configFactoryDefault();
 		//Set relevant frame periods to be at least as fast as periodic rate
@@ -237,6 +172,54 @@ public class Robot extends TimedRobot {
 		//Reset Encoder
 		motor.setSelectedSensorPosition(0);
 	}
+  /**
+   * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+   */
+  @Override
+  public void autonomousInit() {
+   /*  m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    } */
+  }
+
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
+  }
+
+  @Override
+  public void teleopInit() {
+    // This makes sure that the autonomous stops running when
+    // teleop starts running. If you want the autonomous to
+    // continue until interrupted by another command, remove
+    // this line or comment it out.
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+  }
+
+  /**
+   * This function is called periodically during operator control.
+   */
+  @Override
+  public void teleopPeriodic() {
+  }
+
+  @Override
+  public void testInit() {
+    // Cancels all running commands at the start of test mode.
+    CommandScheduler.getInstance().cancelAll();
+  }
+
+  /**
+   * This function is called periodically during test mode.
+   */
+  @Override
+  public void testPeriodic() {
+  }
 }
-
-
