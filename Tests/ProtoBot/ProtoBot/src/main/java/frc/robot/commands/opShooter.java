@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.flywheel;
@@ -17,6 +19,8 @@ public class opShooter extends CommandBase {
    */
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
+  double targetRpm;
+  double currRpm;
   private final flywheel m_flywheel; 
 
   public opShooter(flywheel subsystem) {
@@ -32,13 +36,11 @@ public class opShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    SmartDashboard.putNumber("Red", m_flywheel.getColor().red);
-    SmartDashboard.putNumber("Green", m_flywheel.getColor().green);
-    SmartDashboard.putNumber("Blue", m_flywheel.getColor().blue);
-
-    
   
+    targetRpm = SmartDashboard.getNumber("Target RPM", 100);
+    currRpm = m_flywheel.getRpm();
+    m_flywheel.set(ControlMode.Velocity, 10000);
+
   }
 
   // Called once the command ends or is interrupted.

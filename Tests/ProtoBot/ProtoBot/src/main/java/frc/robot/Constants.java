@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -23,13 +25,27 @@ public final class Constants {
     public static final int kWristSlotIdx = 2;
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
     public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
-    
-    public static final int rightSparkPort = 1;
-    public static final int leftSparkPort = 2;
+	
+	//Drive Characterization Feed Forward/Feedback Gains
+	public static final double ksVolts = 0.22;
+    public static final double kvVoltSecondsPerMeter = 1.98;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
-    public enum RobotMap 
-    {
+	public static final double kPDriveVel = 8.5;
+	
+	//Drive Kinematics
+	public static final double kTrackwidthMeters = 0.69;
+	public static final DifferentialDriveKinematics kDriveKinematics = 
+		new DifferentialDriveKinematics(kTrackwidthMeters);
 
+	public static final double kMaxSpeedMetersPerSecond = 3;
+	public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+	//RAMSETE Parameters
+	public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    public enum RobotMap {
         //Controller Mapping
 	    CONTROLLER_MAIN(0),
 	    CONTROLLER_PARTNER(1),
@@ -44,14 +60,12 @@ public final class Constants {
 	    INTAKE_MOTOR(5),
 	    //Controllers Mapping
 	    LEFT_JOYSTICK(0),
-	    RIGHT_JOYSTICK(1);
+		RIGHT_JOYSTICK(1);
+		
+		public final int value;
 
-	    public final int value;
-
-     RobotMap(int value) 
-    {
-		this.value = value;
-    }
-  
+    	RobotMap(int value) {
+			this.value = value;
+    	}
     }
 }

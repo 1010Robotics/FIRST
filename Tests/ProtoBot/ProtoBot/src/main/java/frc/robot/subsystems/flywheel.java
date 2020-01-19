@@ -8,22 +8,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.revrobotics.ColorSensorV3;
 
 import frc.robot.Constants;
 
 public class flywheel extends SubsystemBase {
 
-  public static void initMotor(final TalonSRX motor){
-		//Set Sensor Phase
-		motor.setSensorPhase(false);
+  public static void initFWMotor(final TalonFX motor){
+    //Set Sensor Phase
+    motor.setSensorPhase(false);
+    motor.configClosedloopRamp(0.5, 0);
+		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Coast);
 		//Factory default hardware to prevent unexpected behavior
@@ -38,27 +37,25 @@ public class flywheel extends SubsystemBase {
   }
 
   //Declare Motors
-  private final ColorSensorV3 colorSensor;
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final TalonSRX flywheelMtr;
+  //private final TalonSRX flywheelMtr;
 
+  private final TalonFX flywheelMtr;
   public flywheel() {
     //Define Motors
-    flywheelMtr = new TalonSRX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
-
-    colorSensor = new ColorSensorV3(i2cPort);
+    flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
     
     //Initialize Motors
-    initMotor(flywheelMtr);
+    initFWMotor(flywheelMtr);
+  }
+
+  public int getRpm(){
+    return flywheelMtr.getSelectedSensorVelocity();
   }
 
   public void set(final ControlMode mode, final double value){
     flywheelMtr.set(mode, value);
   }
 
-  public Color getColor(){
-    return colorSensor.getColor();
-  }
   public void stop(){
     flywheelMtr.set(ControlMode.PercentOutput, 0);
   }

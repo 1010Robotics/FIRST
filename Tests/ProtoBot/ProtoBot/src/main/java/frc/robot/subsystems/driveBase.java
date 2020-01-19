@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -17,7 +18,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.CSVFile;
 import frc.robot.Constants;
 
 public class driveBase extends SubsystemBase {
@@ -26,7 +26,6 @@ public class driveBase extends SubsystemBase {
   public TalonSRX intake;
   public CANSparkMax baseLeft, baseRight;
   public CANEncoder leftEncoder, rightEncoder;
-  public CSVFile baseData;
   
   public static void initSparkMax(final CANSparkMax Spark, CANEncoder Encoder, boolean inverted) {
     //Restores defaults
@@ -45,7 +44,8 @@ public class driveBase extends SubsystemBase {
 
   public static void initMotor(final TalonSRX motor){
 		//Set Sensor Phase
-		motor.setSensorPhase(false);
+    motor.setSensorPhase(false);
+
 		//Brake Mode
 		motor.setNeutralMode(NeutralMode.Coast);
 		//Factory default hardware to prevent unexpected behavior
