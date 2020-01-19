@@ -51,37 +51,56 @@ public class DriveSubsystem extends SubsystemBase {
     catch (RuntimeException ex) {DriverStation.reportError("Error Starting NavX: " + ex.getMessage(), true);}
   }
 
+  /**
+  * @param mode CTRE TalonFX ControlMode
+  * @param rightVal Right Drive Motors' Output
+  * @param leftVal Left Drive Motors' Output
+  */
   public void set(ControlMode mode, double rightVal, double leftVal) {
     leftMaster.set(mode, leftVal);
     rightMaster.set(mode, rightVal);
   }
 
+  /*
+  */
   public void stop(){
     leftMaster.set(ControlMode.PercentOutput, 0);
     rightMaster.set(ControlMode.PercentOutput, 0);
   }
 
+  /*
+  */
   public double getLeftPositionRaw() {
     return leftMaster.getSelectedSensorPosition();
   }
 
+  /*
+  */
   public double getRightPositionRaw(){
     return rightMaster.getSelectedSensorPosition();
   }
   
+  /*
+  */
   public void resetEnc() {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
   }
 
+  /*
+  */
   public void getAngle() {
     gyro.getAngle();
   }
 
+  /*
+  */
   public void resetAngle() {
     gyro.reset();
   }
 
+  /*
+  */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
