@@ -5,6 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/**
+ * @author Pedro Amui and Caden Hewlett
+ * 
+ * DriveSubsystem for the 6364 Infinite Recharge Robot.
+ * Includes Left and Right Side Motors of the Drivetrain.
+ * - 4 Falcon500 Motors (2 on each side)
+ * - 4 Built-in Encoders (1 per motor)
+ * - 1 NavX Gyro on RoboRio SPI Port
+ * 
+ * Key Methods and Utilities:
+ * - PathFollowing Code
+ * - Sensors Value Methods
+ * - Anti-tipping Code
+ */
+
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -52,57 +68,82 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-  * @param mode CTRE TalonFX ControlMode
-  * @param rightVal Right Drive Motors' Output
-  * @param leftVal Left Drive Motors' Output
-  */
+   * Set Drive Motors to certain Percent Output
+   * 
+   * @param rightVal Right Drive Motors' Percent Output
+   * @param leftVal Left Drive Motors' Percent Output
+   */
+  public void set(double rightVal, double leftVal) {
+    leftMaster.set(ControlMode.PercentOutput, leftVal);
+    rightMaster.set(ControlMode.PercentOutput, rightVal);
+  }
+
+  /**
+   * Set Drive Motors to certain Control Mode and Output
+   * 
+   * @param mode CTRE TalonFX ControlMode
+   * @param rightVal Right Drive Motors' Output
+   * @param leftVal Left Drive Motors' Output
+   */
   public void set(ControlMode mode, double rightVal, double leftVal) {
     leftMaster.set(mode, leftVal);
     rightMaster.set(mode, rightVal);
   }
 
-  /*
-  */
+  /**
+   * Stop Drive Motors
+   */
   public void stop(){
     leftMaster.set(ControlMode.PercentOutput, 0);
     rightMaster.set(ControlMode.PercentOutput, 0);
   }
 
-  /*
-  */
+  /**
+   * Get Left Position in Raw Encoder Units (2048 per Revolution)
+   * 
+   * @return Current Raw Encoder Units for the Left Drive
+   */
   public double getLeftPositionRaw() {
     return leftMaster.getSelectedSensorPosition();
   }
 
-  /*
-  */
+  /**
+   * Get Right Position in Raw Encoder Units (2048 per Revolution)
+   * 
+   * @return Current Raw Encoder Units for the Right Drive
+   */
   public double getRightPositionRaw(){
     return rightMaster.getSelectedSensorPosition();
   }
   
-  /*
-  */
+  /**
+   * Reset all Drive Encoders to zero
+   */
   public void resetEnc() {
     leftMaster.setSelectedSensorPosition(0);
     rightMaster.setSelectedSensorPosition(0);
   }
 
-  /*
-  */
-  public void getAngle() {
-    gyro.getAngle();
+  /**
+   * Get Current NavX X-Axis Angle
+   * 
+   * @return Return Robot's Current Angle
+   */
+  public double getAngle() {
+    return gyro.getAngle();
   }
 
-  /*
-  */
+  /**
+   * Reset NavX's Z-Axis Angle
+   */
   public void resetAngle() {
     gyro.reset();
   }
 
-  /*
-  */
+  /**
+   * This method will be called once per scheduler run
+   */
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }
