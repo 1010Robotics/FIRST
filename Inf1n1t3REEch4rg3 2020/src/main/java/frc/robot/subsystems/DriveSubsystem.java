@@ -15,6 +15,7 @@
  * - 1 NavX Gyro on RoboRio SPI Port
  * 
  * Key Methods and Utilities:
+ * - Odometry Calculations and Methods
  * - PathFollowing Code
  * - Sensors Value Methods
  * - Anti-tipping Code
@@ -28,6 +29,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -35,12 +39,15 @@ import frc.robot.Robot;
 public class DriveSubsystem extends SubsystemBase {
 
   //Declare Motors
-  TalonFX leftMaster;
-  TalonFX leftSlave;
-  TalonFX rightMaster;
-  TalonFX rightSlave;
+  private TalonFX leftMaster;
+  private TalonFX leftSlave;
+  private TalonFX rightMaster;
+  private TalonFX rightSlave;
   //Declare Sensors
-  AHRS gyro;
+  private AHRS gyro;
+  //Declare Others
+  private DifferentialDriveOdometry mOdometry;
+  
 
   public DriveSubsystem() {
     //Define Motors
@@ -65,6 +72,11 @@ public class DriveSubsystem extends SubsystemBase {
     //Define Gyro
     try {gyro = new AHRS(SPI.Port.kMXP);}
     catch (RuntimeException ex) {DriverStation.reportError("Error Starting NavX: " + ex.getMessage(), true);}
+
+    resetEnc();
+    resetAngle();
+
+    mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
   }
 
   /**
@@ -108,12 +120,48 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Get Right Position in Raw Encoder Units (2048 per Revolution)
+   * Get Left Wheels' Position in Meters
+   * 
+   * @return Current Position for the Left Drive, in meters
+   */
+  public double getLeftPosition() {
+    return leftMaster.getSelectedSensorPosition(); //Code to Meters
+  }
+
+  /**
+   * Get Left Wheels' Velocity in Meters per Second
+   * 
+   * @return Current Velocity of the Left Drive, in meters per second
+   */
+  public double getLeftVelocity() {
+    return leftMaster.getSelectedSensorVelocity(); //Code to Meters per Second
+  }
+
+  /**
+   * Get Right Wheels' Position in Raw Encoder Units (2048 per Revolution)
    * 
    * @return Current Raw Encoder Units for the Right Drive
    */
   public double getRightPositionRaw(){
     return rightMaster.getSelectedSensorPosition();
+  }
+
+  /**
+   * Get Right Wheels' Position in Meters
+   * 
+   * @return Current Position for the Right Drive, in meters
+   */
+  public double getRightPosition() {
+    return rightMaster.getSelectedSensorPosition(); //Code to Meters
+  }
+
+  /**
+   * Get Right Wheels' Velocity in Meters per Second
+   * 
+   * @return Current Velocity of the Right Drive, in meters per second
+   */
+  public double getRightVelocity() {
+    return rightMaster.getSelectedSensorVelocity(); //Code to Meters per Second
   }
   
   /**
@@ -125,19 +173,47 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Get Current NavX X-Axis Angle
+   * Get Current NavX's Yaw Angle
    * 
-   * @return Return Robot's Current Angle
+   * @return Robot's Current Angle
    */
   public double getAngle() {
     return gyro.getAngle();
   }
 
   /**
-   * Reset NavX's Z-Axis Angle
+   * Get Current Rate of Change in Angle of NavX's Yaw
+   * 
+   * @return Robot's Current Rate of Change in Angle
+   */
+  public double getAngleRate() {
+    return gyro.getRate();
+  }
+
+  /**
+   * Reset NavX's Yaw Angle to zero
    */
   public void resetAngle() {
     gyro.reset();
+  }
+
+  /**
+   * Returns the currently-estimated pose of the robot
+   *
+   * @return The pose
+   */
+  public Pose2d getPose() {
+    return mOdometry.getPoseMeters();
+  }
+
+  /**
+   * Resets the odometry to the specified pose
+   *
+   * @param pose The pose to which to set the odometry
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEnc();
+    mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getAngle()));
   }
 
   /**
@@ -145,5 +221,6 @@ public class DriveSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    mOdometry.update(Rotation2d.fromDegrees(getAngle()), getLeftPosition(), getRightPosition());
   }
 }
