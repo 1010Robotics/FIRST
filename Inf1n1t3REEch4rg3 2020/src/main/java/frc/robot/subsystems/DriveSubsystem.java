@@ -18,9 +18,7 @@
  * - Odometry Calculations and Methods
  * - PathFollowing Code
  * - Sensors Value Methods
- * - Anti-tipping Code
  */
-
 
 package frc.robot.subsystems;
 
@@ -47,7 +45,6 @@ public class DriveSubsystem extends SubsystemBase {
   private AHRS gyro;
   //Declare Others
   private DifferentialDriveOdometry mOdometry;
-  
 
   public DriveSubsystem() {
     //Define Motors

@@ -7,11 +7,11 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.flywheel;
+import frc.robot.subsystems.FlywheelSubsystem;;
 
 public class opShooter extends CommandBase {
   /**
@@ -21,11 +21,11 @@ public class opShooter extends CommandBase {
 
   double targetRpm;
   double currRpm;
-  private final flywheel m_flywheel; 
+  private final FlywheelSubsystem flywheel; 
 
-  public opShooter(flywheel subsystem) {
-    m_flywheel = subsystem;
-    addRequirements(m_flywheel);
+  public opShooter(FlywheelSubsystem subsystem) {
+    flywheel = subsystem;
+    addRequirements(flywheel);
   }
 
   // Called when the command is initially scheduled.
@@ -38,8 +38,8 @@ public class opShooter extends CommandBase {
   public void execute() {
   
     targetRpm = SmartDashboard.getNumber("Target RPM", 100);
-    currRpm = m_flywheel.getRpm();
-    m_flywheel.set(ControlMode.Velocity, 10000);
+    currRpm = flywheel.getRpm();
+    flywheel.set(TalonFXControlMode.Velocity, 10000);
 
   }
 

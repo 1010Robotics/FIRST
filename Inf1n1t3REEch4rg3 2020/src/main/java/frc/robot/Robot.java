@@ -45,6 +45,24 @@ public class Robot extends TimedRobot {
     motor.setSelectedSensorPosition(0);
   }
 
+  public static void initFWMotor(final TalonFX motor){
+    //Set Sensor Phase
+    motor.setSensorPhase(false);
+    motor.configClosedloopRamp(0.5, 0);
+		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		//Brake Mode
+		motor.setNeutralMode(NeutralMode.Coast);
+		//Factory default hardware to prevent unexpected behavior
+		motor.configFactoryDefault();
+		//Output Settings
+		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		//Reset Encoder
+    motor.setSelectedSensorPosition(0);
+  }
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.

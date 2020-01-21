@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.arcadeDrive;
 import frc.robot.commands.opShooter;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.flywheel;
-import frc.robot.subsystems.limelight;
+import frc.robot.subsystems.FlywheelSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,12 +25,12 @@ import frc.robot.subsystems.limelight;
 public class RobotContainer {
 
   private final DriveSubsystem drive = new DriveSubsystem();
-  private final flywheel fw = new flywheel();
-  private final limelight camera = new limelight();
+  private final FlywheelSubsystem flywheel = new FlywheelSubsystem();
+  private final LimelightSubsystem limelight = new LimelightSubsystem();
 
 
-  private final opShooter fwTeleop = new opShooter(fw);
-  private final arcadeDrive baseTeleop = new arcadeDrive(drive, camera);
+  private final opShooter fwTeleop = new opShooter(flywheel);
+  private final arcadeDrive baseTeleop = new arcadeDrive(drive, limelight);
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.

@@ -43,17 +43,12 @@ public final class Constants {
 	    CONTROLLER_MAIN(0),
 	    CONTROLLER_PARTNER(1),
 	    //CAN Motors Mapping
-	    LEFT_MOTORF2(12),
-	    LEFT_MOTORF(7),
-	    LEFT_MOTOR(2), 
-	    RIGHT_MOTORF2(11), 
-	    RIGHT_MOTORF(8), 
-	    RIGHT_MOTOR(1),
+	    LEFT_SLAVE(7),
+	    LEFT_MASTER(2), 
+	    RIGHT_SLAVE(8), 
+	    RIGHT_MASTER(1),
 	    FLYWHEEL_MOTOR(7),
-	    INTAKE_MOTOR(5),
-	    //Controllers Mapping
-	    LEFT_JOYSTICK(0),
-		RIGHT_JOYSTICK(1);
+	    INTAKE_MOTOR(5);
 		
 		public final int value;
 

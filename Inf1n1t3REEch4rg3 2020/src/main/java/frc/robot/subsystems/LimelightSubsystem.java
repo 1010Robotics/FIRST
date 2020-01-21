@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class limelight extends SubsystemBase {
+public class LimelightSubsystem extends SubsystemBase {
 
 	//private static String lime;
 	private static NetworkTableInstance table = null;

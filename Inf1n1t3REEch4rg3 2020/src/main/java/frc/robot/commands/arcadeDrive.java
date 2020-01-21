@@ -14,16 +14,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.limelight;
-import frc.robot.subsystems.limelight.CameraMode;
-import frc.robot.subsystems.limelight.LightMode;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LimelightSubsystem.CameraMode;
+import frc.robot.subsystems.LimelightSubsystem.LightMode;
 
 public class arcadeDrive extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   private final DriveSubsystem chassis;
-  private final limelight camera;
+  private final LimelightSubsystem camera;
 
   // Exponential Variables
   private final double JoyDead = 0.050;
@@ -66,7 +66,7 @@ public class arcadeDrive extends CommandBase {
   /**
    * Creates a new arcadeDrive.
    */
-  public arcadeDrive(DriveSubsystem sub1, limelight sub2) {
+  public arcadeDrive(DriveSubsystem sub1, LimelightSubsystem sub2) {
     chassis = sub1;
     camera = sub2;
     addRequirements(chassis);

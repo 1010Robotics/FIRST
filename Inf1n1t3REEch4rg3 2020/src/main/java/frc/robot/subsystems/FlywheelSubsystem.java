@@ -8,57 +8,49 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 
-public class flywheel extends SubsystemBase {
-
-  public static void initFWMotor(final TalonFX motor){
-    //Set Sensor Phase
-    motor.setSensorPhase(false);
-    motor.configClosedloopRamp(0.5, 0);
-		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		//Brake Mode
-		motor.setNeutralMode(NeutralMode.Coast);
-		//Factory default hardware to prevent unexpected behavior
-		motor.configFactoryDefault();
-		//Output Settings
-		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
-		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-		//Reset Encoder
-    motor.setSelectedSensorPosition(0);
-  }
+public class FlywheelSubsystem extends SubsystemBase {
 
   //Declare Motors
   //private final TalonSRX flywheelMtr;
 
   private final TalonFX flywheelMtr;
-  public flywheel() {
+  
+  public FlywheelSubsystem() {
     //Define Motors
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
     
     //Initialize Motors
-    initFWMotor(flywheelMtr);
+    Robot.initFWMotor(flywheelMtr);
   }
 
-  public int getRpm(){
-    return flywheelMtr.getSelectedSensorVelocity();
+  public void set(double out){
+    flywheelMtr.set(TalonFXControlMode.Velocity, out);
   }
 
-  public void set(final ControlMode mode, final double value){
-    flywheelMtr.set(mode, value);
+  public void set(TalonFXControlMode mode, double out){
+    flywheelMtr.set(mode, out);
   }
 
   public void stop(){
     flywheelMtr.set(ControlMode.PercentOutput, 0);
   }
+
+  public double getRpm(){
+    return flywheelMtr.getSelectedSensorVelocity();
+  }
+
+  public boolean isOnTarget(){
+    return true; //Code Logic
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
