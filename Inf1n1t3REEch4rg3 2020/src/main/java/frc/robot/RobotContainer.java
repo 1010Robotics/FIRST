@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.CSVFile;
 import frc.robot.commands.arcadeDrive;
 import frc.robot.commands.opShooter;
 import frc.robot.subsystems.DriveSubsystem;
@@ -31,6 +32,8 @@ public class RobotContainer {
 
   private final opShooter fwTeleop = new opShooter(flywheel);
   private final arcadeDrive baseTeleop = new arcadeDrive(drive, limelight);
+  private final CSVFile testfile = new CSVFile(drive);
+
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -44,6 +47,10 @@ public class RobotContainer {
     return baseTeleop;
   }
 
+  public Command getCurrentFileCommand(){
+    return testfile;
+  }
+  
   public Command getFlywheelTeleopCommand(){
     return fwTeleop;
   }

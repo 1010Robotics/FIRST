@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.FlywheelSubsystem;;
 
 public class opShooter extends CommandBase {
@@ -21,6 +22,12 @@ public class opShooter extends CommandBase {
 
   double targetRpm;
   double currRpm;
+  double errRpm;
+  double errRpm_sum;
+  double errRpm_last;
+  double errRpm_diff;
+  double power;
+
   private final FlywheelSubsystem flywheel; 
 
   public opShooter(FlywheelSubsystem subsystem) {
@@ -39,7 +46,15 @@ public class opShooter extends CommandBase {
   
     targetRpm = SmartDashboard.getNumber("Target RPM", 100);
     currRpm = flywheel.getRpm();
-    flywheel.set(TalonFXControlMode.Velocity, 10000);
+
+    errRpm = targetRpm - currRpm;
+    errRpm_last = errRpm;
+    errRpm_diff = errRpm - errRpm_last;
+    
+    power = (errRpm*Constants.kFlywheelkP + errRpm_diff*Constants.kFlywheelkP);
+    power = power > 0 ? 0: power < -10000 ? -10000 : power;
+
+    flywheel.set(power);
 
   }
 

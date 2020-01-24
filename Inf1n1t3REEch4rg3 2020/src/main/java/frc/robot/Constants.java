@@ -18,6 +18,10 @@ public final class Constants {
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
     public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
 	
+	//Flywheel Constants (to be later removed)
+	public static final double kFlywheelkP = 0.00055;
+	public static final double kFlywheelkD = 0.0008;
+
 	//Drive Characterization Feed Forward/Feedback Gains
 	public static final double ksVolts = 0.22;
     public static final double kvVoltSecondsPerMeter = 1.98;
