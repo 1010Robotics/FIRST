@@ -11,13 +11,14 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
 
-    //Talon Setting Constants
+	//Talon Setting Constants
+	public static final int kTickPerRev = 2048; //Encoder ticks per revolution for the Falcon 500
     public static final int kDriveSlotIdx = 0; //Which PID Slot to pull gains from (0,1,2,3)
     public static final int kElevatorSlotIdx = 1; //Which PID Slot to pull gains from (0,1,2,3)
     public static final int kWristSlotIdx = 2;
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
     public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
-	
+
 	//Flywheel Constants (to be later removed)
 	public static final double kFlywheelkP = 0.00055;
 	public static final double kFlywheelkD = 0.0008;
@@ -30,6 +31,7 @@ public final class Constants {
 	public static final double kPDriveVel = 8.5;
 	
 	//Drive Kinematics
+	public static final double kWheelDimaterMeters = 0.1905;
 	public static final double kTrackwidthMeters = 0.69;
 	public static final DifferentialDriveKinematics kDriveKinematics = 
 		new DifferentialDriveKinematics(kTrackwidthMeters);
