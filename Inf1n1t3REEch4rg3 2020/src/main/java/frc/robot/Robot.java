@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   public static OI oi;
   private Command m_teleopBase;
   private Command m_teleopFlywheel;
-  private Command m_fileTest;
+  private Command m_teleopIntake;
 
   public static void initFalcon(final TalonFX motor){
     //Set Sensor Phase
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     oi = new OI();
     m_robotContainer = new RobotContainer();
 
-    m_fileTest = m_robotContainer.getCurrentFileCommand();
+    m_teleopIntake = m_robotContainer.getIntakeTeleopCommand();
     m_teleopFlywheel = m_robotContainer.getFlywheelTeleopCommand();
     m_teleopBase = m_robotContainer.getDriveTeleopCommand();
   }
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_fileTest.schedule();
+    m_teleopIntake.schedule();
     m_teleopBase.schedule();
     m_teleopFlywheel.schedule();
     // This makes sure that the autonomous stops running when

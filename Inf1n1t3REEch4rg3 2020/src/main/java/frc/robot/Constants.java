@@ -51,7 +51,8 @@ public final class Constants {
 	    LEFT_MASTER(2), 
 	    RIGHT_SLAVE(8), 
 	    RIGHT_MASTER(1),
-	    FLYWHEEL_MOTOR(7),
+		FLYWHEEL_MOTOR(7),
+		PHOTOELEC_SENSOR(3),
 	    INTAKE_MOTOR(5);
 		
 		public final int value;

@@ -10,11 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.CSVFile;
 import frc.robot.commands.arcadeDrive;
+import frc.robot.commands.opIntake;
 import frc.robot.commands.opShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /**
@@ -28,11 +29,12 @@ public class RobotContainer {
   private final DriveSubsystem drive = new DriveSubsystem();
   private final FlywheelSubsystem flywheel = new FlywheelSubsystem();
   private final LimelightSubsystem limelight = new LimelightSubsystem();
+  private final IntakeSubsystem intake = new IntakeSubsystem();
 
 
   private final opShooter fwTeleop = new opShooter(flywheel);
   private final arcadeDrive baseTeleop = new arcadeDrive(drive, limelight);
-  private final CSVFile testfile = new CSVFile(drive);
+  private final opIntake intakeTeleop = new opIntake(intake);
 
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
@@ -46,9 +48,9 @@ public class RobotContainer {
   public Command getDriveTeleopCommand(){
     return baseTeleop;
   }
-
-  public Command getCurrentFileCommand(){
-    return testfile;
+  
+  public Command getIntakeTeleopCommand(){
+    return intakeTeleop;
   }
   
   public Command getFlywheelTeleopCommand(){
