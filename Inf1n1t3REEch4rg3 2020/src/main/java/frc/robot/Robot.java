@@ -47,22 +47,25 @@ public class Robot extends TimedRobot {
   }
 
   public static void initFWMotor(final TalonFX motor){
-    //Set Sensor Phase
-    motor.setSensorPhase(false);
-    motor.configClosedloopRamp(0.5, 0);
-		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		//Brake Mode
-		motor.setNeutralMode(NeutralMode.Coast);
-		//Factory default hardware to prevent unexpected behavior
+    //Factory default hardware to prevent unexpected behavior
 		motor.configFactoryDefault();
-		//Output Settings
+    //Set Sensor Phase
+		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    motor.setSensorPhase(false);
+    //Brake Mode
+		motor.setNeutralMode(NeutralMode.Coast);
+    //Output Settings
 		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
 		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
 		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-		//Reset Encoder
-    motor.setSelectedSensorPosition(0);
-  }
+    motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+    //PIDF Config
+    		/* Config the Velocity closed loop gains in slot0 */
+		motor.config_kF(Constants.kPIDLoopIdx, Constants.kFlywheelkF, Constants.kTimeoutMs);
+		motor.config_kP(Constants.kPIDLoopIdx, Constants.kFlywheelkP, Constants.kTimeoutMs);
+		motor.config_kI(Constants.kPIDLoopIdx, Constants.kFlywheelkI, Constants.kTimeoutMs);
+		motor.config_kD(Constants.kPIDLoopIdx, Constants.kFlywheelkD, Constants.kTimeoutMs);
+	  }
 
   /**
    * This function is run when the robot is first started up and should be used for any

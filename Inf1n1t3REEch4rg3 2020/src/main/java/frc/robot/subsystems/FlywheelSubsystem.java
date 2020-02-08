@@ -39,8 +39,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   public void set(double out){
-    targetRpm = out * 2048 / 600;
-    flywheelMtr.set(TalonFXControlMode.Velocity, targetRpm);
+    flywheelMtr.set(TalonFXControlMode.Velocity, out * Constants.kTickPerRev / 600.0);
   }
 
   public void set(TalonFXControlMode mode, double out){
@@ -51,8 +50,12 @@ public class FlywheelSubsystem extends SubsystemBase {
     flywheelMtr.set(ControlMode.PercentOutput, 0);
   }
 
+  public double getRawVelocity() {
+    return flywheelMtr.getSelectedSensorVelocity(Constants.kPIDLoopIdx);
+  }
+
   public double getRpm(){
-    return flywheelMtr.getSelectedSensorVelocity() / 2048 * 600;
+    return flywheelMtr.getSelectedSensorVelocity(Constants.kPIDLoopIdx) / Constants.kTickPerRev * 600.0;
   }
 
   /**

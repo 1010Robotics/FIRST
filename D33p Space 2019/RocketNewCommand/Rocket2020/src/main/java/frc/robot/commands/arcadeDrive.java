@@ -33,7 +33,6 @@ public class arcadeDrive extends CommandBase {
   private final double MotorMin = 0.008;
    
   //Align Code
-	private float moveKp = 0.0075f;
 	private float trueKp = 0.008f;  
 
   
