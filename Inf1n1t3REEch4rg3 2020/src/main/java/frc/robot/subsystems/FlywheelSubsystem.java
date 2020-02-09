@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
+import frc.robot.utilities.InitializeTalon;
 
 public class FlywheelSubsystem extends SubsystemBase {
 
@@ -35,7 +35,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
     
     //Initialize Motors
-    Robot.initFWMotor(flywheelMtr);
+    InitializeTalon.initFWMotor(flywheelMtr);
   }
 
   public void set(double out){

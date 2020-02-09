@@ -7,10 +7,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,44 +24,6 @@ public class Robot extends TimedRobot {
   private Command m_teleopBase;
   private Command m_teleopFlywheel;
   private Command m_teleopIntake;
-
-  public static void initFalcon(final TalonFX motor){
-    //Set Sensor Phase
-    motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    motor.setSensorPhase(false);
-		//Brake Mode
-		motor.setNeutralMode(NeutralMode.Coast);
-		//Factory default hardware to prevent unexpected behavior
-		motor.configFactoryDefault();
-		//Output Settings
-		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
-		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-		motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-		//Reset Encoder
-    motor.setSelectedSensorPosition(0);
-  }
-
-  public static void initFWMotor(final TalonFX motor){
-    //Factory default hardware to prevent unexpected behavior
-		motor.configFactoryDefault();
-    //Set Sensor Phase
-		motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    motor.setSensorPhase(false);
-    //Brake Mode
-		motor.setNeutralMode(NeutralMode.Coast);
-    //Output Settings
-		motor.configNominalOutputForward(0, Constants.kTimeoutMs);
-		motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-    motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-    //PIDF Config
-    		/* Config the Velocity closed loop gains in slot0 */
-		motor.config_kF(Constants.kPIDLoopIdx, Constants.kFlywheelkF, Constants.kTimeoutMs);
-		motor.config_kP(Constants.kPIDLoopIdx, Constants.kFlywheelkP, Constants.kTimeoutMs);
-		motor.config_kI(Constants.kPIDLoopIdx, Constants.kFlywheelkI, Constants.kTimeoutMs);
-		motor.config_kD(Constants.kPIDLoopIdx, Constants.kFlywheelkD, Constants.kTimeoutMs);
-	  }
 
   /**
    * This function is run when the robot is first started up and should be used for any

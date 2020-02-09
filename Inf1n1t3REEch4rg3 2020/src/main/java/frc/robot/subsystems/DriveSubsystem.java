@@ -23,6 +23,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -32,7 +33,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
+import frc.robot.utilities.InitializeTalon;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -49,18 +50,22 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     //Define Motors
     try {
-      leftMaster = new TalonFX(0);
-      leftSlave = new TalonFX(1);
-      rightMaster = new TalonFX(2);
-      rightSlave = new TalonFX(3);
+      leftMaster = new TalonFX(2);
+      leftSlave = new TalonFX(7);
+      rightMaster = new TalonFX(1);
+      rightSlave = new TalonFX(8);
     }
     catch (RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
 
     //Initialize Motors
-    Robot.initFalcon(leftMaster);
-    Robot.initFalcon(leftSlave);
-    Robot.initFalcon(rightMaster);
-    Robot.initFalcon(rightSlave);
+    InitializeTalon.initLeftDriveFalcon(leftMaster);
+    InitializeTalon.initLeftDriveFalcon(leftSlave);
+    InitializeTalon.initRightDriveFalcon(rightMaster);
+    InitializeTalon.initRightDriveFalcon(rightSlave);
+
+    leftMaster.setNeutralMode(NeutralMode.Coast);
+    rightMaster.setNeutralMode(NeutralMode.Coast);
+
 
     //Set Slaves
     leftSlave.follow(leftMaster);

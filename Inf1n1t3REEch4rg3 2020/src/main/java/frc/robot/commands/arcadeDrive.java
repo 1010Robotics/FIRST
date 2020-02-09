@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LimelightSubsystem.CameraMode;
 import frc.robot.subsystems.LimelightSubsystem.LightMode;
+import frc.robot.utilities.Exponential;
 
 
 public class arcadeDrive extends CommandBase {
@@ -30,32 +31,14 @@ public class arcadeDrive extends CommandBase {
   private final double DriveExp = 1.7;
   private final double MotorMin = 0.008;
 
-  // Exponential Function
-  private double exponential(final double joystickVal, final double driveExp, final double joyDead,
-      final double motorMin) {
-    double joySign;
-    final double joyMax = 1 - joyDead;
-    final double joyLive = Math.abs(joystickVal) - joyDead;
-    if (joystickVal > 0) {
-      joySign = 1;
-    } else if (joystickVal < 0) {
-      joySign = -1;
-    } else {
-      joySign = 0;
-    }
-    double power = (joySign
-        * (motorMin + ((1 - motorMin) * (Math.pow(joyLive, driveExp) / Math.pow(joyMax, driveExp)))));
-    if (Double.isNaN(power)) {
-      power = 0;
-    }
-    return power;
-  }
-
   // Joy Code
   private double joyYval;
   private double joyXval;
   private double yOutput;
   private double xOutput;
+  private double cOutput;
+  private double kSkew = 4500;
+
   // Align Code
   private final float moveKp = 0.01f;
   private final float moveKd = 0.06f;
@@ -86,8 +69,10 @@ public class arcadeDrive extends CommandBase {
   @Override
   public void execute() {
 
-    // CSVFile.addRow(1, 1, "One", 1);
-    // SmartDashboard.putNumber("Left Enc Value", chassis.getLeftPositionRaw());
+    SmartDashboard.putNumber("Right Drive Velocity Raw", chassis.getRightVelocity());
+    SmartDashboard.putNumber("Left Drive Velocity Raw", chassis.getLeftVelocity());
+    SmartDashboard.putNumber("Angle Rate", chassis.getAngleRate());
+    SmartDashboard.putNumber("Correction Output", cOutput);
 
     if (Robot.oi.main.getXButton()) {
       SmartDashboard.putNumber("CAMERA X", camera.getTx());
@@ -101,10 +86,12 @@ public class arcadeDrive extends CommandBase {
     else {
       joyYval = Robot.oi.main.getY(Hand.kLeft);
       joyXval = Robot.oi.main.getX(Hand.kRight);
-      yOutput = exponential(joyYval, DriveExp, JoyDead, MotorMin);
-      xOutput = exponential(joyXval, DriveExp, JoyDead, MotorMin);
-      chassis.set(ControlMode.PercentOutput, ((yOutput) - xOutput), ((yOutput) + xOutput));
+      yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
+      xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
+      cOutput = ((xOutput != 0) ? 0 : (chassis.getAngleRate() * kSkew));
+      chassis.set(ControlMode.Velocity, (yOutput) - (xOutput) + cOutput, (yOutput) + xOutput - cOutput);
     }
+
   }
 
   // Called once the command ends or is interrupted.

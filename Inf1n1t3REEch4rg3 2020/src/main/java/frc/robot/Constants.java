@@ -20,11 +20,22 @@ public final class Constants {
 	public static final int kPIDLoopIdx = 0; //Which Cascaded PID Loop
     public static final int kTimeoutMs = 10; //Set 0 to skip waiting for confirmation
 
-	//Flywheel Constants (to be later removed)
-	public static final double kFlywheelkP = 0.25;
-	public static final double kFlywheelkI = 0;//0.001;
-	public static final double kFlywheelkD = 0;//20;
+	//Flywheel Constants
+	public static final double kFlywheelkP = 0;
+	public static final double kFlywheelkI = 0;
+	public static final double kFlywheelkD = 0;
 	public static final double kFlywheelkF = 0.0505;
+
+	//Drive Constants
+	public static final double kRightDrivekP = 0;
+	public static final double kRightDrivekI = 0;
+	public static final double kRightDrivekD = 0;
+	public static final double kRightDrivekF = 0.0500;
+
+	public static final double kLeftDrivekP = 0;
+	public static final double kLeftDrivekI = 0;
+	public static final double kLeftDrivekD = 0;
+	public static final double kLeftDrivekF = 0.0456;
 
 	//Drive Characterization Feed Forward/Feedback Gains
 	public static final double ksVolts = 0.22;
