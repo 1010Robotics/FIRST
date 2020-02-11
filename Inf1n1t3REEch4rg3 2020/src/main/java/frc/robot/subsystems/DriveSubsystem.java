@@ -180,7 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return Robot's Current Angle
    */
   public double getAngle() {
-    return gyro.getAngle();
+    return gyro.getYaw();
   }
 
   /**
