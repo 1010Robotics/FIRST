@@ -25,12 +25,14 @@ import frc.robot.utilities.InitializeTalon;
 
 public class FlywheelSubsystem extends SubsystemBase {
 
-  //Declare Motors
+  //Declare Variables
   public double targetRpm;
 
+  //Declare Motors
   private final TalonFX flywheelMtr;
   
   public FlywheelSubsystem() {
+
     //Define Motors
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
     
@@ -38,34 +40,62 @@ public class FlywheelSubsystem extends SubsystemBase {
     InitializeTalon.initFWMotor(flywheelMtr);
   }
 
-  public void set(double out){
-    flywheelMtr.set(TalonFXControlMode.Velocity, out * Constants.kTickPerRev / 600.0);
+  /**
+   * Sets the output of the Flywheel, with proper conversion factors.
+   * This function is set to Control Mode 'Velocity', but can be overridden to a specific ControlMode.
+   * 
+   * @param value the Output Value of the Flywheel
+   */
+  public void set(double value){
+    flywheelMtr.set(TalonFXControlMode.Velocity, value * Constants.kTickPerRev / 600.0);
   }
 
-  public void set(TalonFXControlMode mode, double out){
-    flywheelMtr.set(mode, out);
+  /**
+   * Sets the ControlMode and output of the Flywheel. See default function: {@link #set(double)}
+   * 
+   * @param mode CTRE TalonFX ControlMode
+   * @param value the Output Value of the Flywheel
+   */
+  public void set(TalonFXControlMode mode, double value){
+    flywheelMtr.set(mode, value);
   }
 
+  /**
+   * Stops the Flywheel
+   */
   public void stop(){
     flywheelMtr.set(ControlMode.PercentOutput, 0);
   }
 
+  /**
+   * Gets the Unaltered Velocity of the Flywheel
+   * 
+   * @return the Raw Velocity of the Flyweel
+   */
   public double getRawVelocity() {
     return flywheelMtr.getSelectedSensorVelocity(Constants.kPIDLoopIdx);
   }
 
+  /**
+   * Gets the Speed of the Flywheel in Revolutions per Minute
+   * 
+   * @return the RPM of the Flywheel
+   */
   public double getRpm(){
     return flywheelMtr.getSelectedSensorVelocity(Constants.kPIDLoopIdx) / Constants.kTickPerRev * 600.0;
   }
 
   /**
-   * Determine if flywheel RPM is within +-5% of the target RPM
+   * Determine if flywheel RPM is within +- 5% of the target RPM
    * 
-   * @return Whether RPM is within +-5% of the target RPM
+   * @param errorLimit the Error Range Percentage - normally 0.05
+   * @return True if the RPM is within range, False otherwise
    */
-  public boolean isOnTarget(){
+  public boolean isOnTarget(double errorLimit){
+
+    //errorLimit was 0.05
     double currRpm = getRpm();
-    double errorLimit = 0.05;
+
     if(currRpm < ((1 - errorLimit) * targetRpm) || currRpm > ((1.0 + errorLimit)  * targetRpm)) {
       return false;
     } 

@@ -126,12 +126,13 @@ public class IntakeSubsystem extends SubsystemBase {
   /**
    * Tells us if there is a Fault in our Intake.
    * A Fault exists when the intake is 'crooked,' meaning one side is extended while the other is not.
-   *
+   * 
    * @return True if there is a Fault, False otherwise.
    */
   public boolean isSolenoidFault(){
     return (rightSolenoid.get() != leftSolenoid.get());
   }
+  
   /**
    * Starts the Closed Loop Control for the Compressor
    */
