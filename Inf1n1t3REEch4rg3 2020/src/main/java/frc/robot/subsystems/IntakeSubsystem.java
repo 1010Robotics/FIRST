@@ -27,7 +27,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utilities.InitializeTalon;
@@ -37,21 +39,34 @@ public class IntakeSubsystem extends SubsystemBase {
   //Declare Motors
   private TalonFX intakeMotor;
   private TalonFX carouselMotor;
+
+  //Declare Solenoids
+  private final Solenoid rightSolenoid;
+  private final Solenoid leftSolenoid;
+
+  //Declare Compressor
+  private final Compressor compressor;
   //Declare Sensors
   private final AnalogInput PhotoElecSensor;
 
   //Declare Local Constants
   private final int PhotoElecRange = 1000;
+  private final int pcmID = 0;
+
+  //Public Variables
+  public boolean compressorDefined = false;
+  public enum solenoidState{OPEN, CLOSED, OFF}
+  public solenoidState leftState;
+  public solenoidState rightState;
 
   public IntakeSubsystem() {
 
-    
     //Define Motors
     try {
       intakeMotor = new TalonFX(Constants.RobotMap.INTAKE_MOTOR.value);
       carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
     }
-    catch (RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
+    catch (final RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
     
     InitializeTalon.initGenericFalcon(intakeMotor, false);
     InitializeTalon.initCarouselFalcon(carouselMotor);
@@ -62,19 +77,83 @@ public class IntakeSubsystem extends SubsystemBase {
     //Define Photoelectric Sensor
     PhotoElecSensor = new AnalogInput(Constants.RobotMap.PHOTOELEC_SENSOR.value);
 
+    //Define Compressor
+    compressor = new Compressor(pcmID); 
+
+    //Define Solenoids
+    leftSolenoid = new Solenoid(pcmID, 0);
+    rightSolenoid = new Solenoid(pcmID, 1);
+
     resetEnc(carouselMotor);
     resetEnc(intakeMotor);
     resetPhotoelec();
+    leftState = solenoidState.OFF;
+    rightState = solenoidState.OFF;
+  }
+  
+  /**
+   * Extends the solenoids on the intake and changes their state to OPEN
+   */
+  public void extendIntake(){
+    leftSolenoid.set(true);
+    rightSolenoid.set(true);  
+
+    leftState = solenoidState.OPEN;
+    rightState = solenoidState.OPEN;
   }
 
-    /**
+  /**
+   * Retracts the Solenoids on the Intake and changes their state to CLOSED
+   */
+  public void retractIntake(){
+    leftSolenoid.set(false);
+    rightSolenoid.set(false);  
+
+    leftState = solenoidState.CLOSED;
+    rightState = solenoidState.CLOSED;
+  }
+
+  /**
+   * Tells us if the Intake is currently out.
+   * Useful for checking our robot's size to prevent Rules violations.
+   * 
+   * @return True if the Intake is Extended, False otherwise.
+   */
+  public boolean isIntakeOut(){
+    return ((leftState == solenoidState.OPEN) || (rightState == solenoidState.OPEN));
+  }
+
+  /**
+   * Starts the Closed Loop Control for the Compressor
+   */
+  public void startCompressor(){
+    compressor.setClosedLoopControl(true);
+  }
+
+  /**
+   * Terminates the Closed Loop Control for the Compressors
+   */
+  public void stopCompressor(){
+    compressor.setClosedLoopControl(false);
+    compressor.stop();
+  }
+  
+  /**
+   * Tells us if the Compressor has started.
+   * 
+   * @return True if the Compressor is enabled, False otherwise.
+   */
+  public boolean compressorDefined(){
+    return compressor.enabled();
+  }
+  /**
    * Set Drive Motors to certain Control Mode and Output
    * 
    * @param motor the TalonFX to move
    * @param mode CTRE TalonFX ControlMode
    * @param value the Selected Motor's output
    */
-  public void set(TalonFX  motor, ControlMode mode, double value) {
+  public void set(final TalonFX  motor, final ControlMode mode, final double value) {
     motor.set(mode, value);
   }
 
@@ -83,7 +162,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @param motor the TalonFX to stop
    */
-  public void stop(TalonFX motor){
+  public void stop(final TalonFX motor){
     motor.set(ControlMode.PercentOutput, 0);
   }
 
@@ -92,7 +171,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @param motor the TalonFX to reset the encoder of
    */
-  private void resetEnc(TalonFX motor) {
+  private void resetEnc(final TalonFX motor) {
     motor.setSelectedSensorPosition(0);
   }
 
@@ -117,7 +196,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /**
    * Tells us if the Photoelectric Sensor is Detecting an Object in Range
    * 
-   * @return A Boolean (T/F): True if in Range, False otherwise
+   * @return True if in Range, False otherwise
    */
   public boolean isRange() {
     return PhotoElecSensor.getValue() > PhotoElecRange ? true : false;
