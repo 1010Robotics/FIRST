@@ -97,6 +97,24 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /**
+   * Get Carousel Position in Raw Encoder Units (2048 per Revolution)
+   * 
+   * @return Current Raw Encoder Units for the Carousel
+   */
+  public double getCarouselPosition(){
+    return carouselMotor.getSelectedSensorPosition();
+  }
+
+  /**
+   * Get Intake Position in Raw Encoder Units (2048 per Revolution)
+   * 
+   * @return Current Raw Encoder Units for the Intake
+   */
+  public double getIntakePosition(){
+    return carouselMotor.getSelectedSensorPosition();
+  }
+
+  /**
    * Tells us if the Photoelectric Sensor is Detecting an Object in Range
    * 
    * @return A Boolean (T/F): True if in Range, False otherwise
