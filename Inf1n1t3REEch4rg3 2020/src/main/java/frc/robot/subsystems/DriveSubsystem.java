@@ -33,6 +33,8 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.utilities.InitializeTalon;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -50,10 +52,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     //Define Motors
     try {
-      leftMaster = new TalonFX(2);
-      leftSlave = new TalonFX(7);
-      rightMaster = new TalonFX(1);
-      rightSlave = new TalonFX(8);
+      leftMaster = new TalonFX(Constants.RobotMap.LEFT_MASTER.value);
+      leftSlave = new TalonFX(Constants.RobotMap.LEFT_SLAVE.value);
+      rightMaster = new TalonFX(Constants.RobotMap.RIGHT_MASTER.value);
+      rightSlave = new TalonFX(Constants.RobotMap.RIGHT_SLAVE.value);
     }
     catch (RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
 

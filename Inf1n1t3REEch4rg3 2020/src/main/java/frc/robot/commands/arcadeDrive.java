@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -103,6 +105,8 @@ public class arcadeDrive extends CommandBase {
           count = 1;
           chassis.resetAngle();
           startingAngle = chassis.getAngle();
+          try{ TimeUnit.MILLISECONDS.sleep(150);}
+            catch(Exception ex){/*DELAY*/}
         }
 
         angleError = startingAngle - chassis.getAngle();

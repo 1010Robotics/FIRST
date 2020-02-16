@@ -8,6 +8,23 @@ import frc.robot.Constants;
 
 public class InitializeTalon {
 
+    public static void initGenericFalcon(final TalonFX motor, boolean inverted){ //Initializes Falcon as a Generic Motor
+        //Set Sensor Phase
+        motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        motor.setSensorPhase(false);
+        //Invert
+        motor.setInverted(inverted);
+        //Factory default hardware to prevent unexpected behavior
+        motor.configFactoryDefault();
+        //Output Settings
+        motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+        motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+        motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+        motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+        //Reset Encoder
+        motor.setSelectedSensorPosition(0);
+    }
+
     public static void initRightDriveFalcon(final TalonFX motor){
         //Set Sensor Phase
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
@@ -48,6 +65,26 @@ public class InitializeTalon {
         motor.config_kP(Constants.kPIDLoopIdx, Constants.kLeftDrivekP, Constants.kTimeoutMs);
         motor.config_kI(Constants.kPIDLoopIdx, Constants.kLeftDrivekI, Constants.kTimeoutMs);
         motor.config_kD(Constants.kPIDLoopIdx, Constants.kLeftDrivekD, Constants.kTimeoutMs);
+    }
+
+    public static void initCarouselFalcon(final TalonFX motor){
+        //Set Sensor Phase
+        motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        motor.setSensorPhase(false);
+        //Factory default hardware to prevent unexpected behavior
+        motor.configFactoryDefault();
+        //Output Settings
+        motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+        motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+        motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+        motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+        //Reset Encoder
+        motor.setSelectedSensorPosition(0);
+        //PIDF Config
+        motor.config_kF(Constants.kPIDLoopIdx, Constants.kCarouselkF, Constants.kTimeoutMs);
+        motor.config_kP(Constants.kPIDLoopIdx, Constants.kCarouselkP, Constants.kTimeoutMs);
+        motor.config_kI(Constants.kPIDLoopIdx, Constants.kCarouselkI, Constants.kTimeoutMs);
+        motor.config_kD(Constants.kPIDLoopIdx, Constants.kCarouselkD, Constants.kTimeoutMs);
     }
 
     public static void initFWMotor(final TalonFX motor){

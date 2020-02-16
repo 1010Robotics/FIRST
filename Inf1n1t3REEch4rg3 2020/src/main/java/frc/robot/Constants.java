@@ -26,6 +26,12 @@ public final class Constants {
 	public static final double kFlywheelkD = 0;
 	public static final double kFlywheelkF = 0.0505;
 
+	//Carousel Constants
+	public static final double kCarouselkP = 0;
+	public static final double kCarouselkI = 0;
+	public static final double kCarouselkD = 0;
+	public static final double kCarouselkF = 0.0505;
+
 	//Drive Constants
 	public static final double kRightDrivekP = 0;
 	public static final double kRightDrivekI = 0;
@@ -69,6 +75,7 @@ public final class Constants {
 	    RIGHT_MASTER(1),
 		FLYWHEEL_MOTOR(5),
 		PHOTOELEC_SENSOR(3),
+		CAROUSEL_MOTOR(9),
 	    INTAKE_MOTOR(5);
 		
 		public final int value;
