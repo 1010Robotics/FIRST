@@ -22,6 +22,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.ColorSensorV3;
 
@@ -53,7 +54,7 @@ public class ControlWheelSubsystem extends SubsystemBase {
 
     //Initialize Motors
     InitializeTalon.initGenericFalcon(controlWheelMotor, false);
-    
+
   }
 
   /**
@@ -123,6 +124,16 @@ public class ControlWheelSubsystem extends SubsystemBase {
     }
 
     return currentColour;
+  }
+
+  /**
+   * Set the Control Wheel motor to a Mode and Output.
+   * 
+   * @param mode CTRE TalonFX ControlMode
+   * @param value The Control Wheel Motor's output
+   */
+  public void set(ControlMode mode, double value){
+    controlWheelMotor.set(mode, value);
   }
 
   @Override

@@ -29,6 +29,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -36,6 +37,7 @@ import frc.robot.utilities.InitializeTalon;
 
 public class IntakeSubsystem extends SubsystemBase {
   
+
   //Declare Motors
   private TalonFX intakeMotor;
   private TalonFX carouselMotor;
@@ -46,12 +48,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Declare Compressor
   private final Compressor compressor;
+
   //Declare Sensors
   private final AnalogInput PhotoElecSensor;
-
+  private final PowerDistributionPanel pdp;
+  
   //Declare Local Constants
   private final int PhotoElecRange = 1000;
   private final int pcmID = 0;
+  private final int currentCap = 1000;
 
   //Public Variables
   public boolean compressorDefined = false;
@@ -84,6 +89,9 @@ public class IntakeSubsystem extends SubsystemBase {
     leftSolenoid = new Solenoid(pcmID, 0);
     rightSolenoid = new Solenoid(pcmID, 1);
 
+    //Define PDP
+    pdp = new PowerDistributionPanel();
+
     resetEnc(carouselMotor);
     resetEnc(intakeMotor);
     leftState = solenoidState.OFF;
@@ -112,6 +120,16 @@ public class IntakeSubsystem extends SubsystemBase {
     rightState = solenoidState.CLOSED;
   }
 
+  /**
+   * Tells us if there is a jam in the carousel.
+   * References current draw on the motor's PDP channel to see if it is beyond the set cap
+   * 
+   * @return True if the Carousel is jammed, False otherwise.
+   */
+  public boolean isJammed(){
+    return (pdp.getCurrent(10) > currentCap);
+  }
+  
   /**
    * Tells us if the Intake is currently out.
    * Useful for checking our robot's size to prevent Rules violations.
