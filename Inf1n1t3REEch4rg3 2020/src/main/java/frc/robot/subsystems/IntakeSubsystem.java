@@ -228,10 +228,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean isRange() {
     return PhotoElecSensor.getValue() > PhotoElecRange ? true : false;
   }
-
-  public double getPhotoElecRaw(){
-    return PhotoElecSensor.getValue();
-  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
