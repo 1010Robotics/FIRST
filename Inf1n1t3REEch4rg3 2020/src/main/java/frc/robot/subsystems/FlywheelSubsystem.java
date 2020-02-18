@@ -8,7 +8,14 @@
 /**
  * @author Pedro Amui, Caden Hewlett and Nima Zareian
  * 
+ * Flywheel Subsystem for the 6364 Infinite Recharge Robot.
+ * Includes a Falcon500 to Control the Flywheel.
+ *  - 1 Falcon500 Motor
+ *  - 1 Built-in Encoder
  * 
+ * Key Methods and Utilities:
+ *  - RPM Control
+ *  - Error Range Detection
  * 
  */
 

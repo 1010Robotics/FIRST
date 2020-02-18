@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   private Command m_teleopBase;
   private Command m_teleopFlywheel;
   private Command m_teleopIntake;
-
+  private Command m_teleopControlWheel;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
     oi = new OI();
     m_robotContainer = new RobotContainer();
 
+    m_teleopControlWheel = m_robotContainer.getCWTeleopCommand();
     m_teleopIntake = m_robotContainer.getIntakeTeleopCommand();
     m_teleopFlywheel = m_robotContainer.getFlywheelTeleopCommand();
     m_teleopBase = m_robotContainer.getDriveTeleopCommand();
@@ -88,6 +89,8 @@ public class Robot extends TimedRobot {
     m_teleopIntake.schedule();
     m_teleopBase.schedule();
     m_teleopFlywheel.schedule();
+    m_teleopControlWheel.schedule();
+    
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

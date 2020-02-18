@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.arcadeDrive;
+import frc.robot.commands.opControlWheel;
 import frc.robot.commands.opIntake;
 import frc.robot.commands.opShooter;
+import frc.robot.subsystems.ControlWheelSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -30,12 +32,13 @@ public class RobotContainer {
   private final FlywheelSubsystem flywheel = new FlywheelSubsystem();
   private final LimelightSubsystem limelight = new LimelightSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final ControlWheelSubsystem controlwheel = new ControlWheelSubsystem();
 
 
   private final opShooter fwTeleop = new opShooter(flywheel);
   private final arcadeDrive baseTeleop = new arcadeDrive(drive, limelight);
   private final opIntake intakeTeleop = new opIntake(intake);
-
+  private final opControlWheel controlWheelTeleop = new opControlWheel(controlwheel);
   //public final arcadeDrive m_arcadeDrive = new arcadeDrive(m_driveBase);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -45,6 +48,10 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  public Command getCWTeleopCommand(){
+    return controlWheelTeleop;
+  }
+  
   public Command getDriveTeleopCommand(){
     return baseTeleop;
   }

@@ -11,7 +11,7 @@
  * IntakeSubsystem for the 6364 Infinite Recharge Robot.
  * Includes Carousel and Ball Intake/Indexer.
  * - 2 Falcon500 Motors (1 For Intake, 1 for Indexer)
- * - 2 Built-in Encoders (1 per motor)
+ * - 2 Built-in Encoders (1 per motor)   
  * - 1 Photoelectric Sensor on RoboRio On-Board Analog Input Port
  * 
  * Key Methods and Utilities:
@@ -86,7 +86,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     resetEnc(carouselMotor);
     resetEnc(intakeMotor);
-    resetPhotoelec();
     leftState = solenoidState.OFF;
     rightState = solenoidState.OFF;
   }
@@ -132,7 +131,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean isSolenoidFault(){
     return (rightSolenoid.get() != leftSolenoid.get());
   }
-  
+
   /**
    * Starts the Closed Loop Control for the Compressor
    */
@@ -210,13 +209,6 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public boolean isRange() {
     return PhotoElecSensor.getValue() > PhotoElecRange ? true : false;
-  }
-
-   /**
-   * Resets the accumulator to its initial value
-   */
-  public void resetPhotoelec(){
-    PhotoElecSensor.resetAccumulator();
   }
 
   @Override

@@ -75,6 +75,7 @@ public final class Constants {
 	    RIGHT_MASTER(1),
 		FLYWHEEL_MOTOR(5),
 		PHOTOELEC_SENSOR(3),
+		CW_MOTOR(10),
 		CAROUSEL_MOTOR(9),
 	    INTAKE_MOTOR(5);
 		
