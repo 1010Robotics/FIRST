@@ -32,6 +32,7 @@ public class opIntake extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putBoolean("PHOTOELEC VALUE", intake.isRange());
+    SmartDashboard.putNumber("PHOTOELEC RAW", intake.getPhotoElecRaw());
   }
 
   // Called once the command ends or is interrupted.

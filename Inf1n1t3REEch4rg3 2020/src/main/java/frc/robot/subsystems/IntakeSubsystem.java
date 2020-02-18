@@ -51,8 +51,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //Declare Sensors
   private final AnalogInput PhotoElecSensor;
-  private final PowerDistributionPanel pdp;
-  
+  private final PowerDistributionPanel pdp; //Not technically a sensor, but is acting as one here.
+
   //Declare Local Constants
   private final int PhotoElecRange = 1000;
   private final int pcmID = 0;
@@ -229,6 +229,9 @@ public class IntakeSubsystem extends SubsystemBase {
     return PhotoElecSensor.getValue() > PhotoElecRange ? true : false;
   }
 
+  public double getPhotoElecRaw(){
+    return PhotoElecSensor.getValue();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
