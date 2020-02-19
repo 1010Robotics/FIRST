@@ -31,13 +31,28 @@ public class opControlWheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("Current Colour", controlwheel.readColour().toString());
 
+    SmartDashboard.putString("Current Colour", controlwheel.readColour().toString());
+    SmartDashboard.putString("GAMEDATA", String.valueOf(controlwheel.getDesiredColour()));
+
+    switch(controlwheel.getDesiredColour()){
+      case 'R':
+        //RED IS NEEDED
+      case 'G':
+        //GREEN IS NEEDED
+      case 'B':
+        //BLUE IS NEEDED
+      case 'Y':
+        //YELLOW IS NEEDED
+      case 'U':
+        //NO Data Given
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(final boolean interrupted) {
   }
 
   // Returns true when the command should end.

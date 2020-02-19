@@ -39,7 +39,7 @@ public class arcadeDrive extends CommandBase {
   private double yOutput;
   private double xOutput;
   private double cOutput;
-  private double kSkew = 4500; //should be in constants.java
+  //private double kSkew = 4500; //should be in constants.java
 
   // Align Code
   private boolean correcting = false;
@@ -110,7 +110,7 @@ public class arcadeDrive extends CommandBase {
         }
 
         angleError = startingAngle - chassis.getAngle();
-        angleErrorDiff = angleError - angleErrorLast;
+        //angleErrorDiff = angleError - angleErrorLast;
 
         cOutput = angleError * -100;
         angleErrorLast = angleError;

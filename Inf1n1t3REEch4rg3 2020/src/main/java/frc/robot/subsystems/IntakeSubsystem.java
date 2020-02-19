@@ -121,6 +121,20 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /**
+   * Retracts a specific side of the intake. 
+   * Used in correcting solenoid faults. See {@link #isSolenoidFault()}
+   * 
+   * @param side 'L' or 'R', for Left or Right Side
+   */
+  public void moveSpecificSide(char side){
+    if(side == 'L'){
+      leftSolenoid.set(false);
+    }
+    else if(side == 'R'){
+      rightSolenoid.set(false);
+    }
+  }
+  /**
    * Tells us if there is a jam in the carousel.
    * References current draw on the motor's PDP channel to see if it is beyond the set cap
    * 
@@ -173,24 +187,33 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean compressorDefined(){
     return compressor.enabled();
   }
+
   /**
-   * Set Drive Motors to certain Control Mode and Output
+   * Set Carousel to certain Control Mode and Output
    * 
-   * @param motor the TalonFX to move
    * @param mode CTRE TalonFX ControlMode
    * @param value the Selected Motor's output
    */
-  public void set(final TalonFX  motor, final ControlMode mode, final double value) {
-    motor.set(mode, value);
+  public void setCarousel(final ControlMode mode, final double value) {
+    carouselMotor.set(mode, value);
   }
 
   /**
-   * Stop Selected Motor
+   * Set Carousel to certain Control Mode and Output
    * 
-   * @param motor the TalonFX to stop
+   * @param mode CTRE TalonFX ControlMode
+   * @param value the Selected Motor's output
    */
-  public void stop(final TalonFX motor){
-    motor.set(ControlMode.PercentOutput, 0);
+  public void setIntake(final ControlMode mode, final double value) {
+    intakeMotor.set(mode, value);
+  }
+
+  /**
+   * Stop the Carousel.
+
+   */
+  public void stopCarousel(){
+    carouselMotor.set(ControlMode.PercentOutput, 0);
   }
 
   /**
@@ -220,6 +243,12 @@ public class IntakeSubsystem extends SubsystemBase {
     return carouselMotor.getSelectedSensorPosition();
   }
 
+  /**
+   * Resets the position of the carousel.
+   */
+  public void resetCarouselPosition(){
+    carouselMotor.setSelectedSensorPosition(0);
+  }
   /**
    * Tells us if the Photoelectric Sensor is Detecting an Object in Range
    * 
