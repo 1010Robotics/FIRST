@@ -83,7 +83,7 @@ public class arcadeDrive extends CommandBase {
     SmartDashboard.putNumber("Angle Rate", chassis.getAngleRate());
     SmartDashboard.putNumber("Correction Output", cOutput);
 
-    if (Robot.oi.main.getXButton()) {
+    if(Robot.oi.main.getXButton()) {
       SmartDashboard.putNumber("CAMERA X", camera.getTx());
       moveError = 0 - camera.getTx();
       moveErrorDiff = moveError - moveErrorLast;
