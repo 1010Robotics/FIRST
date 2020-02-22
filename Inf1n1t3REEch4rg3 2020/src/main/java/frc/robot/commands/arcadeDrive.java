@@ -48,8 +48,6 @@ public class arcadeDrive extends CommandBase {
   private final float moveKd = 0.06f;
   private double startingAngle;
   private double angleError;
-  private double angleErrorDiff;
-  private double angleErrorLast;
   private double moveError;
   private double moveErrorDiff;
   private double moveErrorLast;
@@ -113,7 +111,6 @@ public class arcadeDrive extends CommandBase {
         //angleErrorDiff = angleError - angleErrorLast;
 
         cOutput = angleError * -100;
-        angleErrorLast = angleError;
 
       }
       else{

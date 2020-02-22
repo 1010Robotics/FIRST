@@ -28,13 +28,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.utilities.InitializeTalon;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -47,7 +49,11 @@ public class DriveSubsystem extends SubsystemBase {
   //Declare Sensors
   private AHRS gyro;
   //Declare Others
+  private DifferentialDriveKinematics mKinematics;
   private DifferentialDriveOdometry mOdometry;
+  private SimpleMotorFeedforward feedforward;
+  private PIDController leftPID;
+  private PIDController rightPID;
 
   public DriveSubsystem() {
     //Define Motors
@@ -81,6 +87,10 @@ public class DriveSubsystem extends SubsystemBase {
     resetAngle();
 
     mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
+    mKinematics = new DifferentialDriveKinematics(Constants.kTrackwidthMeters);
+    feedforward = new SimpleMotorFeedforward(Constants.ksVolts, Constants.kvVoltSecondsPerMeter, Constants.kaVoltSecondsSquaredPerMeter);
+    leftPID = new PIDController(Constants.kPDriveVel, 0, 0);
+    rightPID = new PIDController(Constants.kPDriveVel, 0, 0);
   }
 
   /**
@@ -200,6 +210,22 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetAngle() {
     gyro.reset();
   }
+
+  public SimpleMotorFeedforward getFeedFoward() {
+    return feedforward;
+  }
+
+  public PIDController getLeftPID() {
+    return leftPID;
+  }
+
+  public PIDController getRightPID() {
+    return rightPID;
+  }
+
+  public DifferentialDriveKinematics getKinematics() {
+    return mKinematics;
+  } 
 
   /**
    * Returns the currently-estimated pose of the robot

@@ -7,9 +7,15 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.commands.arcadeDrive;
 import frc.robot.commands.opControlWheel;
 import frc.robot.commands.opIntake;
@@ -19,6 +25,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -72,6 +79,25 @@ public class RobotContainer {
   private void configureButtonBindings() {
   }
 
+  public Command getAutonomousCommand() {
+    TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond, Constants.kMaxAccelerationMetersPerSecondSquared);
+
+    config.setKinematics(drive.getKinematics());
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())), 
+      config
+      );
+
+      RamseteCommand command = new RamseteCommand(
+        trajectory, 
+        drive::getPose, 
+        new RamseteController(2, 0.7), 
+        drive.getFeedFoward(), 
+        drive.getKinematics(), 
+        drive::getSpeeds, leftController, rightController, outputVolts, requirements)
+  }
+ 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
