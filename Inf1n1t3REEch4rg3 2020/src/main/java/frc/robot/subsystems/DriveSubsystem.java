@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -50,6 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
   private AHRS gyro;
   //Declare Others
   private DifferentialDriveKinematics mKinematics;
+  private DifferentialDriveWheelSpeeds mSpeeds;
   private DifferentialDriveOdometry mOdometry;
   private SimpleMotorFeedforward feedforward;
   private PIDController leftPID;
@@ -88,6 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
     mKinematics = new DifferentialDriveKinematics(Constants.kTrackwidthMeters);
+    mSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
     feedforward = new SimpleMotorFeedforward(Constants.ksVolts, Constants.kvVoltSecondsPerMeter, Constants.kaVoltSecondsSquaredPerMeter);
     leftPID = new PIDController(Constants.kPDriveVel, 0, 0);
     rightPID = new PIDController(Constants.kPDriveVel, 0, 0);
@@ -234,6 +237,14 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     return mOdometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getSpeeds() {
+    return mSpeeds;
+  }
+
+  public void setOutputVolts(double leftVolts, double rightVolts) {
+    set(rightVolts / 12, leftVolts / 12);
   }
 
   /**
