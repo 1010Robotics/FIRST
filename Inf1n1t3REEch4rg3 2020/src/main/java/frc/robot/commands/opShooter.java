@@ -10,6 +10,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.FlywheelSubsystem;;
 
 public class opShooter extends CommandBase {
@@ -62,7 +63,15 @@ public class opShooter extends CommandBase {
     SmartDashboard.putNumber("Flywheel Current Raw", flywheel.getRawVelocity());
     SmartDashboard.putNumber("Flywheel Current RPM", flywheel.getRpm());
 
-    flywheel.set(51000); //MAX 6000
+    flywheel.set(51000);
+
+    //if(Robot.oi.main.getAButton()){
+    if(flywheel.getRpm() > 3000){
+			flywheel.feed();
+    }
+    else{
+      flywheel.stopFeed();
+    }
 
   }
 

@@ -88,6 +88,7 @@ public class InitializeTalon {
     }
 
     public static void initFWMotor(final TalonFX motor){
+        motor.setInverted(true);
         //Factory default hardware to prevent unexpected behavior
         motor.configFactoryDefault();
         //Set Sensor Phase

@@ -74,10 +74,12 @@ public final class Constants {
 	    RIGHT_SLAVE(8), 
 	    RIGHT_MASTER(1),
 		FLYWHEEL_MOTOR(5),
+		FEEDER_MOTOR(6),
+		YEETER_MOTOR(11),
 		PHOTOELEC_SENSOR(3),
 		CW_MOTOR(10),
 		CAROUSEL_MOTOR(9),
-	    INTAKE_MOTOR(5);
+	    INTAKE_MOTOR(4);
 		
 		public final int value;
 

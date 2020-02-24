@@ -81,6 +81,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
   }
 
+  /*
   public Command getAutonomousCommand() {
     TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond, Constants.kMaxAccelerationMetersPerSecondSquared);
 
@@ -106,6 +107,7 @@ public class RobotContainer {
 
       return command;
   }
+  */
  
 
   /**
