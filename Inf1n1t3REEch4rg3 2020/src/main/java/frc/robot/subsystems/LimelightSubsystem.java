@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-	//private static String lime;
 	private static NetworkTableInstance table = null;
 
 	public enum LightMode {
@@ -66,6 +65,6 @@ public class LimelightSubsystem extends SubsystemBase {
 		}
 
 		return table.getTable("limelight").getEntry(key);
-  	}
-  
+	}
+
 }

@@ -7,29 +7,21 @@
 
 package frc.robot.commands;
 
-
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.FlywheelSubsystem;;
 
-public class opShooter extends CommandBase {
-  /**
-   * Creates a new opShooter.
-   */
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+public class OperatorShooter extends CommandBase {
 
-  double targetRpm;
-  double currRpm;
-  double errRpm;
-  double errRpm_sum;
-  double errRpm_last;
-  double errRpm_diff;
-  double power;
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
-  private final FlywheelSubsystem flywheel; 
+  private double fwOutput = 0;
 
-  public opShooter(FlywheelSubsystem subsystem) {
+  private final FlywheelSubsystem flywheel;
+
+  public OperatorShooter(FlywheelSubsystem subsystem) {
     flywheel = subsystem;
     addRequirements(flywheel);
   }
@@ -42,43 +34,37 @@ public class opShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*
-    targetRpm = 3000;
-    currRpm = flywheel.getRpm();
-    
-    (1 / Constants.kFalconMaxRpm) * targetRpm;   
-
-    errRpm = targetRpm - currRpm;
-    errRpm_diff = errRpm - errRpm_last;
-    
-    power = (errRpm * Constants.kFlywheelkP + errRpm_diff * Constants.kFlywheelkD);
-
-    power = power < 0 ? 0: power > 1 ? 1 : power;
-
-    flywheel.set(TalonFXControlMode.PercentOutput, power);
-    
-    errRpm_last = errRpm;
-    */
 
     SmartDashboard.putNumber("Flywheel Current Raw", flywheel.getRawVelocity());
     SmartDashboard.putNumber("Flywheel Current RPM", flywheel.getRpm());
 
-    flywheel.set(51000);
+    /**
+     * FLYWHEEL
+     */
 
-    //if(Robot.oi.main.getAButton()){
-    if(flywheel.getRpm() > 3000){
-			flywheel.feed();
+    if (Robot.oi.main.getYButton()) {
+      fwOutput = 51000;
+    } else if (Robot.oi.main.getXButton()) {
+      fwOutput = 0;
     }
-    else{
+    flywheel.set(fwOutput);
+
+    /**
+     * FEEDER AND YEETER
+     */
+
+    if (Robot.oi.main.getBumper(Hand.kRight)) {
+      flywheel.feed();
+    } else {
       flywheel.stopFeed();
     }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     flywheel.stop();
+    flywheel.stopFeed();
   }
 
   // Returns true when the command should end.

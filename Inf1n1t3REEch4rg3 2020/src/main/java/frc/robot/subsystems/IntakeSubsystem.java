@@ -25,6 +25,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
@@ -36,145 +37,132 @@ import frc.robot.Constants;
 import frc.robot.utilities.InitializeTalon;
 
 public class IntakeSubsystem extends SubsystemBase {
-  
 
-  //Declare Motors
-  private TalonFX intakeMotor;
+  // Declare Motors
+  private VictorSPX intakeMotor;
+  private VictorSPX indexerMotor;
+  private VictorSPX wobbleMotor;
   private TalonFX carouselMotor;
+  private TalonFX winchMotor;
 
-  //Declare Solenoids
-  private final Solenoid rightSolenoid;
-  private final Solenoid leftSolenoid;
+  // Declare Solenoids
+  private final Solenoid intakeSolenoid;
+  private final Solenoid winchArmSolenoid;
 
-  //Declare Compressor
+  // Declare Compressor
   private final Compressor compressor;
 
-  //Declare Sensors
+  // Declare Sensors
   private final AnalogInput PhotoElecSensor;
-  private final PowerDistributionPanel pdp; //Not technically a sensor, but is acting as one here.
+  private final PowerDistributionPanel pdp; // Not technically a sensor, but is acting as one here for current control.
 
-  //Declare Local Constants
-  private final int PhotoElecRange = 1000;
-  private final int pcmID = 0;
-  private final int currentCap = 1000;
+  // Declare Local Constants
+  private static final int PhotoElecRange = 1000;
+  private static final int pcmID = 0;
+  private static final int currentCap = 1000;
 
-  //Public Variables
+  // Public Variables
   public boolean compressorDefined = false;
-  public enum solenoidState{OPEN, CLOSED, OFF}
-  public solenoidState leftState;
-  public solenoidState rightState;
+
+  public enum solenoidState {
+    OPEN, CLOSED, OFF
+  }
+
+  public solenoidState intakeState;
 
   public IntakeSubsystem() {
 
-    //Define Motors
+    // Define Motors
     try {
-      intakeMotor = new TalonFX(Constants.RobotMap.INTAKE_MOTOR.value);
+      intakeMotor = new VictorSPX(Constants.RobotMap.INTAKE_MOTOR.value);
+      wobbleMotor = new VictorSPX(Constants.RobotMap.WOBBLE_MOTOR.value);
+      indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
       carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
+      winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);
+    } catch (final RuntimeException ex) {
+      DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);
     }
-    catch (final RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
-    
-    InitializeTalon.initGenericFalcon(intakeMotor, false);
+
     InitializeTalon.initCarouselFalcon(carouselMotor);
+    InitializeTalon.initGenericFalcon(winchMotor, true);
 
     carouselMotor.setNeutralMode(NeutralMode.Brake);
-    intakeMotor.setNeutralMode(NeutralMode.Coast);
 
-    //Define Photoelectric Sensor
+    // Define Photoelectric Sensor
     PhotoElecSensor = new AnalogInput(Constants.RobotMap.PHOTOELEC_SENSOR.value);
 
-    //Define Compressor
-    compressor = new Compressor(pcmID); 
+    // Define Compressor
+    compressor = new Compressor(pcmID);
 
-    //Define Solenoids
-    leftSolenoid = new Solenoid(pcmID, 0);
-    rightSolenoid = new Solenoid(pcmID, 1);
+    // Define Solenoids
+    intakeSolenoid = new Solenoid(pcmID, 6);
+    winchArmSolenoid = new Solenoid(pcmID, 7);
 
-    //Define PDP
+    // Define PDP
     pdp = new PowerDistributionPanel();
 
     resetEnc(carouselMotor);
-    resetEnc(intakeMotor);
-    leftState = solenoidState.OFF;
-    rightState = solenoidState.OFF;
+
+    intakeState = solenoidState.OFF;
   }
-  
+
   /**
    * Extends the solenoids on the intake and changes their state to OPEN
    */
-  public void extendIntake(){
-    leftSolenoid.set(true);
-    rightSolenoid.set(true);  
+  public void extendIntake() {
+    intakeSolenoid.set(true);
 
-    leftState = solenoidState.OPEN;
-    rightState = solenoidState.OPEN;
+    intakeState = solenoidState.OPEN;
   }
 
   /**
    * Retracts the Solenoids on the Intake and changes their state to CLOSED
    */
-  public void retractIntake(){
-    leftSolenoid.set(false);
-    rightSolenoid.set(false);  
+  public void retractIntake() {
+    intakeSolenoid.set(false);
 
-    leftState = solenoidState.CLOSED;
-    rightState = solenoidState.CLOSED;
+    intakeState = solenoidState.CLOSED;
   }
 
-  /**
-   * Retracts a specific side of the intake. 
-   * Used in correcting solenoid faults. See {@link #isSolenoidFault()}
-   * 
-   * @param side 'L' or 'R', for Left or Right Side
-   */
-  public void moveSpecificSide(char side){
-    if(side == 'L'){
-      leftSolenoid.set(false);
-    }
-    else if(side == 'R'){
-      rightSolenoid.set(false);
-    }
+  public void armUp() {
+    winchArmSolenoid.set(true);
   }
-  /**
-   * Tells us if there is a jam in the carousel.
-   * References current draw on the motor's PDP channel to see if it is beyond the set cap
-   * 
-   * @return True if the Carousel is jammed, False otherwise.
-   */
-  public boolean isJammed(){
-    return (pdp.getCurrent(10) > currentCap);
+
+  public void armDown() {
+    winchArmSolenoid.set(false);
   }
   
   /**
-   * Tells us if the Intake is currently out.
-   * Useful for checking our robot's size to prevent Rules violations.
+   * Tells us if there is a jam in the carousel. References current draw on the
+   * motor's PDP channel to see if it is beyond the set cap
    * 
-   * @return True if the Intake is Extended, False otherwise.
+   * @return True if the Carousel is jammed, False otherwise.
    */
-  public boolean isIntakeOut(){
-    return ((leftState == solenoidState.OPEN) || (rightState == solenoidState.OPEN));
+  public boolean isJammed() {
+    return (pdp.getCurrent(10 /*PDP Port for Carousel Motor*/) > currentCap);
   }
 
   /**
-   * Tells us if there is a Fault in our Intake.
-   * A Fault exists when the intake is 'crooked,' meaning one side is extended while the other is not.
+   * Tells us if the Intake is currently out. Useful for checking our robot's size
+   * to prevent Rules violations.
    * 
-   * @return True if there is a Fault, False otherwise.
+   * @return True if the Intake is Extended, False otherwise.
    */
-  public boolean isSolenoidFault(){
-    return (rightSolenoid.get() != leftSolenoid.get());
+  public boolean isIntakeOut() {
+    return (intakeState == solenoidState.OPEN);
   }
 
   /**
    * Starts the Closed Loop Control for the Compressor
    */
-  public void startCompressor(){
+  public void startCompressor() {
     compressor.setClosedLoopControl(true);
   }
 
   /**
    * Terminates the Closed Loop Control for the Compressors
    */
-  public void stopCompressor(){
+  public void stopCompressor() {
     compressor.setClosedLoopControl(false);
     compressor.stop();
   }
@@ -184,14 +172,14 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @return True if the Compressor is enabled, False otherwise.
    */
-  public boolean compressorDefined(){
+  public boolean compressorDefined() {
     return compressor.enabled();
   }
 
   /**
    * Set Carousel to certain Control Mode and Output
    * 
-   * @param mode CTRE TalonFX ControlMode
+   * @param mode  CTRE TalonFX ControlMode
    * @param value the Selected Motor's output
    */
   public void setCarousel(final ControlMode mode, final double value) {
@@ -201,18 +189,28 @@ public class IntakeSubsystem extends SubsystemBase {
   /**
    * Set Carousel to certain Control Mode and Output
    * 
-   * @param mode CTRE TalonFX ControlMode
+   * @param mode  CTRE TalonFX ControlMode
    * @param value the Selected Motor's output
    */
   public void setIntake(final ControlMode mode, final double value) {
     intakeMotor.set(mode, value);
+    indexerMotor.set(mode, value);
+    wobbleMotor.set(mode, -value);
+  }
+
+  public void setWinch() {
+    winchMotor.set(ControlMode.PercentOutput, 1);
+  }
+
+  public void stopWinch() {
+    winchMotor.set(ControlMode.PercentOutput, 0);
   }
 
   /**
    * Stop the Carousel.
-
+   * 
    */
-  public void stopCarousel(){
+  public void stopCarousel() {
     carouselMotor.set(ControlMode.PercentOutput, 0);
   }
 
@@ -230,7 +228,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @return Current Raw Encoder Units for the Carousel
    */
-  public double getCarouselPosition(){
+  public double getCarouselPosition() {
     return carouselMotor.getSelectedSensorPosition();
   }
 
@@ -239,16 +237,17 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @return Current Raw Encoder Units for the Intake
    */
-  public double getIntakePosition(){
+  public double getIntakePosition() {
     return carouselMotor.getSelectedSensorPosition();
   }
 
   /**
    * Resets the position of the carousel.
    */
-  public void resetCarouselPosition(){
+  public void resetCarouselPosition() {
     carouselMotor.setSelectedSensorPosition(0);
   }
+
   /**
    * Tells us if the Photoelectric Sensor is Detecting an Object in Range
    * 
@@ -257,6 +256,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean isRange() {
     return PhotoElecSensor.getValue() > PhotoElecRange ? true : false;
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

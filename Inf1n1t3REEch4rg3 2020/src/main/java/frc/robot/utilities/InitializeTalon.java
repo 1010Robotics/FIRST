@@ -68,6 +68,7 @@ public class InitializeTalon {
     }
 
     public static void initCarouselFalcon(final TalonFX motor){
+        motor.setInverted(true);
         //Set Sensor Phase
         motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
         motor.setSensorPhase(false);

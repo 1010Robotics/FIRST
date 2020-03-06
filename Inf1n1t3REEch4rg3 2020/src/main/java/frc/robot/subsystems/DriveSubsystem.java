@@ -42,14 +42,14 @@ import frc.robot.utilities.InitializeTalon;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  //Declare Motors
+  // Declare Motors
   private TalonFX leftMaster;
   private TalonFX leftSlave;
   private TalonFX rightMaster;
   private TalonFX rightSlave;
-  //Declare Sensors
+  // Declare Sensors
   private AHRS gyro;
-  //Declare Others
+  // Declare Others
   private DifferentialDriveKinematics mKinematics;
   private DifferentialDriveWheelSpeeds mSpeeds;
   private DifferentialDriveOdometry mOdometry;
@@ -58,16 +58,17 @@ public class DriveSubsystem extends SubsystemBase {
   private PIDController rightPID;
 
   public DriveSubsystem() {
-    //Define Motors
+    // Define Motors
     try {
       leftMaster = new TalonFX(Constants.RobotMap.LEFT_MASTER.value);
       leftSlave = new TalonFX(Constants.RobotMap.LEFT_SLAVE.value);
       rightMaster = new TalonFX(Constants.RobotMap.RIGHT_MASTER.value);
       rightSlave = new TalonFX(Constants.RobotMap.RIGHT_SLAVE.value);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);
     }
-    catch (RuntimeException ex) {DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);}
 
-    //Initialize Motors
+    // Initialize Motors
     InitializeTalon.initLeftDriveFalcon(leftMaster);
     InitializeTalon.initLeftDriveFalcon(leftSlave);
     InitializeTalon.initRightDriveFalcon(rightMaster);
@@ -76,14 +77,16 @@ public class DriveSubsystem extends SubsystemBase {
     leftMaster.setNeutralMode(NeutralMode.Coast);
     rightMaster.setNeutralMode(NeutralMode.Coast);
 
-
-    //Set Slaves
+    // Set Slaves
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
 
-    //Define Gyro
-    try {gyro = new AHRS(SPI.Port.kMXP);}
-    catch (RuntimeException ex) {DriverStation.reportError("Error Starting NavX: " + ex.getMessage(), true);}
+    // Define Gyro
+    try {
+      gyro = new AHRS(SPI.Port.kMXP);
+    } catch (RuntimeException ex) {
+      DriverStation.reportError("Error Starting NavX: " + ex.getMessage(), true);
+    }
 
     resetEnc();
     resetAngle();
@@ -91,7 +94,8 @@ public class DriveSubsystem extends SubsystemBase {
     mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getAngle()));
     mKinematics = new DifferentialDriveKinematics(Constants.kTrackwidthMeters);
     mSpeeds = new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
-    feedforward = new SimpleMotorFeedforward(Constants.ksVolts, Constants.kvVoltSecondsPerMeter, Constants.kaVoltSecondsSquaredPerMeter);
+    feedforward = new SimpleMotorFeedforward(Constants.ksVolts, Constants.kvVoltSecondsPerMeter,
+        Constants.kaVoltSecondsSquaredPerMeter);
     leftPID = new PIDController(Constants.kPDriveVel, 0, 0);
     rightPID = new PIDController(Constants.kPDriveVel, 0, 0);
   }
@@ -100,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
    * Set Drive Motors to certain Percent Output
    * 
    * @param rightVal Right Drive Motors' Percent Output
-   * @param leftVal Left Drive Motors' Percent Output
+   * @param leftVal  Left Drive Motors' Percent Output
    */
   public void set(double rightVal, double leftVal) {
     leftMaster.set(ControlMode.PercentOutput, leftVal);
@@ -110,9 +114,9 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Set Drive Motors to certain Control Mode and Output
    * 
-   * @param mode CTRE TalonFX ControlMode
+   * @param mode     CTRE TalonFX ControlMode
    * @param rightVal Right Drive Motors' Output
-   * @param leftVal Left Drive Motors' Output
+   * @param leftVal  Left Drive Motors' Output
    */
   public void set(ControlMode mode, double rightVal, double leftVal) {
     leftMaster.set(mode, leftVal);
@@ -122,7 +126,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Stop Drive Motors
    */
-  public void stop(){
+  public void stop() {
     leftMaster.set(ControlMode.PercentOutput, 0);
     rightMaster.set(ControlMode.PercentOutput, 0);
   }
@@ -142,7 +146,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return Current Position for the Left Drive, in meters
    */
   public double getLeftPosition() {
-    return leftMaster.getSelectedSensorPosition(); //Code to Meters
+    return leftMaster.getSelectedSensorPosition(); // Code to Meters
   }
 
   /**
@@ -151,7 +155,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return Current Velocity of the Left Drive, in meters per second
    */
   public double getLeftVelocity() {
-    return leftMaster.getSelectedSensorVelocity(); //Code to Meters per Second
+    return leftMaster.getSelectedSensorVelocity(); // Code to Meters per Second
   }
 
   /**
@@ -159,7 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
    * 
    * @return Current Raw Encoder Units for the Right Drive
    */
-  public double getRightPositionRaw(){
+  public double getRightPositionRaw() {
     return rightMaster.getSelectedSensorPosition();
   }
 
@@ -169,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return Current Position for the Right Drive, in meters
    */
   public double getRightPosition() {
-    return rightMaster.getSelectedSensorPosition(); //Code to Meters
+    return rightMaster.getSelectedSensorPosition(); // Code to Meters
   }
 
   /**
@@ -178,9 +182,9 @@ public class DriveSubsystem extends SubsystemBase {
    * @return Current Velocity of the Right Drive, in meters per second
    */
   public double getRightVelocity() {
-    return rightMaster.getSelectedSensorVelocity(); //Code to Meters per Second
+    return rightMaster.getSelectedSensorVelocity(); // Code to Meters per Second
   }
-  
+
   /**
    * Reset all Drive Encoders to zero
    */
@@ -228,7 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DifferentialDriveKinematics getKinematics() {
     return mKinematics;
-  } 
+  }
 
   /**
    * Returns the currently-estimated pose of the robot

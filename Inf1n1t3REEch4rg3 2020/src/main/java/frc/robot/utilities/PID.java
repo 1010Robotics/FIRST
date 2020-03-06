@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.utilities;
 
 public class PID {
 
@@ -34,14 +34,14 @@ public class PID {
         integralConst = false;
     }
 
-    void set_PID_vars(float kP, float kI, float kD, int integral_limit) {
+    public void set_PID_vars(float kP, float kI, float kD, int integral_limit) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         data[INTEGRAL_LIMIT] = integral_limit;
     }
 
-    void set_PID_vars(float kP, int const_kI, float kD, int integral_limit, boolean const_int) {
+    public void set_PID_vars(float kP, int const_kI, float kD, int integral_limit, boolean const_int) {
         this.kP = kP;
         this.kD = kD;
         integralConst = const_int;
@@ -50,7 +50,7 @@ public class PID {
     }
 
 
-    double output(double max_power) {
+    public double output(double max_power) {
         double out;
 
         data[PAST_ERROR] = data[ERROR];

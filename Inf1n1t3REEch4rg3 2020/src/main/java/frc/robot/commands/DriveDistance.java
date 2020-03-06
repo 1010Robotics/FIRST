@@ -7,52 +7,46 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ControlWheelSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.utilities.PID;
 
-public class opControlWheel extends CommandBase {
+public class DriveDistance extends CommandBase {
 
-  private final ControlWheelSubsystem controlwheel;
-  /**
-   * Creates a new opControlWheel.
-   */
-  
-  public opControlWheel(final ControlWheelSubsystem sub1) {
-    controlwheel = sub1;
-    addRequirements(controlwheel);
+  private PID drivePID;
+  private final DriveSubsystem chassis;
+  private int distance;
+  private int direction;
+
+  public DriveDistance(int direction, int distance, final DriveSubsystem sub1) {
+    chassis = sub1;
+    addRequirements(chassis);
+    direction = this.direction;
+    distance = this.distance;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivePID.set_PID_vars(0, 0, 0, 0);
+    drivePID.target = distance * direction;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    SmartDashboard.putString("Current Colour", controlwheel.readColour().toString());
-    SmartDashboard.putString("GAMEDATA", String.valueOf(controlwheel.getDesiredColour()));
-
-    switch(controlwheel.getDesiredColour()){
-      case 'R':
-        //RED IS NEEDED
-      case 'G':
-        //GREEN IS NEEDED
-      case 'B':
-        //BLUE IS NEEDED
-      case 'Y':
-        //YELLOW IS NEEDED
-      case 'U':
-        //NO Data Given
+    drivePID.current = (int) chassis.getLeftPosition();
+    chassis.set(drivePID.output(0.6), drivePID.output(0.6));
+    if(Math.abs(drivePID.current) >= Math.abs(drivePID.target)){
+      chassis.stop();
+      isFinished();
     }
-    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(final boolean interrupted) {
+  public void end(boolean interrupted) {
+    chassis.stop();
   }
 
   // Returns true when the command should end.
