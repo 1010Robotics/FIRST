@@ -7,11 +7,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.utilities.PID;
 import java.lang.Math;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 public class DriveDistance extends CommandBase {
@@ -52,21 +55,23 @@ public class DriveDistance extends CommandBase {
     isTarget = camera.isTarget();
     a2 = camera.getTy();
     getDistance = (h2-h1) / Math.tan(a1+a2);
-    System.out.println("current distance is "+getDistance+"ft");
+    SmartDashboard.putNumber("current distance is ",getDistance);
     if(isTarget){
       //if current distance from the target is bigger than this value
-    if(getDistance>=10){
-        chassis.set(drivePID.output(0.6), drivePID.output(0.6));
-        if(Math.abs(drivePID.current) >= Math.abs(drivePID.target)){
-          chassis.stop();
-          isFinished();
-        }
-      }else{
-        chassis.stop();
-      }
+    if(getDistance>=6){
+        //chassis.set(drivePID.output(0.6), drivePID.output(0.6));
+        //if(Math.abs(drivePID.current) >= Math.abs(drivePID.target)){
+          //chassis.stop();
+          //isFinished();
+        //}
+      //}else{
+        //chassis.stop();
+      //}
+      chassis.set(ControlMode.Velocity, 40, 40);
     }else{
       chassis.stop();
     }
+  }
   }
 
   // Called once the command ends or is interrupted.
