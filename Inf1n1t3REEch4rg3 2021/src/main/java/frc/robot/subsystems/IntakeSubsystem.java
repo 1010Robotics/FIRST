@@ -74,8 +74,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Define Motors
     try {
-      intakeMotor = new VictorSPX(Constants.RobotMap.INTAKE_MOTOR.value);
-      wobbleMotor = new VictorSPX(Constants.RobotMap.WOBBLE_MOTOR.value);
+      intakeMotor = new VictorSPX(Constants.RobotMap.FRONT_INTAKE_MOTOR.value);
+      wobbleMotor = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
       indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
       carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
       winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);

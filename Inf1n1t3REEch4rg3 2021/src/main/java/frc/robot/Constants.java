@@ -74,14 +74,14 @@ public final class Constants {
 	    RIGHT_SLAVE(2), 
 	    RIGHT_MASTER(1),
 		FLYWHEEL_MOTOR(5),
-		FEEDER_MOTOR(7), // indexer 1
-		YEETER_MOTOR(8), // indexer 2
+		INDEXER1_MOTOR(7),
+		INDEXER2_MOTOR(8),
 		PHOTOELEC_SENSOR(3), // don't touch
 		CW_MOTOR(10), // unused
 		CAROUSEL_MOTOR(3), // unused
-		INTAKE_MOTOR(6),	// front intake
-		INDEXER_MOTOR(10), // secondary intake
-		WOBBLE_MOTOR(9), // inderxer 3 
+		FRONT_INTAKE_MOTOR(6),
+		INDEXER_MOTOR(10),
+		INDEXER3_MOTOR(9),
 		WINCH_MOTOR(4); // unused
 		
 		public final int value;
