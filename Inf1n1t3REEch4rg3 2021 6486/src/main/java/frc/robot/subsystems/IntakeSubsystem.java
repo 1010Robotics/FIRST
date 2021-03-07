@@ -64,11 +64,11 @@ public class IntakeSubsystem extends SubsystemBase {
   // Public Variables
   public boolean compressorDefined = false;
 
-  public enum solenoidState {
-    OPEN, CLOSED, OFF
-  }
+  // public enum solenoidState {
+  //   OPEN, CLOSED, OFF
+  // }
 
-  public solenoidState intakeState;
+  //public solenoidState intakeState;
 
   public IntakeSubsystem() {
 
@@ -103,27 +103,27 @@ public class IntakeSubsystem extends SubsystemBase {
 
     resetEnc(carouselMotor);
 
-    intakeState = solenoidState.OFF;
+    //intakeState = solenoidState.OFF;
   }
 
   /**
    * Extends the solenoids on the intake and changes their state to OPEN
    */
-  public void extendIntake() {
+  public void toggleIntake() {
     
-    intakeSolenoid.set(true);
+    intakeSolenoid.toggle();
 
-    intakeState = solenoidState.OPEN;
+    //intakeState = solenoidState.OPEN;
   }
 
   /**
    * Retracts the Solenoids on the Intake and changes their state to CLOSED
    */
-  public void retractIntake() {
-    intakeSolenoid.set(false);
+  // public void retractIntake() {
+  //   intakeSolenoid.set(false);
 
-    intakeState = solenoidState.CLOSED;
-  }
+  //   intakeState = solenoidState.CLOSED;
+  // }
 
   // public void armUp() {
   //   winchArmSolenoid.set(true);
@@ -149,9 +149,9 @@ public class IntakeSubsystem extends SubsystemBase {
    * 
    * @return True if the Intake is Extended, False otherwise.
    */
-  public boolean isIntakeOut() {
-    return (intakeState == solenoidState.OPEN);
-  }
+  // public boolean isIntakeOut() {
+  //   return (intakeState == solenoidState.OPEN);
+  // }
 
   /**
    * Starts the Closed Loop Control for the Compressor

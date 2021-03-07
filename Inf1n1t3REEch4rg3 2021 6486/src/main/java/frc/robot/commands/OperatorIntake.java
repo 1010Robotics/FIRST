@@ -40,7 +40,7 @@ public class OperatorIntake extends CommandBase {
      * SMARTDASHBOARD
      */
 
-    SmartDashboard.putBoolean("Intake Out?", intake.isIntakeOut());
+    // SmartDashboard.putBoolean("Intake Out?", intake.isIntakeOut());
     SmartDashboard.putBoolean("Carousel Jammed", intake.isJammed());
     SmartDashboard.putNumber("Carousel Speed", carouselSpeed);
 
@@ -50,14 +50,12 @@ public class OperatorIntake extends CommandBase {
 
     intakeSpeed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
 
-    if (Robot.oi.main.getAButton()) {
-      intake.startCompressor();
-    }
+    // if (Robot.oi.main.getAButton()) {
+    //   intake.startCompressor();
+    // }
     if (Robot.oi.main.getXButton()) {
-      intake.extendIntake();
-    } else if (Robot.oi.main.getBButton()) {
-      intake.retractIntake();
-    }
+      intake.toggleIntake();
+    } 
 
     // if (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1) {
     //   intake.setIntake(ControlMode.PercentOutput, -0.5);
