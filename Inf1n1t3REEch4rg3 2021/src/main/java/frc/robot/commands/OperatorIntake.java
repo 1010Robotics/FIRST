@@ -51,18 +51,21 @@ public class OperatorIntake extends CommandBase {
     intakeSpeed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
 
     if (Robot.oi.main.getAButton()) {
+      intake.startCompressor();
+    }
+    if (Robot.oi.main.getXButton()) {
       intake.extendIntake();
     } else if (Robot.oi.main.getBButton()) {
       intake.retractIntake();
     }
 
-    if (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1) {
-      intake.setIntake(ControlMode.PercentOutput, -0.5);
-    } else if (Robot.oi.main.getTriggerAxis(Hand.kRight) != 0) {
-      intake.setIntake(ControlMode.PercentOutput, intakeSpeed);
-    } else {
-      intake.setIntake(ControlMode.PercentOutput, 0);
-    }
+    // if (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1) {
+    //   intake.setIntake(ControlMode.PercentOutput, -0.5);
+    // } else if (Robot.oi.main.getTriggerAxis(Hand.kRight) != 0) {
+    //   intake.setIntake(ControlMode.PercentOutput, intakeSpeed);
+    // } else {
+    //   intake.setIntake(ControlMode.PercentOutput, 0);
+    // }
 
     /**
      * CAROUSEL
@@ -82,30 +85,29 @@ public class OperatorIntake extends CommandBase {
       }
     }
 
-    intake.setCarousel(ControlMode.PercentOutput, carouselSpeed);
-
+    // intake.setCarousel(ControlMode.PercentOutput, carouselSpeed);
     /**
      * CLIMB MECHANISM
      */
 
-    if (Robot.oi.main.getPOV(0) == 90) {
-      intake.setWinch();
-    } else
-      intake.stopWinch();
+  //   if (Robot.oi.main.getPOV(0) == 90) {
+  //     //intake.setWinch();
+  //   } else {
+  //     //intake.stopWinch();
 
-    if (Robot.oi.main.getPOV(0) == 0) {
-      intake.armUp();
-    } else if (Robot.oi.main.getPOV(0) == 180) {
-      intake.armDown();
-    }
-  }
+  //   // if (Robot.oi.main.getPOV(0) == 0) {
+  //   //   intake.armUp();
+  //   // } else if (Robot.oi.main.getPOV(0) == 180) {
+  //   //   intake.armDown();
+  //   // }
+   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.stopCarousel();
     intake.stopCompressor();
-    intake.stopWinch();
+    // intake.stopWinch();
   }
 
   // Returns true when the command should end.

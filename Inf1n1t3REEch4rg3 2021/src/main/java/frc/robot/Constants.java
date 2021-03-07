@@ -81,8 +81,8 @@ public final class Constants {
 		CAROUSEL_MOTOR(3), // unused
 		FRONT_INTAKE_MOTOR(6),
 		INDEXER_MOTOR(10),
-		INDEXER3_MOTOR(9),
-		WINCH_MOTOR(4); // unused
+		INDEXER3_MOTOR(9);
+		// WINCH_MOTOR(4); // unused
 		
 		public final int value;
 

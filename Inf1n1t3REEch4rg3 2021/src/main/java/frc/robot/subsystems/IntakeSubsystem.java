@@ -43,11 +43,11 @@ public class IntakeSubsystem extends SubsystemBase {
   private VictorSPX indexerMotor;
   private VictorSPX wobbleMotor;
   private TalonFX carouselMotor;
-  private TalonFX winchMotor;
+  // private TalonFX winchMotor;
 
   // Declare Solenoids
   private final Solenoid intakeSolenoid;
-  private final Solenoid winchArmSolenoid;
+  // private final Solenoid winchArmSolenoid;
 
   // Declare Compressor
   private final Compressor compressor;
@@ -78,13 +78,13 @@ public class IntakeSubsystem extends SubsystemBase {
       wobbleMotor = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
       indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
       carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
-      winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);
+      // winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);
     } catch (final RuntimeException ex) {
       DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);
     }
 
     InitializeTalon.initCarouselFalcon(carouselMotor);
-    InitializeTalon.initGenericFalcon(winchMotor, true);
+    // InitializeTalon.initGenericFalcon(winchMotor, true);
 
     carouselMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -95,8 +95,8 @@ public class IntakeSubsystem extends SubsystemBase {
     compressor = new Compressor(pcmID);
 
     // Define Solenoids
-    intakeSolenoid = new Solenoid(pcmID, 6);
-    winchArmSolenoid = new Solenoid(pcmID, 7);
+    intakeSolenoid = new Solenoid(pcmID, 7);
+    //winchArmSolenoid = new Solenoid(pcmID, 7);
 
     // Define PDP
     pdp = new PowerDistributionPanel();
@@ -110,6 +110,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * Extends the solenoids on the intake and changes their state to OPEN
    */
   public void extendIntake() {
+    
     intakeSolenoid.set(true);
 
     intakeState = solenoidState.OPEN;
@@ -124,13 +125,13 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeState = solenoidState.CLOSED;
   }
 
-  public void armUp() {
-    winchArmSolenoid.set(true);
-  }
+  // public void armUp() {
+  //   winchArmSolenoid.set(true);
+  // }
 
-  public void armDown() {
-    winchArmSolenoid.set(false);
-  }
+  // public void armDown() {
+  //   winchArmSolenoid.set(false);
+  // }
   
   /**
    * Tells us if there is a jam in the carousel. References current draw on the
@@ -198,13 +199,13 @@ public class IntakeSubsystem extends SubsystemBase {
     wobbleMotor.set(mode, -value);
   }
 
-  public void setWinch() {
-    winchMotor.set(ControlMode.PercentOutput, 1);
-  }
+  // public void setWinch() {
+  //   winchMotor.set(ControlMode.PercentOutput, 1);
+  // }
 
-  public void stopWinch() {
-    winchMotor.set(ControlMode.PercentOutput, 0);
-  }
+  // public void stopWinch() {
+  //   winchMotor.set(ControlMode.PercentOutput, 0);
+  // }
 
   /**
    * Stop the Carousel.
