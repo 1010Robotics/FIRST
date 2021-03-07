@@ -45,8 +45,8 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     // Define Motors
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
-    feederMtr = new VictorSPX(Constants.RobotMap.FEEDER_MOTOR.value);
-    yeeterMtr = new VictorSPX(Constants.RobotMap.YEETER_MOTOR.value);
+    feederMtr = new VictorSPX(Constants.RobotMap.INDEXER1_MOTOR.value);
+    yeeterMtr = new VictorSPX(Constants.RobotMap.INDEXER2_MOTOR.value);
 
     // Initialize Motors
     InitializeTalon.initFWMotor(flywheelMtr);

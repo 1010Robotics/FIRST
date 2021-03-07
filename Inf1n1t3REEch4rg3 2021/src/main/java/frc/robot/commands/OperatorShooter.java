@@ -42,12 +42,12 @@ public class OperatorShooter extends CommandBase {
      * FLYWHEEL
      */
 
-    if (Robot.oi.main.getYButton()) {
-      fwOutput = 51000;
-    } else if (Robot.oi.main.getXButton()) {
-      fwOutput = 0;
-    }
-    flywheel.set(fwOutput);
+    // if (Robot.oi.main.getYButton()) {
+    //   fwOutput = 51000;
+    // } else if (Robot.oi.main.getXButton()) {
+    //   fwOutput = 0;
+    // }
+    // flywheel.set(fwOutput);
 
     /**
      * FEEDER AND YEETER
