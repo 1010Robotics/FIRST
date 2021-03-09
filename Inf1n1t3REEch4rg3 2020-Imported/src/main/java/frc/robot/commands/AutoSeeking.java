@@ -17,9 +17,10 @@ public class AutoSeeking extends CommandBase {
   private final LimelightSubsystem camera;
   private double tx;
   private boolean tv;
-  private double left_command;
-  private double right_command;
-  double steering_adjust = 0.0;
+  private double leftCommand;
+  private double rightCommand;
+  double steeringAdjust = 0.0;
+
   /** Creates a new AutoSeeking. */
   public AutoSeeking(final DriveSubsystem sub1, final LimelightSubsystem sub4) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -42,25 +43,29 @@ public class AutoSeeking extends CommandBase {
     if (tv == false)
     {
         // We don't see the target, seek for the target by spinning in place at a safe speed.
-        steering_adjust = 0;
+        // 此处记添加若转三圈还找不到目标就后退
+        steeringAdjust = 1800;
     }
     else
-    {   if(tx<=2&&tx>=-2){
+    {   if(tx<=1&&tx>=-1){
         //the target is within acceptable range
-        steering_adjust = 1200;
+        steeringAdjust = 0;
         }else{
         // We do see the target, execute aiming code
-        // kp*tx, this value should be around 2 digits, 10 is used to prevent the value being too small;
-        steering_adjust =  tx * 20 + 875;
+        if(tx>0){
+        steeringAdjust =  tx * 30 + 1000;
+        }else{
+        steeringAdjust = tx * 30 - 1000;
+        }
         }
     }
 
-    left_command=steering_adjust;
-    right_command=-steering_adjust;
-    SmartDashboard.putNumber("left velocity", left_command);
-    SmartDashboard.putNumber("right velocity", right_command);
-    SmartDashboard.putNumber("adjustValue", steering_adjust);
-    chassis.set(ControlMode.Velocity, right_command, left_command);
+    leftCommand=steeringAdjust;
+    rightCommand=-steeringAdjust;
+    SmartDashboard.putNumber("left velocity", leftCommand);
+    SmartDashboard.putNumber("right velocity", rightCommand);
+    SmartDashboard.putNumber("adjustValue", steeringAdjust);
+    chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
   }
 
   // Called once the command ends or is interrupted.
