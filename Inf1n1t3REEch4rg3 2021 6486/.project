@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Inf1n1t3REEch4rg3ImportedAimTest</name>
-	<comment>Project Inf1n1t3REEch4rg3ImportedAimTest created by Buildship.</comment>
+	<name>Inf1n1t3REEch4rg3 2021 6486</name>
+	<comment>Project Inf1n1t3REEch4rg3 2021 6486 created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
 			<arguments>
@@ -17,12 +12,11 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1615062885948</id>
+			<id>1615094560013</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
