@@ -61,14 +61,6 @@ public class DriveDistance extends CommandBase {
     if(isTarget){
       //if current distance from the target is bigger than this value
       if(getDistance>=10){
-        //chassis.set(drivePID.output(0.6), drivePID.output(0.6));
-        //if(Math.abs(drivePID.current) >= Math.abs(drivePID.target)){
-          //chassis.stop();
-          //isFinished();
-        //}
-      //}else{
-        //chassis.stop();
-      //}
        chassis.set(ControlMode.Velocity, -2000, -2000);
       }else{
        chassis.stop();
