@@ -59,7 +59,7 @@ public class OperatorShooter extends CommandBase {
     }
     flywheel.set(fwOutput);
 
-    if (Robot.oi.main.getBumper(Hand.kRight)) {
+    if (Robot.oi.partner.getBumper(Hand.kRight)) {
       flywheel.feed();
     } else {
       flywheel.stopFeed();

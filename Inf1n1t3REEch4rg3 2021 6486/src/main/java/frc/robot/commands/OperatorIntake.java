@@ -78,12 +78,12 @@ public class OperatorIntake extends CommandBase {
     } else {
       intake.stopIndexer2();
     }
-    if (Robot.oi.main.getYButton()) {
+    if (Robot.oi.main.getBButton()) {
       intake.setIndexer3();
     } else {
       intake.stopIndexer3();
     }
-    if (Robot.oi.main.getBButton()) {
+    if (Robot.oi.main.getYButton()) {
       intake.setSecondaryIntake();
     } else {
       intake.stopSecondaryIntake();
