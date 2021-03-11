@@ -40,6 +40,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   private final TalonFX flywheelMtr;
   private final VictorSPX feederMtr;
   private final VictorSPX yeeterMtr;
+  private final VictorSPX indexer3;
 
   public FlywheelSubsystem() {
 
@@ -47,6 +48,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
     feederMtr = new VictorSPX(Constants.RobotMap.INDEXER1_MOTOR.value);
     yeeterMtr = new VictorSPX(Constants.RobotMap.INDEXER2_MOTOR.value);
+    indexer3 = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
 
     // Initialize Motors
     InitializeTalon.initFWMotor(flywheelMtr);
@@ -93,11 +95,13 @@ public class FlywheelSubsystem extends SubsystemBase {
   public void feed() {
     feederMtr.set(ControlMode.PercentOutput, -1);
     yeeterMtr.set(ControlMode.PercentOutput, 1);
+    indexer3.set(ControlMode.PercentOutput, 1);
   }
 
   public void stopFeed() {
     feederMtr.set(ControlMode.PercentOutput, 0);
     yeeterMtr.set(ControlMode.PercentOutput, 0);
+    indexer3.set(ControlMode.PercentOutput, 0);
   }
 
   /**

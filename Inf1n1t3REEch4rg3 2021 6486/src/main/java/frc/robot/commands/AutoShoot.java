@@ -34,12 +34,12 @@ public class AutoShoot extends CommandBase {
   public void execute() {
     flywheel.set(51000);
     Timer.delay(3);
-    intake.setCarousel(ControlMode.PercentOutput, 0.13);
+    //intake.setCarousel(ControlMode.PercentOutput, 0.13);
     flywheel.feed();
     Timer.delay(5);
     flywheel.stop();
     flywheel.stopFeed();
-    intake.stopCarousel();
+    //intake.stopCarousel();
     isFinished();
   }
 
@@ -48,7 +48,7 @@ public class AutoShoot extends CommandBase {
   public void end(boolean interrupted) {
     flywheel.stop();
     flywheel.stopFeed();
-    intake.stopCarousel();
+    //intake.stopCarousel();
   }
 
   // Returns true when the command should end.

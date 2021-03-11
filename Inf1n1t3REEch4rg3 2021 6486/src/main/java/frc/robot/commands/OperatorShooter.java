@@ -52,6 +52,12 @@ public class OperatorShooter extends CommandBase {
     /**
      * FEEDER AND YEETER
      */
+    if (Robot.oi.partner.getBumper(Hand.kLeft)) {
+      fwOutput = 51000;
+    } else {
+      fwOutput = 0;
+    }
+    flywheel.set(fwOutput);
 
     if (Robot.oi.main.getBumper(Hand.kRight)) {
       flywheel.feed();

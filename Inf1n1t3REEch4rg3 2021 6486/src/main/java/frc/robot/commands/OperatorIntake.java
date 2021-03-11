@@ -9,16 +9,14 @@ package frc.robot.commands;
 
 import java.util.Date;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class OperatorIntake extends CommandBase {
 
-  private double intakeSpeed = 0;
+  //private double intakeSpeed = 0;
   private static Date date = new Date();
   private long delta;
   private double carouselSpeed = 0;
@@ -40,32 +38,18 @@ public class OperatorIntake extends CommandBase {
   public void execute() {
 
     /**
-     * SMARTDASHBOARD
-     */
-
-    // SmartDashboard.putBoolean("Intake Out?", intake.isIntakeOut());
-    SmartDashboard.putBoolean("Carousel Jammed", intake.isJammed());
-    SmartDashboard.putNumber("Carousel Speed", carouselSpeed);
-
-    /**
      * INTAKE
      */
 
-    intakeSpeed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
-
-    // if (Robot.oi.main.getAButton()) {
-    //   intake.startCompressor();
-    // }
-    // if (Robot.oi.main.getXButton()) {
-    //   intake.toggleIntake();
-    // } 
+    //intakeSpeed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
     if(Robot.oi.main.getXButton()){
         delta = new Date().getTime() - date.getTime();
         
-        //the 1000 is msec, pls put whatever how long it takes for the robot to finish extend the intake, 
+        //the 1000 is msec, put whatever how long it takes for the robot to finish extend the intake, 
         //1000 msec = 1 sec
         //maybe put a time value slightly longer than usual
+        //:3
 
         if( delta>1000 ){
             date = new Date();
@@ -84,43 +68,38 @@ public class OperatorIntake extends CommandBase {
      * CAROUSEL
      */
 
-    if (Robot.oi.main.getBumper(Hand.kRight)) {
-      carouselSpeed = 0.13;
+    if (Robot.oi.main.getBumper(Hand.kLeft)) {
+      intake.setIntake();
     } else {
-      if (Robot.oi.partner.getBumper(Hand.kLeft)) {
-        carouselSpeed = 0;
-      } else if (Robot.oi.partner.getBumper(Hand.kRight)) {
-        carouselSpeed = 0.075;
-      } else if (Robot.oi.partner.getAButton()){
-        carouselSpeed = -0.05;
-      } else {
-        carouselSpeed = 0;
-      }
+      intake.stopIntake();
+    }
+    if (Robot.oi.main.getAButton()) {
+      intake.setIndexer2();
+    } else {
+      intake.stopIndexer2();
+    }
+    if (Robot.oi.main.getYButton()) {
+      intake.setIndexer3();
+    } else {
+      intake.stopIndexer3();
+    }
+    if (Robot.oi.main.getBButton()) {
+      intake.setSecondaryIntake();
+    } else {
+      intake.stopSecondaryIntake();
     }
 
-    // intake.setCarousel(ControlMode.PercentOutput, carouselSpeed);
-    /**
-     * CLIMB MECHANISM
-     */
-
-  //   if (Robot.oi.main.getPOV(0) == 90) {
-  //     //intake.setWinch();
-  //   } else {
-  //     //intake.stopWinch();
-
-  //   // if (Robot.oi.main.getPOV(0) == 0) {
-  //   //   intake.armUp();
-  //   // } else if (Robot.oi.main.getPOV(0) == 180) {
-  //   //   intake.armDown();
-  //   // }
    }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopCarousel();
+   
     intake.stopCompressor();
-    // intake.stopWinch();
+    intake.stopIndexer2();
+    intake.stopIndexer3();
+    intake.stopSecondaryIntake();
+    intake.stopIntake();
   }
 
   // Returns true when the command should end.
