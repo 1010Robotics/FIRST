@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import java.util.Date;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +19,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class OperatorIntake extends CommandBase {
 
   private double intakeSpeed = 0;
-
+  private Date date;
+  private long delta;
   private double carouselSpeed = 0;
 
   private final IntakeSubsystem intake;
@@ -53,10 +56,23 @@ public class OperatorIntake extends CommandBase {
     // if (Robot.oi.main.getAButton()) {
     //   intake.startCompressor();
     // }
-    if (Robot.oi.main.getXButton()) {
-      intake.toggleIntake();
-    } 
+    // if (Robot.oi.main.getXButton()) {
+    //   intake.toggleIntake();
+    // } 
+    
+    if(Robot.oi.main.getXButton()){
+        date = new Date();
+        delta = new Date().getTime() - date.getTime();
+        
+        //the 1000 is msec, pls put whatever how long it takes for the robot to finish extend the intake, 
+        //1000 msec = 1 sec
+        //maybe put a time value slightly longer than usual
 
+        if( delta>1000 ){
+            date = new Date();
+            intake.toggleIntake();
+        }
+    }
     // if (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1) {
     //   intake.setIntake(ControlMode.PercentOutput, -0.5);
     // } else if (Robot.oi.main.getTriggerAxis(Hand.kRight) != 0) {
