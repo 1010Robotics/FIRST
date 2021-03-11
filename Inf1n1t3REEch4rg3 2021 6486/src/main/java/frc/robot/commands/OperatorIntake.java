@@ -19,7 +19,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class OperatorIntake extends CommandBase {
 
   private double intakeSpeed = 0;
-  private Date date;
+  private static Date date = new Date();
   private long delta;
   private double carouselSpeed = 0;
 
@@ -61,7 +61,6 @@ public class OperatorIntake extends CommandBase {
     // } 
     
     if(Robot.oi.main.getXButton()){
-        date = new Date();
         delta = new Date().getTime() - date.getTime();
         
         //the 1000 is msec, pls put whatever how long it takes for the robot to finish extend the intake, 

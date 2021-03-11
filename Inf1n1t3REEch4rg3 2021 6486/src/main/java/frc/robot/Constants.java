@@ -68,20 +68,23 @@ public final class Constants {
         //Controller Mapping
 	    CONTROLLER_MAIN(0),
 	    CONTROLLER_PARTNER(1),
-	    //CAN Motors Mapping
-	    LEFT_SLAVE(4),
-	    LEFT_MASTER(3), 
-	    RIGHT_SLAVE(2), 
-	    RIGHT_MASTER(1),
+		//CAN Motors Mapping
+		RIGHT_MASTER(1),
+		RIGHT_SLAVE(2),
+		LEFT_MASTER(3), 
+	    LEFT_SLAVE(4), 
 		FLYWHEEL_MOTOR(5),
+		FRONT_INTAKE_MOTOR(6),
 		INDEXER1_MOTOR(7),
 		INDEXER2_MOTOR(8),
-		PHOTOELEC_SENSOR(3), // don't touch
-		CW_MOTOR(10), // unused
-		CAROUSEL_MOTOR(3), // unused
-		FRONT_INTAKE_MOTOR(6),
-		INDEXER_MOTOR(10),
-		INDEXER3_MOTOR(9);
+		INDEXER3_MOTOR(9),
+		SECONDARY_INTAKE(10),
+		PHOTOELEC_SENSOR(11); // don't touch
+		//CW_MOTOR(10), // unused
+		//CAROUSEL_MOTOR(3), // unused
+		//INDEXER_MOTOR(10),
+
+
 		// WINCH_MOTOR(4); // unused
 		
 		public final int value;

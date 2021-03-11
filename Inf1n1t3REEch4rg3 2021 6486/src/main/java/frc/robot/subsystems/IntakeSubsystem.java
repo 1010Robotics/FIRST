@@ -76,8 +76,8 @@ public class IntakeSubsystem extends SubsystemBase {
     try {
       intakeMotor = new VictorSPX(Constants.RobotMap.FRONT_INTAKE_MOTOR.value);
       wobbleMotor = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
-      indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
-      carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
+      //indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
+      //carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
       // winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);
     } catch (final RuntimeException ex) {
       DriverStation.reportError("Error Starting TalonFX: " + ex.getMessage(), true);
