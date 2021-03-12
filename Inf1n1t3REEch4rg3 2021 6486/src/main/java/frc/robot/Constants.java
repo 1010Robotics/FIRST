@@ -79,7 +79,7 @@ public final class Constants {
 		INDEXER2_MOTOR(8),
 		INDEXER3_MOTOR(9),
 		SECONDARY_INTAKE(10),
-		PHOTOELEC_SENSOR(11); // don't touch
+		PHOTOELEC_SENSOR(3); // don't touch
 		//CW_MOTOR(10), // unused
 		//CAROUSEL_MOTOR(3), // unused
 		//INDEXER_MOTOR(10),
