@@ -61,9 +61,7 @@ public class OperatorShooter extends CommandBase {
 
     if (Robot.oi.partner.getBumper(Hand.kRight)) {
       flywheel.feed();
-    } else {
-      flywheel.stopFeed();
-    }
+    } 
   }
 
   // Called once the command ends or is interrupted.

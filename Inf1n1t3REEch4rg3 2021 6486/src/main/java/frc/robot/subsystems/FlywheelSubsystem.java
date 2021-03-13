@@ -24,7 +24,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -38,17 +38,17 @@ public class FlywheelSubsystem extends SubsystemBase {
 
   // Declare Motors
   private final TalonFX flywheelMtr;
-  private final VictorSPX feederMtr;
-  private final VictorSPX yeeterMtr;
-  private final VictorSPX indexer3;
+  private final TalonSRX indexer1;
+  private final TalonSRX indexer2;
+  private final TalonSRX indexer3;
 
   public FlywheelSubsystem() {
 
     // Define Motors
     flywheelMtr = new TalonFX(Constants.RobotMap.FLYWHEEL_MOTOR.value);
-    feederMtr = new VictorSPX(Constants.RobotMap.INDEXER1_MOTOR.value);
-    yeeterMtr = new VictorSPX(Constants.RobotMap.INDEXER2_MOTOR.value);
-    indexer3 = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
+    indexer1 = new TalonSRX(Constants.RobotMap.INDEXER1_MOTOR.value);
+    indexer2 = new TalonSRX(Constants.RobotMap.INDEXER2_MOTOR.value);
+    indexer3 = new TalonSRX(Constants.RobotMap.INDEXER3_MOTOR.value);
 
     // Initialize Motors
     InitializeTalon.initFWMotor(flywheelMtr);
@@ -93,14 +93,14 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   public void feed() {
-    feederMtr.set(ControlMode.PercentOutput, -1);
-    yeeterMtr.set(ControlMode.PercentOutput, 1);
+    indexer1.set(ControlMode.PercentOutput, -1);
+    indexer2.set(ControlMode.PercentOutput, 1);
     indexer3.set(ControlMode.PercentOutput, 1);
   }
 
   public void stopFeed() {
-    feederMtr.set(ControlMode.PercentOutput, 0);
-    yeeterMtr.set(ControlMode.PercentOutput, 0);
+    indexer1.set(ControlMode.PercentOutput, 0);
+    indexer2.set(ControlMode.PercentOutput, 0);
     indexer3.set(ControlMode.PercentOutput, 0);
   }
 

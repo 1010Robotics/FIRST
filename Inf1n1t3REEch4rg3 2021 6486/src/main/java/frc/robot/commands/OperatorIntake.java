@@ -68,22 +68,28 @@ public class OperatorIntake extends CommandBase {
      * CAROUSEL
      */
 
-    if (Robot.oi.main.getBumper(Hand.kLeft)) {
-      intake.setIntake();
+    
+    if (Robot.oi.main.getBumper(Hand.kRight)){
+      intake.setFrontIntake();
     } else {
-      intake.stopIntake();
+      intake.stopFrontIntake();
     }
-    if (Robot.oi.main.getAButton()) {
+    if (Robot.oi.partner.getXButton()) {
+      intake.setIndexer1();
+    } else {
+      intake.stopIndexer1();
+    }
+    if (Robot.oi.partner.getAButton()) {
       intake.setIndexer2();
     } else {
       intake.stopIndexer2();
     }
-    if (Robot.oi.main.getBButton()) {
+    if (Robot.oi.partner.getBButton()) {
       intake.setIndexer3();
     } else {
       intake.stopIndexer3();
     }
-    if (Robot.oi.main.getYButton()) {
+    if (Robot.oi.main.getBumper(Hand.kLeft)) {
       intake.setSecondaryIntake();
     } else {
       intake.stopSecondaryIntake();
@@ -96,6 +102,7 @@ public class OperatorIntake extends CommandBase {
   public void end(boolean interrupted) {
    
     intake.stopCompressor();
+    intake.stopIndexer1();
     intake.stopIndexer2();
     intake.stopIndexer3();
     intake.stopSecondaryIntake();

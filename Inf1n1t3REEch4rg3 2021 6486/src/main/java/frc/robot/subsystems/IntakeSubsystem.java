@@ -24,7 +24,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
@@ -38,11 +38,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
   // Declare Motors
   
-  private VictorSPX secondaryIntake;
-  private VictorSPX frontIntake;
+  private TalonSRX secondaryIntake;
+  private TalonSRX frontIntake;
 
-  private VictorSPX indexer2;
-  private VictorSPX indexer3;
+  private TalonSRX indexer1;
+  private TalonSRX indexer2;
+  private TalonSRX indexer3;
   //private TalonFX carouselMotor;
   // private TalonFX winchMotor;
 
@@ -74,10 +75,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Define Motors
     try {
-      secondaryIntake = new VictorSPX(Constants.RobotMap.SECONDARY_INTAKE.value);
-      frontIntake = new VictorSPX(Constants.RobotMap.FRONT_INTAKE_MOTOR.value);
-      indexer2 = new VictorSPX(Constants.RobotMap.INDEXER2_MOTOR.value);
-      indexer3 = new VictorSPX(Constants.RobotMap.INDEXER3_MOTOR.value);
+      secondaryIntake = new TalonSRX(Constants.RobotMap.SECONDARY_INTAKE.value);
+      frontIntake = new TalonSRX(Constants.RobotMap.FRONT_INTAKE_MOTOR.value);
+      indexer1 = new TalonSRX(Constants.RobotMap.INDEXER1_MOTOR.value);
+      indexer2 = new TalonSRX(Constants.RobotMap.INDEXER2_MOTOR.value);
+      indexer3 = new TalonSRX(Constants.RobotMap.INDEXER3_MOTOR.value);
       //indexerMotor = new VictorSPX(Constants.RobotMap.INDEXER_MOTOR.value);
       //carouselMotor = new TalonFX(Constants.RobotMap.CAROUSEL_MOTOR.value);
       // winchMotor = new TalonFX(Constants.RobotMap.WINCH_MOTOR.value);
@@ -171,18 +173,33 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public void setIntake() {
     secondaryIntake.set(ControlMode.PercentOutput, 1);
-    frontIntake.set(ControlMode.PercentOutput, 1);
-    indexer2.set(ControlMode.PercentOutput, 1);
+    frontIntake.set(ControlMode.PercentOutput, -1);
+    indexer1.set(ControlMode.PercentOutput, 1);
+    indexer2.set(ControlMode.PercentOutput, -1);
     indexer3.set(ControlMode.PercentOutput, 1);
   }
   public void stopIntake() {
     secondaryIntake.set(ControlMode.PercentOutput, 0);
     frontIntake.set(ControlMode.PercentOutput, 0);
+    indexer1.set(ControlMode.PercentOutput, 0);
     indexer2.set(ControlMode.PercentOutput, 0);
     indexer3.set(ControlMode.PercentOutput, 0);
   }
+  
+  public void setFrontIntake(){
+    frontIntake.set(ControlMode.PercentOutput, -1);
+  }
+  public void stopFrontIntake(){
+    frontIntake.set(ControlMode.PercentOutput, 0);
+  }
+  public void setIndexer1(){
+    indexer1.set(ControlMode.PercentOutput, 1);
+  }
+  public void stopIndexer1(){
+    indexer1.set(ControlMode.PercentOutput, 0);
+  }
   public void setIndexer2(){
-    indexer2.set(ControlMode.PercentOutput, 1);
+    indexer2.set(ControlMode.PercentOutput, -1);
   }
   public void stopIndexer2(){
     indexer2.set(ControlMode.PercentOutput, 0);
