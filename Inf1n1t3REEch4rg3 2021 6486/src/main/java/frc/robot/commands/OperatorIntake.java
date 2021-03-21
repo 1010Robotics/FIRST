@@ -19,8 +19,11 @@ public class OperatorIntake extends CommandBase {
   //private double intakeSpeed = 0;
   private static Date date = new Date();
   private long delta;
-  private double carouselSpeed = 0;
-
+  private float frontSpeed;
+  private float secondarySpeed;
+  private float indexer1Speed;
+  private float indexer2Speed;
+  private float indexer3Speed;
   private final IntakeSubsystem intake;
 
   public OperatorIntake(final IntakeSubsystem sub1) {
@@ -69,31 +72,55 @@ public class OperatorIntake extends CommandBase {
      */
 
     
-    if (Robot.oi.main.getBumper(Hand.kRight)){
-      intake.setFrontIntake();
+    if (Robot.oi.partner.getBumper(Hand.kRight)){
+      frontSpeed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kLeft)) {
+      frontSpeed=1;
     } else {
-      intake.stopFrontIntake();
+      frontSpeed=0;
     }
+
+    if (Robot.oi.partner.getBumper(Hand.kLeft)) {
+      secondarySpeed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kLeft)) {
+      secondarySpeed=1;
+    } else {
+      secondarySpeed=0;
+    }
+
     if (Robot.oi.partner.getXButton()) {
-      intake.setIndexer1();
+      indexer1Speed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kRight)) {
+      indexer1Speed=1;
     } else {
-      intake.stopIndexer1();
+      indexer1Speed=0;
     }
+
     if (Robot.oi.partner.getAButton()) {
-      intake.setIndexer2();
+      indexer2Speed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kLeft)) {
+      indexer2Speed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kRight)) {
+      indexer2Speed=1;
     } else {
-      intake.stopIndexer2();
+      indexer2Speed=0;
     }
+
     if (Robot.oi.partner.getBButton()) {
-      intake.setIndexer3();
+      indexer3Speed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kLeft)) {
+      indexer3Speed=1;
+    } else if (Robot.oi.main.getBumper(Hand.kRight)) {
+      indexer3Speed=1;
     } else {
-      intake.stopIndexer3();
+      indexer3Speed=0;
     }
-    if (Robot.oi.main.getBumper(Hand.kLeft)) {
-      intake.setSecondaryIntake();
-    } else {
-      intake.stopSecondaryIntake();
-    }
+
+    intake.setFrontIntake(frontSpeed);
+    intake.setSecondaryIntake(secondarySpeed);
+    intake.setIndexer1(indexer1Speed);
+    intake.setIndexer2(indexer2Speed);
+    intake.setIndexer3(indexer3Speed);
 
    }
 
@@ -102,11 +129,11 @@ public class OperatorIntake extends CommandBase {
   public void end(boolean interrupted) {
    
     intake.stopCompressor();
-    intake.stopIndexer1();
-    intake.stopIndexer2();
-    intake.stopIndexer3();
-    intake.stopSecondaryIntake();
-    intake.stopIntake();
+    intake.setIndexer1(0);
+    intake.setIndexer2(0);
+    intake.setIndexer3(0);
+    intake.setSecondaryIntake(0);
+
   }
 
   // Returns true when the command should end.

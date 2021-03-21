@@ -117,7 +117,6 @@ public class IntakeSubsystem extends SubsystemBase {
     
     intakeSolenoid.toggle();
 
-    //intakeState = solenoidState.OPEN;
   }
 
 
@@ -155,75 +154,32 @@ public class IntakeSubsystem extends SubsystemBase {
     return compressor.enabled();
   }
 
-  /**
-   * Set Carousel to certain Control Mode and Output
-   * 
-   * @param mode  CTRE TalonFX ControlMode
-   * @param value the Selected Motor's output
-   */
-  // public void setCarousel(final ControlMode mode, final double value) {
-  //   carouselMotor.set(mode, value);
-  // }
 
   /**
    * Set Carousel to certain Control Mode and Output
    * 
-   * @param mode  CTRE TalonFX ControlMode
-   * @param value the Selected Motor's output
+   * @param speed the Selected Motor's output
    */
-  public void setIntake() {
-    secondaryIntake.set(ControlMode.PercentOutput, 1);
-    frontIntake.set(ControlMode.PercentOutput, -1);
-    indexer1.set(ControlMode.PercentOutput, 1);
-    indexer2.set(ControlMode.PercentOutput, -1);
-    indexer3.set(ControlMode.PercentOutput, 1);
-  }
-  public void stopIntake() {
-    secondaryIntake.set(ControlMode.PercentOutput, 0);
-    frontIntake.set(ControlMode.PercentOutput, 0);
-    indexer1.set(ControlMode.PercentOutput, 0);
-    indexer2.set(ControlMode.PercentOutput, 0);
-    indexer3.set(ControlMode.PercentOutput, 0);
-  }
-  
-  public void setFrontIntake(){
-    frontIntake.set(ControlMode.PercentOutput, -1);
-  }
-  public void stopFrontIntake(){
-    frontIntake.set(ControlMode.PercentOutput, 0);
-  }
-  public void setIndexer1(){
-    indexer1.set(ControlMode.PercentOutput, 1);
-  }
-  public void stopIndexer1(){
-    indexer1.set(ControlMode.PercentOutput, 0);
-  }
-  public void setIndexer2(){
-    indexer2.set(ControlMode.PercentOutput, -1);
-  }
-  public void stopIndexer2(){
-    indexer2.set(ControlMode.PercentOutput, 0);
-  }
-  public void setIndexer3(){
-    indexer3.set(ControlMode.PercentOutput, 1);
-  }
-  public void stopIndexer3(){
-    indexer3.set(ControlMode.PercentOutput, 0);
-  }
-  public void setSecondaryIntake(){
-    secondaryIntake.set(ControlMode.PercentOutput, 1);
-  }
-  public void stopSecondaryIntake(){
-    secondaryIntake.set(ControlMode.PercentOutput, 0);
+
+  public void setFrontIntake(float speed){
+    frontIntake.set(ControlMode.PercentOutput, -speed);
   }
 
-  // public void setIndexer3Motor(){
-  //   indexer3Motor.set(ControlMode.PercentOutput, 1);
-  // }
+  public void setSecondaryIntake(float speed){
+    secondaryIntake.set(ControlMode.PercentOutput, speed);
+  }
 
-  // public void stopIndexer3Motor(){
-  //   indexer3Motor.set(ControlMode.PercentOutput, 0);
-  // }
+  public void setIndexer1(float speed){
+    indexer1.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setIndexer2(float speed){
+    indexer2.set(ControlMode.PercentOutput, -speed);
+  }
+
+  public void setIndexer3(float speed){
+    indexer3.set(ControlMode.PercentOutput, speed);
+  }
 
 
   /**
@@ -235,30 +191,6 @@ public class IntakeSubsystem extends SubsystemBase {
     motor.setSelectedSensorPosition(0);
   }
 
-  /**
-   * Get Carousel Position in Raw Encoder Units (2048 per Revolution)
-   * 
-   * @return Current Raw Encoder Units for the Carousel
-   */
-  // public double getCarouselPosition() {
-  //   return carouselMotor.getSelectedSensorPosition();
-  // }
-
-  /**
-   * Get Intake Position in Raw Encoder Units (2048 per Revolution)
-   * 
-   * @return Current Raw Encoder Units for the Intake
-   */
-  // public double getIntakePosition() {
-  //   return carouselMotor.getSelectedSensorPosition();
-  // }
-
-  /**
-   * Resets the position of the carousel.
-   */
-  // public void resetCarouselPosition() {
-  //   carouselMotor.setSelectedSensorPosition(0);
-  // }
 
   /**
    * Tells us if the Photoelectric Sensor is Detecting an Object in Range
