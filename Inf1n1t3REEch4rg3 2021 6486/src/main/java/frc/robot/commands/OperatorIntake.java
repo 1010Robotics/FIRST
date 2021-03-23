@@ -75,68 +75,36 @@ public class OperatorIntake extends CommandBase {
     //   intake.setIntake(ControlMode.PercentOutput, 0);
     // }
 
-    /**
-     * CAROUSEL
-     */
+    
 
     
-    if ((Robot.oi.partner.getBumper(Hand.kRight)) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getAButton())){
+    if ((Robot.oi.partner.getBumper(Hand.kRight)) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getAButton()) || (Robot.oi.main.getYButton())){
       frontSpeed=1;
-     } 
-    //else if (Robot.oi.main.getBumper(Hand.kLeft)) {
-    //   frontSpeed=1;
-    // } else if (Robot.oi.main.getAButton()){
-    //   frontSpeed=1;
-     //}
-      else {
+     }else {
       frontSpeed=0;
     }
 
-    if ((Robot.oi.partner.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getAButton())) {
+    if ((Robot.oi.partner.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getAButton()) || (Robot.oi.main.getYButton())) {
       secondarySpeed=1;
-    } 
-    // else if (Robot.oi.main.getBumper(Hand.kLeft)) {
-    //   secondarySpeed=1;
-    // } else if (Robot.oi.main.getAButton()){
-    //   secondarySpeed=1;
-    // } 
-    else {
+    }else {
       secondarySpeed=0;
     }
 
     if ((Robot.oi.partner.getXButton()) || (Robot.oi.main.getBumper(Hand.kRight)) || (Robot.oi.main.getAButton())) {
       indexer1Speed=1;
-    } 
-    // else if (Robot.oi.main.getBumper(Hand.kRight)) {
-    //   indexer1Speed=1;
-    // } else if (Robot.oi.main.getAButton()) {
-    //   indexer1Speed=1; 
-    // } 
-    else {
+    }else {
       indexer1Speed=0;
     }
 
     if ((Robot.oi.partner.getAButton()) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
       indexer2Speed=1;
-    } 
-    // else if (Robot.oi.main.getBumper(Hand.kLeft)) {
-    //   indexer2Speed=1;
-    // } else if (Robot.oi.main.getBumper(Hand.kRight)) {
-    //   indexer2Speed=1;
-    // } 
-    else {
+    }else {
       indexer2Speed=0;
     }
 
     if ((Robot.oi.partner.getBButton()) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
       indexer3Speed=1;
-    } 
-    //else if (Robot.oi.main.getBumper(Hand.kLeft)) {
-    //   indexer3Speed=1;
-    // } else if (Robot.oi.main.getBumper(Hand.kRight)) {
-    //   indexer3Speed=1;
-    // }
-    else {
+    }else {
       indexer3Speed=0;
     }
 
@@ -146,6 +114,7 @@ public class OperatorIntake extends CommandBase {
       }else if(intake.indexer3Activated()){
         indexDelta = new Date().getTime() - indexDate.getTime();
       }
+
       if(indexDelta >= 3500){
         if(intake.getMotorCurrent(5)>=4.5){
         nb+=1;
