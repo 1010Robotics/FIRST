@@ -20,8 +20,10 @@ public class OperatorIntake extends CommandBase {
   //private double intakeSpeed = 0;
   private static Date date = new Date();
   private static Date indexDate = new Date();
+  private static Date currentDate = new Date();
   private long delta;
   private long indexDelta;
+  private long currentDelta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
@@ -115,9 +117,13 @@ public class OperatorIntake extends CommandBase {
         indexDelta = new Date().getTime() - indexDate.getTime();
       }
 
-      if(indexDelta >= 3500){
-        if(intake.getMotorCurrent(5)>=4.5){
-        nb+=1;
+      if(indexDelta >= 1500){
+        if(intake.getMotorCurrent(5)>=5.5){
+          currentDelta = new Date().getTime() - currentDate.getTime();
+          if( currentDelta>800 ){
+            currentDate = new Date();
+            nb+=1;
+          }
         }
       }
 
