@@ -123,7 +123,7 @@ public class OperatorIntake extends CommandBase {
             currentDate = new Date();
             try
             {
-                Thread.sleep(500);
+                Thread.sleep(175);
             }
             catch(InterruptedException ex)
             {
@@ -155,6 +155,8 @@ public class OperatorIntake extends CommandBase {
         indexer2Speed=0;
         indexer3Speed=0;
       }
+    }else{
+      nb=0;
     }
     SmartDashboard.putNumber("NB", nb);
 
