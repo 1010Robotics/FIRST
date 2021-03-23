@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import java.util.Date;
-
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -122,6 +121,14 @@ public class OperatorIntake extends CommandBase {
           currentDelta = new Date().getTime() - currentDate.getTime();
           if( currentDelta>800 ){
             currentDate = new Date();
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch(InterruptedException ex)
+            {
+                Thread.currentThread().interrupt();
+            }
             nb+=1;
           }
         }
