@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   private Command m_teleopBase;
   private Command m_teleopFlywheel;
   private Command m_teleopIntake;
+  private Command m_teleopCamera;
   private Command m_autoCommand;
 
   /**
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
     m_teleopIntake = m_robotContainer.getIntakeTeleopCommand();
     m_teleopFlywheel = m_robotContainer.getFlywheelTeleopCommand();
     m_teleopBase = m_robotContainer.getDriveTeleopCommand();
+    m_teleopCamera = m_robotContainer.getCameraTeleopCommand();
     m_autoCommand = m_robotContainer.getAutonomousCommand();
   }
 
@@ -95,6 +97,7 @@ public class Robot extends TimedRobot {
     m_teleopIntake.schedule();
     m_teleopBase.schedule();
     m_teleopFlywheel.schedule();
+    m_teleopCamera.schedule();
     
   }
 

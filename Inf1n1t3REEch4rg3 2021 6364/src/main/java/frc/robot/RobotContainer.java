@@ -12,10 +12,12 @@ import frc.robot.commands.AutoRoutine;
 import frc.robot.commands.OperatorDrive;
 import frc.robot.commands.OperatorIntake;
 import frc.robot.commands.OperatorShooter;
+import frc.robot.commands.Depthcamera;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.DepthcameraSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -30,10 +32,12 @@ public class RobotContainer {
   private final FlywheelSubsystem flywheel = new FlywheelSubsystem();
   private final LimelightSubsystem camera = new LimelightSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final DepthcameraSubsystem depth = new DepthcameraSubsystem();
 
   private final OperatorShooter fwTeleop = new OperatorShooter(flywheel);
   private final OperatorDrive baseTeleop = new OperatorDrive(drive, camera);
   private final OperatorIntake intakeTeleop = new OperatorIntake(intake);
+  private final Depthcamera cameraTeleop = new Depthcamera(depth);
   private final AutoRoutine autoRoutine = new AutoRoutine(drive, intake, flywheel, camera);
 
   public RobotContainer() {
@@ -50,6 +54,10 @@ public class RobotContainer {
 
   public Command getFlywheelTeleopCommand() {
     return fwTeleop;
+  }
+
+  public Command getCameraTeleopCommand() {
+    return cameraTeleop;
   }
 
   private void configureButtonBindings() {
