@@ -29,10 +29,10 @@ public class OperatorDrive extends CommandBase {
   private final double MotorMin = 0.008;
 
   // Joy Code
-  private double joyYval;
-  private double joyXval;
-  private double yOutput;
-  private double xOutput;
+  private double joyYvalL;
+  private double joyYvalR;
+  private double yOutputL;
+  private double yOutputR;
   private double cOutput;
 
   // Align Code
@@ -97,12 +97,12 @@ public class OperatorDrive extends CommandBase {
     else {
       camera.setLedMode(LightMode.eOff);
 
-      joyYval = Robot.oi.main.getY(Hand.kLeft);
-      joyXval = Robot.oi.main.getX(Hand.kRight);
-      yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
-      xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
+      joyYvalL = Robot.oi.main.getY(Hand.kLeft);
+      joyYvalR = Robot.oi.main.getY(Hand.kRight);
+      yOutputL= 21000 * Exponential.exponential(joyYvalL, DriveExp, JoyDead, MotorMin);
+      yOutputR = 21000 * Exponential.exponential(joyYvalR, DriveExp, JoyDead, MotorMin);
 
-      chassis.set(ControlMode.Velocity, (yOutput) - (xOutput), (yOutput) + xOutput);
+      chassis.set(ControlMode.Velocity,  -(yOutputR),-(yOutputL));
     }
   }
 

@@ -60,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   // Declare Local Constants
   private static final int PhotoElecRange = 1000;
-  private static final int pcmID = 0;
+  private static final int pcmID = 21;
 
   // Public Variables
   public boolean compressorDefined = false;
@@ -108,6 +108,10 @@ public class IntakeSubsystem extends SubsystemBase {
     //resetEnc(carouselMotor);
 
     //intakeState = solenoidState.OFF;
+  }
+
+  public double getMotorCurrent(int port){
+    return (pdp.getCurrent(port));
   }
 
   /**
