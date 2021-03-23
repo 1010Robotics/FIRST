@@ -114,6 +114,16 @@ public class IntakeSubsystem extends SubsystemBase {
     return (pdp.getCurrent(port));
   }
 
+  public boolean indexer3Activated(){
+    boolean indexer3State= false;
+    if(getMotorCurrent(5)<=3.5){//whatever value of current when it is stopped
+      indexer3State=false;
+    }else{
+      indexer3State=true;
+    }
+    return indexer3State;
+  }
+
   /**
    * Extends the solenoids on the intake and changes their state to OPEN
    */
@@ -122,6 +132,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeSolenoid.toggle();
 
   }
+
+
 
 
   /**

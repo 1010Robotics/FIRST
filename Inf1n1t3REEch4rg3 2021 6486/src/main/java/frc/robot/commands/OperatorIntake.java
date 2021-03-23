@@ -19,7 +19,9 @@ public class OperatorIntake extends CommandBase {
 
   //private double intakeSpeed = 0;
   private static Date date = new Date();
+  private static Date indexDate = new Date();
   private long delta;
+  private long indexDelta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
@@ -139,21 +141,17 @@ public class OperatorIntake extends CommandBase {
     }
 
     if (Robot.oi.main.getYButton()){
-
-      if(intake.getMotorCurrent(5) > 4.5){
-        delta = new Date().getTime() - date.getTime();
-        
-        //the 1000 is msec, put whatever how long it takes for the robot to finish extend the intake, 
-        //1000 msec = 1 sec
-        //maybe put a time value slightly longer than usual
-        //:3 '                                                                                   '
-
-        if( delta>1000 ){
-         date = new Date();
-         nb+=1;
-        }
-
+      if (intake.indexer3Activated()==false){
+        indexDate = new Date();
+      }else if(intake.indexer3Activated()){
+        indexDelta = new Date().getTime() - indexDate.getTime();
       }
+      if(indexDelta >= 3500){
+        if(intake.getMotorCurrent(5)>=4.5){
+        nb+=1;
+        }
+      }
+
     }
     if (Robot.oi.main.getYButton()){
       frontSpeed=1;
