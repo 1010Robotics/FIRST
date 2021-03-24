@@ -13,15 +13,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.RerunSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LimelightSubsystem.CameraMode;
 import frc.robot.subsystems.LimelightSubsystem.LightMode;
 import frc.robot.utilities.Exponential;
 
+
 public class OperatorDrive extends CommandBase {
 
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
+  private final RerunSubsystem rerun;
 
   // Exponential Variables
   private final double JoyDead = 0.050;
@@ -35,6 +38,10 @@ public class OperatorDrive extends CommandBase {
   private double xOutput;
   private double cOutput;
 
+  private String leftVal;
+  private String rightVal;
+  private String input;
+
   // Align Code
   private final float moveKp = 0.01f;
   private final float moveKd = 0.06f;
@@ -46,11 +53,13 @@ public class OperatorDrive extends CommandBase {
   /**
    * Creates a new arcadeDrive.
    */
-  public OperatorDrive(final DriveSubsystem sub1, final LimelightSubsystem sub2) {
+  public OperatorDrive(final DriveSubsystem sub1, final LimelightSubsystem sub2, final RerunSubsystem sub3) {
     chassis = sub1;
     camera = sub2;
+    rerun = sub3;
     addRequirements(chassis);
     addRequirements(camera);
+    addRequirements(rerun);
   }
 
   // Called when the command is initially scheduled.
@@ -103,6 +112,10 @@ public class OperatorDrive extends CommandBase {
       xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
 
       chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
+      leftVal=String.valueOf(-(yOutput) - (xOutput));
+      rightVal=String.valueOf(-(yOutput) + (xOutput));
+      input=leftVal+','+rightVal;
+      rerun.save(input, "drive11.txt");
     }
   }
 

@@ -10,12 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoRoutine;
 import frc.robot.commands.OperatorDrive;
+import frc.robot.commands.AutoRerun;
 import frc.robot.commands.OperatorIntake;
 import frc.robot.commands.OperatorShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.RerunSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -30,11 +32,12 @@ public class RobotContainer {
   private final FlywheelSubsystem flywheel = new FlywheelSubsystem();
   private final LimelightSubsystem camera = new LimelightSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final RerunSubsystem rerun = new RerunSubsystem();
 
   private final OperatorShooter fwTeleop = new OperatorShooter(flywheel);
-  private final OperatorDrive baseTeleop = new OperatorDrive(drive, camera);
+  private final OperatorDrive baseTeleop = new OperatorDrive(drive, camera, rerun);
   private final OperatorIntake intakeTeleop = new OperatorIntake(intake);
-  private final AutoRoutine autoRoutine = new AutoRoutine(drive, intake, flywheel, camera);
+  private final AutoRoutine autoRoutine = new AutoRoutine(drive, intake, flywheel, camera, rerun);
 
   public RobotContainer() {
     configureButtonBindings();
