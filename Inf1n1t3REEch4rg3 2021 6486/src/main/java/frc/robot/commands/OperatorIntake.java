@@ -18,18 +18,19 @@ public class OperatorIntake extends CommandBase {
 
   //private double intakeSpeed = 0;
   private static Date date = new Date();
-  private static Date indexDate = new Date();
-  private static Date currentDate = new Date();
+  private static Date index1Date = new Date();
+  private static Date index2Date = new Date();
+  private static Date index3Date = new Date();
   private long delta;
-  private long indexDelta;
-  private long currentDelta;
+  private long index1Delta;
+  private long index2Delta;
+  private long index3Delta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
   private float indexer2Speed;
   private float indexer3Speed;
   private final IntakeSubsystem intake;
-  private int nb = 0;
 
   public OperatorIntake(final IntakeSubsystem sub1) {
     intake = sub1;
@@ -110,59 +111,51 @@ public class OperatorIntake extends CommandBase {
     }
 
     if (Robot.oi.main.getYButton()){
+      frontSpeed=1;
+      secondarySpeed=1;
+      indexer1Speed=1;
+      indexer2Speed=1;
+      indexer3Speed=1;
+      if (intake.indexer1Activated()==false){
+        index1Date = new Date();
+      }else if(intake.indexer1Activated()){
+        index1Delta = new Date().getTime() - index1Date.getTime();
+      }
+      if (intake.indexer2Activated()==false){
+        index2Date = new Date();
+      }else if(intake.indexer2Activated()){
+        index2Delta = new Date().getTime() - index2Date.getTime();
+      }
       if (intake.indexer3Activated()==false){
-        indexDate = new Date();
+        index3Date = new Date();
       }else if(intake.indexer3Activated()){
-        indexDelta = new Date().getTime() - indexDate.getTime();
+        index3Delta = new Date().getTime() - index1Date.getTime();
       }
 
-      if(indexDelta >= 1500){
-        if(intake.getMotorCurrent(5)>=5.5){
-          currentDelta = new Date().getTime() - currentDate.getTime();
-          if( currentDelta>800 ){
-            currentDate = new Date();
-            try
-            {
-                Thread.sleep(175);
-            }
-            catch(InterruptedException ex)
-            {
-                Thread.currentThread().interrupt();
-            }
-            nb+=1;
+      if(index1Delta >= 1500){
+        if(intake.getMotorCurrent(14)>=5.5){
+          indexer1Speed=0;
+          indexer2Speed=1;
+          indexer3Speed=1;
+        }
+      }
+      if(index2Delta >= 1500 && indexer1Speed == 0 ){
+        if(intake.getMotorCurrent(11)>=5.5){
+            indexer1Speed=0;
+            indexer2Speed=0;
+            indexer3Speed=1;     
           }
+      }
+      if(index3Delta >= 1500 && indexer2Speed == 0){
+        if(intake.getMotorCurrent(5)>=5.5){
+          indexer1Speed=0;
+          indexer2Speed=0;
+          indexer3Speed=0;
         }
       }
 
     }
-    if (Robot.oi.main.getYButton()){
-      frontSpeed=1;
-      secondarySpeed=1;
-      if(nb==0){
-        indexer1Speed=1;
-        indexer2Speed=1;
-        indexer3Speed=1;
-      }else if(nb==1){
-        indexer1Speed=0;
-        indexer2Speed=1;
-        indexer3Speed=1;
-      }else if(nb==2){
-        indexer1Speed=0;
-        indexer2Speed=0;
-        indexer3Speed=1;
-      }else if(nb==3){
-        indexer1Speed=0;
-        indexer2Speed=0;
-        indexer3Speed=0;
-      }
-    }else{
-      nb=0;
-    }
-    SmartDashboard.putNumber("NB", nb);
 
-    if (Robot.oi.main.getBumper(Hand.kRight)){
-      nb=0;
-    }
 
     intake.setFrontIntake(frontSpeed);
     intake.setSecondaryIntake(secondarySpeed);

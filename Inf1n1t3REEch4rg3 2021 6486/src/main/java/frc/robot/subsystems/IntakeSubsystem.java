@@ -116,6 +116,26 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
 
+  public boolean indexer1Activated(){
+    boolean indexer1State= false;
+    if(getMotorCurrent(14)<=2){//whatever value of current when it is stopped
+      indexer1State=false;
+    }else{
+      indexer1State=true;
+    }
+    return indexer1State;
+  }
+
+  public boolean indexer2Activated(){
+    boolean indexer2State= false;
+    if(getMotorCurrent(11)<=1.75){//whatever value of current when it is stopped
+      indexer2State=false;
+    }else{
+      indexer2State=true;
+    }
+    return indexer2State;
+  }
+
   public boolean indexer3Activated(){
     boolean indexer3State= false;
     if(getMotorCurrent(5)<=2.625){//whatever value of current when it is stopped
