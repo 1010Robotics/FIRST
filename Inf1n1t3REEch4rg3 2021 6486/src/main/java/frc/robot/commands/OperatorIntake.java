@@ -22,6 +22,9 @@ public class OperatorIntake extends CommandBase {
   private static Date index2Date = new Date();
   private static Date index3Date = new Date();
   private static Date currentDate = new Date();
+  private static Date index1ActDate = new Date();
+  private static Date index2ActDate = new Date();
+  private static Date index3ActDate = new Date();
   private static Date aDate = new Date();
 
   private long delta;
@@ -29,6 +32,9 @@ public class OperatorIntake extends CommandBase {
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
+  private long index1ActDelta;
+  private long index2ActDelta;
+  private long index3ActDelta;
   private long currentDelta;
   private float frontSpeed;
   private float secondarySpeed;
@@ -141,34 +147,29 @@ public class OperatorIntake extends CommandBase {
     }
 
     if (Robot.oi.main.getYButton()){
-
+      
       if (intake.indexer2Activated()==false){
         index2Date = new Date();
-        
       }else if(intake.indexer2Activated()){
         index2Delta = new Date().getTime() - index2Date.getTime();
       }
       if (intake.indexer3Activated()==false){
         index3Date = new Date();
-        
-      }else if(intake.indexer3Activated()){
-        index3Delta = new Date().getTime() - index1Date.getTime();
+      }else if(intake.indexer3Activated()){  
+        index3Delta = new Date().getTime() - index3Date.getTime();
       }
   
       if(index2Delta >= 500 ){
         if(intake.getMotorCurrent(11)>=4.7){
           currentDelta=new Date().getTime()-currentDate.getTime();
-          if (currentDelta>300){
+          if (currentDelta>400){
             currentDate = new Date();
-          // try
-          // {
-          //   Thread.sleep(3);
-          // }
-          // catch(InterruptedException ex)
-          // {
-          //   Thread.currentThread().interrupt();
-          // }
             nb+=1;
+            if(nb==1){
+              index1ActDate = new Date();
+            }else if(nb==2){
+              index2ActDate = new Date();
+            }
         }
         }
       }
@@ -176,7 +177,7 @@ public class OperatorIntake extends CommandBase {
         if(intake.getMotorCurrent(5)>=5.5&&nb==2){
             aDelta=new Date().getTime()-aDate.getTime();
             if (aDelta>700){
-              aDate = new Date();
+            aDate = new Date();
             nb=3;
             }
         }
@@ -192,14 +193,24 @@ public class OperatorIntake extends CommandBase {
       }else if(nb==1){ 
         frontSpeed=1;
         secondarySpeed=1;
-        indexer1Speed=0;
+        index1ActDelta = new Date().getTime()-index1ActDate.getTime();
+        if(index1ActDelta>500){
+          indexer1Speed=-1;
+        }else{
+          indexer1Speed=0;
+        }
         indexer2Speed=1;
         indexer3Speed=1;
       }else if(nb==2){ 
         frontSpeed=1;
         secondarySpeed=1;
         indexer1Speed=0;
-        indexer2Speed=0;
+        index2ActDelta = new Date().getTime()-index2ActDate.getTime();
+        if(index2ActDelta>500){
+          indexer2Speed=-1;
+        }else{
+          indexer2Speed=0;
+        }
         indexer3Speed=1;
       }else if(nb==3){
         frontSpeed=0;

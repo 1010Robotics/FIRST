@@ -20,6 +20,7 @@ public class AutoSeeking extends CommandBase {
   private final IntakeSubsystem intake;
   private double tx;
   private boolean tv;
+ 
   private double leftCommand;
   private double rightCommand;
   private double h1=1.5;
@@ -70,17 +71,18 @@ public class AutoSeeking extends CommandBase {
     
     tx=camera.getTx();
     tv=camera.isTarget();
-    if (tv == false)
+    if (tv == false)//tv是有无目标
     {
         // We don't see the target, seek for the target by spinning in place at a safe speed.
-        // 此处记添加若转三圈还找不到目标就后退
+        // 没有目标的话，左边轮胎1800马力，右边轮胎-1800马力，原地打圈
         steeringAdjust = 1800;
         leftCommand=steeringAdjust;
-    rightCommand=-steeringAdjust;
-    SmartDashboard.putNumber("left velocity", leftCommand);
-    SmartDashboard.putNumber("right velocity", rightCommand);
-    SmartDashboard.putNumber("adjustValue", steeringAdjust);
-    chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
+        rightCommand=-steeringAdjust;
+        SmartDashboard.putNumber("left velocity", leftCommand);
+        SmartDashboard.putNumber("right velocity", rightCommand);
+        SmartDashboard.putNumber("adjustValue", steeringAdjust);
+        chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
+        
     }
     else
     {   
@@ -90,15 +92,15 @@ public class AutoSeeking extends CommandBase {
         //start driving towards the target
         a2 = camera.getTy();
         getDistance = 60* Math.tan((a1+a2)*Math.PI/180);//1 is the horizontal position of camera starting from the head of the robot
-        SmartDashboard.putNumber("current distance is ",getDistance);
-        SmartDashboard.putNumber("a2 ",a2);
-        
+        SmartDashboard.putNumber("current distance is ", getDistance);
+        SmartDashboard.putNumber("a2 ", a2);
         //if current distance from the target is bigger than this value
         if(getDistance>=20){//ft
           chassis.set(ControlMode.Velocity, 3000, 3000);
         }else{
           chassis.stop();
           //now start running the intake
+        
           if (intake.indexer1Activated()==false){
             index1Date = new Date();
           }else if(intake.indexer1Activated()){
@@ -114,21 +116,23 @@ public class AutoSeeking extends CommandBase {
           }else if(intake.indexer3Activated()){
             index3Delta = new Date().getTime() - index1Date.getTime();
           }
-    
           if(index1Delta >= 300){
-            
             if(intake.getMotorCurrent(14)>=5&&nb==0){
               nb=1;
+            
             }
           }
           if(index2Delta >= 300 ){
             if(intake.getMotorCurrent(11)>=5.5&&nb==1){
-                nb=2;
-              }
+              nb=2;
+           
+            }
           }
+          //同理
           if(index3Delta >= 300){
             if(intake.getMotorCurrent(5)>=5.5&&nb==2){
-                nb=3;
+              nb=3;
+           
             }
           }
           SmartDashboard.putNumber("nb",nb);
@@ -139,51 +143,31 @@ public class AutoSeeking extends CommandBase {
             indexer1Speed=1;
             indexer2Speed=1;
             indexer3Speed=1;
-            index1Position = intake.getIndexer1Position();
-            index2Position = intake.getIndexer2Position();
-            index3Position = intake.getIndexer3Position();
           }else if(nb==1){ 
-            intake.setIndexer1Position(index1Position-1000);
             frontSpeed=1;
             secondarySpeed=1;
             indexer1Speed=0;
             indexer2Speed=1;
             indexer3Speed=1;
-            index2Position = intake.getIndexer1Position();
-            index3Position = intake.getIndexer2Position();
           }else if(nb==2){ 
             frontSpeed=1;
             secondarySpeed=1;
-            intake.setIndexer2Position(index2Position-1000);
             indexer1Speed=0;
             indexer2Speed=0;
-            indexer3Speed=1;
-            index3Position = intake.getIndexer3Position();
-          }else if(nb==3){
-            intake.setIndexer3Position(index3Position-1000);
+            indexer3Speed=1;       
+          }else if(nb==3){ 
             frontSpeed=0;
             secondarySpeed=0;
             indexer1Speed=0;
             indexer2Speed=0;
             indexer3Speed=0;
           }
-
-  
-    
           intake.setFrontIntake(frontSpeed);
           intake.setSecondaryIntake(secondarySpeed);
           intake.setIndexer1(indexer1Speed);
           intake.setIndexer2(indexer2Speed);
           intake.setIndexer3(indexer3Speed);
-          //make sure the intake finish before the base start moving again
-          try
-          {
-            Thread.sleep(5000);
-          }
-          catch(InterruptedException ex)
-          {
-            Thread.currentThread().interrupt();
-          }
+
         }
       }else{
         // We do see the target, execute aiming code
@@ -192,6 +176,10 @@ public class AutoSeeking extends CommandBase {
         }else{
         steeringAdjust = tx * 30 - 1000;
         }
+        leftCommand=steeringAdjust;
+        rightCommand=-steeringAdjust;
+        chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
+        
       }
     }  
 
