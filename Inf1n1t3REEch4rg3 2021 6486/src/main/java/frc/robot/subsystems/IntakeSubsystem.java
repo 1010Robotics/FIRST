@@ -155,6 +155,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
+  public void extendIntake(){
+    intakeSolenoid.set(true);
+  }
+
+  public void retractIntake(){
+    intakeSolenoid.set(false);
+  }
+
 
 
 
@@ -203,6 +211,7 @@ public class IntakeSubsystem extends SubsystemBase {
     frontIntake.set(ControlMode.PercentOutput, -speed);
   }
 
+
   public void setSecondaryIntake(float speed){
     secondaryIntake.set(ControlMode.PercentOutput, speed);
   }
@@ -217,6 +226,29 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void setIndexer3(float speed){
     indexer3.set(ControlMode.PercentOutput, speed);
+  }
+
+  public double getIndexer1Position(){
+    return indexer1.getSelectedSensorPosition();
+  }
+
+  public double getIndexer2Position(){
+    return indexer2.getSelectedSensorPosition();
+  }
+
+  public double getIndexer3Position(){
+    return indexer3.getSelectedSensorPosition();
+  }
+
+  public void setIndexer1Position(double position){
+    indexer1.set(ControlMode.MotionMagic,position);
+  }
+
+  public void setIndexer2Position(double position){
+    indexer2.set(ControlMode.Position, position);
+  }
+  public void setIndexer3Position(double position){
+    indexer3.set(ControlMode.Position, position);
   }
 
 

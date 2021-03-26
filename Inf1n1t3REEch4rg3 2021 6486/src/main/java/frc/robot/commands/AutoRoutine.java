@@ -16,6 +16,6 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class AutoRoutine extends SequentialCommandGroup {
   public AutoRoutine(final DriveSubsystem sub1, final IntakeSubsystem sub2, final FlywheelSubsystem sub3,
       final LimelightSubsystem sub4) {
-    super(new AutoShoot(sub2, sub3), new DriveDistance(1, 2000, sub1));
+    super(new AutoSeeking(sub1, sub4, sub2));
   }
 }

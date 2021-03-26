@@ -21,15 +21,24 @@ public class OperatorIntake extends CommandBase {
   private static Date index1Date = new Date();
   private static Date index2Date = new Date();
   private static Date index3Date = new Date();
+  private static Date currentDate = new Date();
+  private static Date aDate = new Date();
+
   private long delta;
+  private long aDelta;
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
+  private long currentDelta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
   private float indexer2Speed;
   private float indexer3Speed;
+  private double index1Position;
+  private double index2Position;
+  private double index3Position;
+  private int nb = 0;
   private final IntakeSubsystem intake;
 
   public OperatorIntake(final IntakeSubsystem sub1) {
@@ -94,12 +103,33 @@ public class OperatorIntake extends CommandBase {
 
     if ((Robot.oi.partner.getXButton()) || (Robot.oi.main.getBumper(Hand.kRight)) || (Robot.oi.main.getAButton())) {
       indexer1Speed=1;
-    }else {
+    }else if(Robot.oi.main.getBButton()){
+      intake.setIndexer1Position(8000);
+    }else{
       indexer1Speed=0;
     }
 
     if ((Robot.oi.partner.getAButton()) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
       indexer2Speed=1;
+    }else if(Robot.oi.main.getBButton()){
+      indexer2Speed=-1;
+      try
+          {
+            Thread.sleep(2000);
+          }
+          catch(InterruptedException ex)
+          {
+            Thread.currentThread().interrupt();
+          }
+      indexer2Speed=0;
+      try
+      {
+        Thread.sleep(55500);
+      }
+      catch(InterruptedException ex)
+      {
+        Thread.currentThread().interrupt();
+      }
     }else {
       indexer2Speed=0;
     }
@@ -111,50 +141,77 @@ public class OperatorIntake extends CommandBase {
     }
 
     if (Robot.oi.main.getYButton()){
-      frontSpeed=1;
-      secondarySpeed=1;
-      indexer1Speed=1;
-      indexer2Speed=1;
-      indexer3Speed=1;
-      if (intake.indexer1Activated()==false){
-        index1Date = new Date();
-      }else if(intake.indexer1Activated()){
-        index1Delta = new Date().getTime() - index1Date.getTime();
-      }
+
       if (intake.indexer2Activated()==false){
         index2Date = new Date();
+        
       }else if(intake.indexer2Activated()){
         index2Delta = new Date().getTime() - index2Date.getTime();
       }
       if (intake.indexer3Activated()==false){
         index3Date = new Date();
+        
       }else if(intake.indexer3Activated()){
         index3Delta = new Date().getTime() - index1Date.getTime();
       }
-
-      if(index1Delta >= 1500){
-        if(intake.getMotorCurrent(14)>=5.5){
-          indexer1Speed=0;
-          indexer2Speed=1;
-          indexer3Speed=1;
+  
+      if(index2Delta >= 500 ){
+        if(intake.getMotorCurrent(11)>=4.7){
+          currentDelta=new Date().getTime()-currentDate.getTime();
+          if (currentDelta>300){
+            currentDate = new Date();
+          // try
+          // {
+          //   Thread.sleep(3);
+          // }
+          // catch(InterruptedException ex)
+          // {
+          //   Thread.currentThread().interrupt();
+          // }
+            nb+=1;
+        }
         }
       }
-      if(index2Delta >= 1500 && indexer1Speed == 0 ){
-        if(intake.getMotorCurrent(11)>=5.5){
-            indexer1Speed=0;
-            indexer2Speed=0;
-            indexer3Speed=1;     
-          }
-      }
-      if(index3Delta >= 1500 && indexer2Speed == 0){
-        if(intake.getMotorCurrent(5)>=5.5){
-          indexer1Speed=0;
-          indexer2Speed=0;
-          indexer3Speed=0;
+      if(index3Delta >= 500){
+        if(intake.getMotorCurrent(5)>=5.5&&nb==2){
+            aDelta=new Date().getTime()-aDate.getTime();
+            if (aDelta>700){
+              aDate = new Date();
+            nb=3;
+            }
         }
       }
+      SmartDashboard.putNumber("nb",nb);
 
-    }
+      if(nb==0){
+        frontSpeed=1;
+        secondarySpeed=1;
+        indexer1Speed=1;
+        indexer2Speed=1;
+        indexer3Speed=1;
+      }else if(nb==1){ 
+        frontSpeed=1;
+        secondarySpeed=1;
+        indexer1Speed=0;
+        indexer2Speed=1;
+        indexer3Speed=1;
+      }else if(nb==2){ 
+        frontSpeed=1;
+        secondarySpeed=1;
+        indexer1Speed=0;
+        indexer2Speed=0;
+        indexer3Speed=1;
+      }else if(nb==3){
+        frontSpeed=0;
+        secondarySpeed=0;
+        indexer1Speed=0;
+        indexer2Speed=0;
+        indexer3Speed=0;
+      }
+    }else{
+      nb=0;
+    }    
+
 
 
     intake.setFrontIntake(frontSpeed);
