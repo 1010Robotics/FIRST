@@ -22,20 +22,29 @@ public class OperatorIntake extends CommandBase {
   private static Date index2Date = new Date();
   private static Date index3Date = new Date();
   private static Date currentDate = new Date();
+  private static Date current2Date = new Date();
   private static Date index1ActDate = new Date();
   private static Date index2ActDate = new Date();
   private static Date index3ActDate = new Date();
   private static Date aDate = new Date();
+
+  private static Date index1BDate = new Date();
+  private static Date index2BDate = new Date();
+  private static Date index3BDate = new Date();
 
   private long delta;
   private long aDelta;
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
+  private long index1BDelta;
+  private long index2BDelta;
+  private long index3BDelta;
   private long index1ActDelta;
   private long index2ActDelta;
   private long index3ActDelta;
   private long currentDelta;
+  private long current2Delta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
@@ -109,33 +118,12 @@ public class OperatorIntake extends CommandBase {
 
     if ((Robot.oi.partner.getXButton()) || (Robot.oi.main.getBumper(Hand.kRight)) || (Robot.oi.main.getAButton())) {
       indexer1Speed=1;
-    }else if(Robot.oi.main.getBButton()){
-      intake.setIndexer1Position(8000);
     }else{
       indexer1Speed=0;
     }
 
     if ((Robot.oi.partner.getAButton()) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
       indexer2Speed=1;
-    }else if(Robot.oi.main.getBButton()){
-      indexer2Speed=-1;
-      try
-          {
-            Thread.sleep(2000);
-          }
-          catch(InterruptedException ex)
-          {
-            Thread.currentThread().interrupt();
-          }
-      indexer2Speed=0;
-      try
-      {
-        Thread.sleep(55500);
-      }
-      catch(InterruptedException ex)
-      {
-        Thread.currentThread().interrupt();
-      }
     }else {
       indexer2Speed=0;
     }
@@ -147,7 +135,11 @@ public class OperatorIntake extends CommandBase {
     }
 
     if (Robot.oi.main.getYButton()){
-      
+      if (intake.indexer1Activated()==false){
+        index1Date = new Date();
+      }else if(intake.indexer1Activated()){
+        index1Delta = new Date().getTime() - index1Date.getTime();
+      }
       if (intake.indexer2Activated()==false){
         index2Date = new Date();
       }else if(intake.indexer2Activated()){
@@ -158,19 +150,26 @@ public class OperatorIntake extends CommandBase {
       }else if(intake.indexer3Activated()){  
         index3Delta = new Date().getTime() - index3Date.getTime();
       }
-  
-      if(index2Delta >= 500 ){
-        if(intake.getMotorCurrent(11)>=4.7){
+
+      if(index1Delta >= 500 ){
+        if(intake.getMotorCurrent(14)>=4.7&&nb==0){
           currentDelta=new Date().getTime()-currentDate.getTime();
-          if (currentDelta>400){
-            currentDate = new Date();
-            nb+=1;
-            if(nb==1){
+          if (currentDelta>700){
+              nb=1;
               index1ActDate = new Date();
-            }else if(nb==2){
-              index2ActDate = new Date();
-            }
+              currentDate = new Date();
+          }
         }
+      }
+      if(index2Delta >= 500 ){
+        if(intake.getMotorCurrent(11)>=4.7&&nb==1){
+            current2Delta=new Date().getTime()-current2Date.getTime();
+            if (current2Delta>700){
+            nb=2;
+            index2ActDate = new Date();
+            current2Date = new Date();
+            }
+        
         }
       }
       if(index3Delta >= 500){
@@ -194,7 +193,8 @@ public class OperatorIntake extends CommandBase {
         frontSpeed=1;
         secondarySpeed=1;
         index1ActDelta = new Date().getTime()-index1ActDate.getTime();
-        if(index1ActDelta>500){
+        SmartDashboard.putNumber("index1Act delta",index1ActDelta);
+        if(index1ActDelta<100){
           indexer1Speed=-1;
         }else{
           indexer1Speed=0;
@@ -206,11 +206,11 @@ public class OperatorIntake extends CommandBase {
         secondarySpeed=1;
         indexer1Speed=0;
         index2ActDelta = new Date().getTime()-index2ActDate.getTime();
-        if(index2ActDelta>500){
-          indexer2Speed=-1;
-        }else{
-          indexer2Speed=0;
-        }
+        // if(index2ActDelta<100){
+        //   indexer2Speed=-1;
+        // }else{
+        indexer2Speed=0;
+        // }
         indexer3Speed=1;
       }else if(nb==3){
         frontSpeed=0;
@@ -221,7 +221,34 @@ public class OperatorIntake extends CommandBase {
       }
     }else{
       nb=0;
-    }    
+    }  
+    
+  
+    if (Robot.oi.main.getBButton()){
+      index1BDelta = new Date().getTime() - index1BDate.getTime(); 
+      index2BDelta = new Date().getTime() - index2BDate.getTime(); 
+      index3BDelta = new Date().getTime() - index3BDate.getTime();  
+      if(index1BDelta<=2000){
+        indexer1Speed=-1;
+      }else{
+        indexer1Speed=0;
+      }
+      if(index2BDelta<=2000){
+        indexer2Speed=-1;
+      }else{
+        indexer2Speed=0;
+      }
+      if(index3BDelta<=2000){
+        indexer3Speed=-1;
+      }else{
+        indexer3Speed=0;
+      }
+    }else{
+      index1BDate = new Date();
+      index2BDate = new Date();
+      index3BDate = new Date();
+    }
+    SmartDashboard.putNumber("indexer1BDelta",index1BDelta);
 
 
 
@@ -232,6 +259,8 @@ public class OperatorIntake extends CommandBase {
     intake.setIndexer3(indexer3Speed);
 
    }
+
+   
 
   // Called once the command ends or is interrupted.
   @Override
