@@ -21,6 +21,8 @@ public class AutoSeeking extends CommandBase {
   private double tx;
   private boolean tv;
  
+  private double direction;
+
   private double leftCommand;
   private double rightCommand;
   private double h1=1.5;
@@ -29,11 +31,12 @@ public class AutoSeeking extends CommandBase {
   private double a2;
   private double getDistance;
   double steeringAdjust = 0.0;
-
+  private static Date processDate = new Date();
   private static Date index1Date = new Date();
   private static Date index2Date = new Date();
   private static Date index3Date = new Date();
   private static Date TargetDate = new Date();
+  private long processDelta;
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
@@ -65,18 +68,28 @@ public class AutoSeeking extends CommandBase {
     intake.startCompressor();
     intake.extendIntake();
     camera.setLedMode(LightMode.eOff);
+    chassis.resetAngle();
+    processDate = new Date();
+    
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    
+    processDelta = new Date().getTime() - processDate.getTime();
     tx=camera.getTx();
     tv=camera.isTarget();
+    direction=chassis.getAngle();
+    SmartDashboard.putBoolean("tv", tv);
+    
+    if((direction>=-20&&direction<=20&&nb==3)||(direction>=10&&direction<=40&&processDelta>=20000)){
+      chassis.set(ControlMode.Velocity, 3000, 3000);   
+    }else{
     if (tv == false)//tv是有无目标
     {
         TargetDelta = new Date().getTime() - TargetDate.getTime();
-        if (TargetDelta>=15000&&TargetDelta<=30000){
+        if (TargetDelta>=35000){
           chassis.set(ControlMode.Velocity, 3000, 3000);   
         }else{
         // We don't see the target, seek for the target by spinning in place at a safe speed.
@@ -87,6 +100,7 @@ public class AutoSeeking extends CommandBase {
         SmartDashboard.putNumber("left velocity", leftCommand);
         SmartDashboard.putNumber("right velocity", rightCommand);
         SmartDashboard.putNumber("adjustValue", steeringAdjust);
+        SmartDashboard.putNumber("direction", direction);
         chassis.set(ControlMode.Velocity, rightCommand, leftCommand);   
         }
     }
@@ -128,18 +142,22 @@ public class AutoSeeking extends CommandBase {
               nb=1; 
             }
           }
-          if(index2Delta >= 400 ){
-            if(intake.getMotorCurrent(11)>=5.5&&nb==1){
+          if(index2Delta >= 300 ){
+            if(intake.getMotorCurrent(11)>=5&&nb==1){
               nb=2;
             }
           }
           //同理
           if(index3Delta >= 400){
-            if(intake.getMotorCurrent(5)>=5.5&&nb==2){
+            if(intake.getMotorCurrent(5)>=5&&nb==2){
               nb=3;
             }
           }
           SmartDashboard.putNumber("nb",nb);
+          SmartDashboard.putNumber("index1",intake.getMotorCurrent(14));
+          SmartDashboard.putNumber("index2",intake.getMotorCurrent(11));
+          SmartDashboard.putNumber("index3",intake.getMotorCurrent(5));
+
   
           if(nb==0){
             frontSpeed=1;
@@ -184,7 +202,8 @@ public class AutoSeeking extends CommandBase {
         chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
         
       }
-    }  
+    }
+  }  
 
     
   
