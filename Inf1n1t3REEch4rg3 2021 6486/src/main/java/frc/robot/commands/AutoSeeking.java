@@ -25,7 +25,7 @@ public class AutoSeeking extends CommandBase {
   private double rightCommand;
   private double h1=1.5;
   private double h2=6.92;
-  private double a1=82;
+  private double a1=50;
   private double a2;
   private double getDistance;
   double steeringAdjust = 0.0;
@@ -33,9 +33,11 @@ public class AutoSeeking extends CommandBase {
   private static Date index1Date = new Date();
   private static Date index2Date = new Date();
   private static Date index3Date = new Date();
+  private static Date TargetDate = new Date();
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
+  private long TargetDelta;
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
@@ -73,6 +75,10 @@ public class AutoSeeking extends CommandBase {
     tv=camera.isTarget();
     if (tv == false)//tv是有无目标
     {
+        TargetDelta = new Date().getTime() - TargetDate.getTime();
+        if (TargetDelta>=15000&&TargetDelta<=30000){
+          chassis.set(ControlMode.Velocity, 3000, 3000);   
+        }else{
         // We don't see the target, seek for the target by spinning in place at a safe speed.
         // 没有目标的话，左边轮胎1800马力，右边轮胎-1800马力，原地打圈
         steeringAdjust = 1800;
@@ -81,25 +87,26 @@ public class AutoSeeking extends CommandBase {
         SmartDashboard.putNumber("left velocity", leftCommand);
         SmartDashboard.putNumber("right velocity", rightCommand);
         SmartDashboard.putNumber("adjustValue", steeringAdjust);
-        chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
-        
+        chassis.set(ControlMode.Velocity, rightCommand, leftCommand);   
+        }
     }
     else
     {   
+      TargetDate = new Date();
       if(tx<=3&&tx>=-3){
         //the target is within acceptable range
         steeringAdjust = 0;
         //start driving towards the target
         a2 = camera.getTy();
-        getDistance = 60* Math.tan((a1+a2)*Math.PI/180);//1 is the horizontal position of camera starting from the head of the robot
+        getDistance = 102 * Math.tan((a1+a2)*Math.PI/180);//1 is the horizontal position of camera starting from the head of the robot
         SmartDashboard.putNumber("current distance is ", getDistance);
         SmartDashboard.putNumber("a2 ", a2);
         //if current distance from the target is bigger than this value
-        if(getDistance>=20){//ft
+        // if(getDistance>=50){//ft
           chassis.set(ControlMode.Velocity, 3000, 3000);
-        }else{
-          chassis.stop();
-          //now start running the intake
+        // }else{
+        //   chassis.stop();
+        //   //now start running the intake
         
           if (intake.indexer1Activated()==false){
             index1Date = new Date();
@@ -114,25 +121,22 @@ public class AutoSeeking extends CommandBase {
           if (intake.indexer3Activated()==false){
             index3Date = new Date();
           }else if(intake.indexer3Activated()){
-            index3Delta = new Date().getTime() - index1Date.getTime();
+            index3Delta = new Date().getTime() - index3Date.getTime();
           }
-          if(index1Delta >= 300){
+          if(index1Delta >= 400){
             if(intake.getMotorCurrent(14)>=5&&nb==0){
-              nb=1;
-            
+              nb=1; 
             }
           }
-          if(index2Delta >= 300 ){
+          if(index2Delta >= 400 ){
             if(intake.getMotorCurrent(11)>=5.5&&nb==1){
               nb=2;
-           
             }
           }
           //同理
-          if(index3Delta >= 300){
+          if(index3Delta >= 400){
             if(intake.getMotorCurrent(5)>=5.5&&nb==2){
               nb=3;
-           
             }
           }
           SmartDashboard.putNumber("nb",nb);
@@ -168,9 +172,8 @@ public class AutoSeeking extends CommandBase {
           intake.setIndexer2(indexer2Speed);
           intake.setIndexer3(indexer3Speed);
 
-        }
+        //}
       }else{
-        // We do see the target, execute aiming code
         if(tx>0){
         steeringAdjust =  tx * 30 + 1000;
         }else{
