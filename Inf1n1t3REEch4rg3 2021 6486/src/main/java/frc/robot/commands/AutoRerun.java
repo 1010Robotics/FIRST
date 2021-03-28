@@ -14,10 +14,13 @@ import frc.robot.subsystems.RerunSubsystem;
 import frc.robot.subsystems.LimelightSubsystem.CameraMode;
 import frc.robot.subsystems.LimelightSubsystem.LightMode;
 import java.io.*;
+// import java.util.Date;
 public class AutoRerun extends CommandBase {
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
   private final RerunSubsystem rerun;
+
+  // private static Date processDate = new Date();
 
   private double leftVal;
   private double rightVal;
@@ -63,7 +66,7 @@ public class AutoRerun extends CommandBase {
 
   
 		   try {
-			      String fileName="/home/lvuser/drive11.txt";
+			      String fileName="/home/lvuser/slalomPath8.txt";
 	   	    	File file = new File(fileName);
 	   	    	BufferedReader reader = null;
 	   	    	reader = new BufferedReader(new FileReader(file));
@@ -74,7 +77,9 @@ public class AutoRerun extends CommandBase {
                  rightVal=Double.parseDouble(ret[1]);
                  SmartDashboard.putNumber("leftVal of auto", leftVal);
                  SmartDashboard.putNumber("rightVal of auto", rightVal);
+                //  processDate = new Date();
                  chassis.set(ControlMode.Velocity, leftVal, rightVal);
+                //  rerun.save(processDate+":"+leftVal+','+rightVal, "slalomPathAutoTime2.txt");
                  try
                  {
                       Thread.sleep(20);

@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+// import java.util.Date;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +27,7 @@ public class OperatorDrive extends CommandBase {
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
   private final RerunSubsystem rerun;
-
+  // private static Date processDate = new Date();
   // Exponential Variables
   private final double JoyDead = 0.050;
   private final double DriveExp = 1.5;
@@ -112,10 +114,11 @@ public class OperatorDrive extends CommandBase {
       xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
 
       chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
+
       leftVal=String.valueOf(-(yOutput) - (xOutput));
       rightVal=String.valueOf(-(yOutput) + (xOutput));
       input=leftVal+','+rightVal;
-      rerun.save(input, "drive11.txt");
+      rerun.save(input, "slalomPath8.txt");
     }
   }
 
