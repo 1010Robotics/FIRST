@@ -79,15 +79,15 @@ public class OperatorDrive extends CommandBase {
      */
 
     if (Robot.oi.main.getBumper(Hand.kLeft)) {
-      camera.setLedMode(LightMode.eOn);
+      // camera.setLedMode(LightMode.eOn);
 
-      moveError = 0 - camera.getTx();
-      moveErrorDiff = moveError - moveErrorLast;
-      moveOutput = (moveError * moveKp) + (moveErrorDiff * moveKd);
+      // moveError = 0 - camera.getTx();
+      // moveErrorDiff = moveError - moveErrorLast;
+      // moveOutput = (moveError * moveKp) + (moveErrorDiff * moveKd);
 
-      chassis.set(ControlMode.PercentOutput, moveOutput, -moveOutput);
+      // chassis.set(ControlMode.PercentOutput, moveOutput, -moveOutput);
 
-      moveErrorLast = moveError;
+      // moveErrorLast = moveError;
     }
 
     /**

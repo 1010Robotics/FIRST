@@ -8,6 +8,10 @@
 package frc.robot.commands;
 
 import java.util.Date;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -64,6 +68,7 @@ public class OperatorIntake extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -128,7 +133,7 @@ public class OperatorIntake extends CommandBase {
       indexer2Speed=0;
     }
 
-    if ((Robot.oi.partner.getBButton()) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
+    if ((Robot.oi.partner.getBButton()) || (Robot.oi.main.getBumper(Hand.kLeft))|| (Robot.oi.partner.getBumper(Hand.kLeft)) || (Robot.oi.main.getBumper(Hand.kRight))) {
       indexer3Speed=1;
     }else {
       indexer3Speed=0;
@@ -228,17 +233,17 @@ public class OperatorIntake extends CommandBase {
       index1BDelta = new Date().getTime() - index1BDate.getTime(); 
       index2BDelta = new Date().getTime() - index2BDate.getTime(); 
       index3BDelta = new Date().getTime() - index3BDate.getTime();  
-      if(index1BDelta<=2000){
+      if(index1BDelta<=100){
         indexer1Speed=-1;
       }else{
         indexer1Speed=0;
       }
-      if(index2BDelta<=2000){
+      if(index2BDelta<=100){
         indexer2Speed=-1;
       }else{
         indexer2Speed=0;
       }
-      if(index3BDelta<=2000){
+      if(index3BDelta<=15){
         indexer3Speed=-1;
       }else{
         indexer3Speed=0;
