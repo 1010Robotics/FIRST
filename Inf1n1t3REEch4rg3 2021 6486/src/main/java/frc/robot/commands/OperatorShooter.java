@@ -65,7 +65,7 @@ public class OperatorShooter extends CommandBase {
 
     // SmartDashboard.putNumber("trigger Output", Robot.oi.main.getTriggerAxis(Hand.kLeft));
     
-    if(Robot.oi.partner.getYButton()){
+    if(Robot.oi.main.getAButton()){
       delta = new Date().getTime() - date.getTime();
       
       //the 1000 is msec, put whatever how long it takes for the robot to finish extend the intake, 
