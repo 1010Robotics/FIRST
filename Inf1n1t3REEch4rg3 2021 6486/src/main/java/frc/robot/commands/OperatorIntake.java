@@ -120,7 +120,7 @@ public class OperatorIntake extends CommandBase {
     
 
     
-    if ( (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getYButton())){
+    if ( (Robot.oi.main.getYButton())){
       frontSpeed=1;
      }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
       frontSpeed=-1;
@@ -128,7 +128,7 @@ public class OperatorIntake extends CommandBase {
       frontSpeed=0;
     }
 
-    if ((Robot.oi.main.getBumper(Hand.kLeft))|| (Robot.oi.main.getYButton())) {
+    if ((Robot.oi.main.getYButton())) {
       secondarySpeed=1;
     }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
       secondarySpeed=-1;
