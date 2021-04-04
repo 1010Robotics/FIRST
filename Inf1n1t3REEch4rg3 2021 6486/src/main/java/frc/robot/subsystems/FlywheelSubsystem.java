@@ -22,6 +22,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -62,7 +63,10 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param value the Output Value of the Flywheel
    */
   public void set(double value) {
+    flywheelMtr.setNeutralMode(NeutralMode.Brake);
+    // flywheelMtr.set(TalonFXControlMode.Velocity, value * Constants.kTickPerRev / 600.0);
     flywheelMtr.set(TalonFXControlMode.Velocity, value * Constants.kTickPerRev / 600.0);
+   
   }
 
   /**
@@ -86,7 +90,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   /**
    * Gets the Unaltered Velocity of the Flywheel
    * 
-   * @return the Raw Velocity of the Flyweel
+   * @return the Raw Velocity of the Flywheel
    */
   public double getRawVelocity() {
     return flywheelMtr.getSelectedSensorVelocity(Constants.kPIDLoopIdx);

@@ -20,11 +20,18 @@ public class OperatorShooter extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   private double fwOutput = 0;
-
+  private static Date fwDate = new Date();
+  private long fwDelta;
   private final FlywheelSubsystem flywheel;
-  private int i=0;
+  private int i = 0;
   private long delta;
   private static Date date = new Date();
+
+  private double h1 = 1.5;
+  private double h2 = 6.92;
+  private double a1 = 50;
+  private double a2;
+  private double getDistance;
 
   public OperatorShooter(FlywheelSubsystem subsystem) {
     flywheel = subsystem;
@@ -34,6 +41,7 @@ public class OperatorShooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,9 +56,9 @@ public class OperatorShooter extends CommandBase {
      */
 
     // if (Robot.oi.main.getYButton()) {
-    //   fwOutput = 51000;
+    // fwOutput = 51000;
     // } else if (Robot.oi.main.getXButton()) {
-    //   fwOutput = 0;
+    // fwOutput = 0;
     // }
     // flywheel.set(fwOutput);
 
@@ -58,36 +66,143 @@ public class OperatorShooter extends CommandBase {
      * FEEDER AND YEETER
      */
     // if(Robot.oi.main.getTriggerAxis(Hand.kLeft)!=0){
-    //   fwOutput = 50000+1000*Robot.oi.main.getTriggerAxis(Hand.kLeft);
+    // fwOutput = 50000+1000*Robot.oi.main.getTriggerAxis(Hand.kLeft);
     // } else {
-    //   fwOutput=0;
+    // fwOutput=0;
     // }
 
-    // SmartDashboard.putNumber("trigger Output", Robot.oi.main.getTriggerAxis(Hand.kLeft));
-    
-    if(Robot.oi.main.getAButton()){
-      delta = new Date().getTime() - date.getTime();
-      
-      //the 1000 is msec, put whatever how long it takes for the robot to finish extend the intake, 
-      //1000 msec = 1 sec
-      //maybe put a time value slightly longer than usual
-      //:3
+    // SmartDashboard.putNumber("trigger Output",
+    // Robot.oi.main.getTriggerAxis(Hand.kLeft));
 
-      if( delta>1000 ){
-          date = new Date();
-          i+=1;
-          if(i%2!=0){
-            fwOutput=51000;
-          }else{
-            fwOutput=0;
-          }
+    if (Robot.oi.partner.getYButton()) {
+      delta = new Date().getTime() - date.getTime();
+
+      // the 1000 is msec, put whatever how long it takes for the robot to finish
+      // extend the intake,
+      // 1000 msec = 1 sec
+      // maybe put a time value slightly longer than usual
+      // :3
+      getDistance = 102 * Math.tan((a1 + a2) * Math.PI / 180);
+      if (delta > 1000) {
+        date = new Date();
+        i += 1;
+        if (i % 2 != 0) {
+            fwOutput = 5100;
+          
+          // 5100 - Green Zone
+          // 4200 - Yellow Zone
+          // 4100 - Purple Zone
+        } else {
+          fwOutput = 0;
+
+          SmartDashboard.putNumber("fwouput", fwOutput);
+        }
       }
-      flywheel.set(fwOutput);
+    }
+
+    if (Robot.oi.partner.getBButton()) {
+      delta = new Date().getTime() - date.getTime();
+
+      // the 1000 is msec, put whatever how long it takes for the robot to finish
+      // extend the intake,
+      // 1000 msec = 1 sec
+      // maybe put a time value slightly longer than usual
+      // :3
+      getDistance = 102 * Math.tan((a1 + a2) * Math.PI / 180);
+      if (delta > 1000) {
+        date = new Date();
+        i += 1;
+        if (i % 2 != 0) {
+            fwOutput = 4200;
+
+          
+          
+          // 5100 - Green Zone
+          // 4200 - Yellow Zone
+          // 4100 - Purple Zone
+        } else {
+          fwOutput = 0;
+
+          SmartDashboard.putNumber("fwouput", fwOutput);
+        }
+      }
+    }
+
+    if (Robot.oi.partner.getAButton()) {
+      delta = new Date().getTime() - date.getTime();
+
+      // the 1000 is msec, put whatever how long it takes for the robot to finish
+      // extend the intake,
+      // 1000 msec = 1 sec
+      // maybe put a time value slightly longer than usual
+      // :3
+      getDistance = 102 * Math.tan((a1 + a2) * Math.PI / 180);
+      if (delta > 1000) {
+        date = new Date();
+        i += 1;
+        if (i % 2 != 0) {
+            if((flywheel.getRpm()==0)||(flywheel.getRpm()>4200&&flywheel.getRpm()<4500)){
+            fwOutput = 4300;
+            }else if(flywheel.getRpm()<=4200){
+            fwOutput = 4400;
+            }else if(flywheel.getRpm()>=4500){
+            fwOutput = 4000; 
+            }
+          
+          
+          // 5100 - Green Zone
+          // 4200 - Yellow Zone
+          // 4100 - Purple Zone
+        } else {
+          fwOutput = 0;
+
+          SmartDashboard.putNumber("fwouput", fwOutput);
+        }
+      }
+    }
+
+    if (Robot.oi.partner.getXButton()) {
+      delta = new Date().getTime() - date.getTime();
+
+      // the 1000 is msec, put whatever how long it takes for the robot to finish
+      // extend the intake,
+      // 1000 msec = 1 sec
+      // maybe put a time value slightly longer than usual
+      // :3
+      getDistance = 102 * Math.tan((a1 + a2) * Math.PI / 180);
+      if (delta > 1000) {
+        date = new Date();
+        i += 1;
+        if (i % 2 != 0) {
+            if((flywheel.getRpm()==0)||(flywheel.getRpm()>4200&&flywheel.getRpm()<4500)){
+            fwOutput = 4300;
+            }else if(flywheel.getRpm()<=4200){
+            fwOutput = 4400;
+            }else if(flywheel.getRpm()>=4500){
+            fwOutput = 4000;
+            }
+          
+          
+          // 5100 - Green Zone
+          // 4200 - Yellow Zone
+          // 4100 - Purple Zone
+        } else {
+          fwOutput = 0;
+
+          SmartDashboard.putNumber("fwouput", fwOutput);
+        }
+      }
+    }
+    // if(Robot.oi.partner.getBumper(Hand.kRight)){
+    // fwOutput=0;
+
+    // }
+    flywheel.set(fwOutput);
   }
-    // if (Robot.oi.partner.getBumper(Hand.kRight)) {
-    //   flywheel.feed();
-    // } 
-  }
+
+  // if (Robot.oi.partner.getBumper(Hand.kRight)) {
+  // flywheel.feed();
+  // }
 
   // Called once the command ends or is interrupted.
   @Override

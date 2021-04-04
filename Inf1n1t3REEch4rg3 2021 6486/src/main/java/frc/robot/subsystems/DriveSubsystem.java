@@ -74,8 +74,8 @@ public class DriveSubsystem extends SubsystemBase {
     InitializeTalon.initRightDriveFalcon(rightMaster);
     InitializeTalon.initRightDriveFalcon(rightSlave);
 
-    leftMaster.setNeutralMode(NeutralMode.Coast);
-    rightMaster.setNeutralMode(NeutralMode.Coast);
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
 
     // Set Slaves
     leftSlave.follow(leftMaster);

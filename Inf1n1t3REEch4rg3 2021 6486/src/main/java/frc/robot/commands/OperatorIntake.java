@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.IntakeSubsystem;
-
+import frc.robot.subsystems.FlywheelSubsystem;
 public class OperatorIntake extends CommandBase {
 
   //private double intakeSpeed = 0;
@@ -36,14 +36,20 @@ public class OperatorIntake extends CommandBase {
   private static Date index2BDate = new Date();
   private static Date index3BDate = new Date();
 
+  private static Date index2sDate = new Date();
+  private static Date index3sDate = new Date();
+
   private long delta;
   private long aDelta;
   private long index1Delta;
   private long index2Delta;
   private long index3Delta;
+  private long index2sDelta;
+  private long index3sDelta;
   private long index1BDelta;
   private long index2BDelta;
   private long index3BDelta;
+  
   private long index1ActDelta;
   private long index2ActDelta;
   private long index3ActDelta;
@@ -57,12 +63,17 @@ public class OperatorIntake extends CommandBase {
   private double index1Position;
   private double index2Position;
   private double index3Position;
+
+  private double fwRpm=4300;
+
   private int nb = 0;
   private final IntakeSubsystem intake;
 
   public OperatorIntake(final IntakeSubsystem sub1) {
     intake = sub1;
+   
     addRequirements(intake);
+  
   }
 
   // Called when the command is initially scheduled.
@@ -109,7 +120,7 @@ public class OperatorIntake extends CommandBase {
     
 
     
-    if ((Robot.oi.partner.getBumper(Hand.kRight)) || (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getYButton())){
+    if ( (Robot.oi.main.getBumper(Hand.kLeft)) || (Robot.oi.main.getYButton())){
       frontSpeed=1;
      }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
       frontSpeed=-1;
@@ -125,25 +136,19 @@ public class OperatorIntake extends CommandBase {
       secondarySpeed=0;
     }
 
-    if ((Robot.oi.partner.getXButton())|| (Robot.oi.main.getAButton())) {
-      indexer1Speed=1;
-    }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
+    if((Robot.oi.partner.getBumper(Hand.kLeft))){
       indexer1Speed=-1;
     }else{
       indexer1Speed=0;
     }
 
-    if ((Robot.oi.partner.getAButton()) || (Robot.oi.main.getBumper(Hand.kRight))) {
-      indexer2Speed=1;
-    }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
+    if((Robot.oi.partner.getBumper(Hand.kLeft))){
       indexer2Speed=-1;
     }else {
       indexer2Speed=0;
     }
 
-    if ((Robot.oi.partner.getBButton()) || (Robot.oi.main.getBumper(Hand.kRight))) {
-      indexer3Speed=1;
-    }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
+    if((Robot.oi.partner.getBumper(Hand.kLeft))){
       indexer3Speed=-1;
     }else{
       indexer3Speed=0;
@@ -243,17 +248,17 @@ public class OperatorIntake extends CommandBase {
       index1BDelta = new Date().getTime() - index1BDate.getTime(); 
       index2BDelta = new Date().getTime() - index2BDate.getTime(); 
       index3BDelta = new Date().getTime() - index3BDate.getTime();  
-      if(index1BDelta<=100){
+      if(index1BDelta<=150){
         indexer1Speed=-1;
       }else{
         indexer1Speed=0;
       }
-      if(index2BDelta<=100){
+      if(index2BDelta<=150){
         indexer2Speed=-1;
       }else{
         indexer2Speed=0;
       }
-      if(index3BDelta<=15){
+      if(index3BDelta<=150){
         indexer3Speed=-1;
       }else{
         indexer3Speed=0;
@@ -263,6 +268,36 @@ public class OperatorIntake extends CommandBase {
       index2BDate = new Date();
       index3BDate = new Date();
     }
+
+    if ((Robot.oi.main.getBumper(Hand.kRight))) {
+      
+      // if((flywheel.getRpm()<=fwRpm+300)&&(flywheel.getRpm()>=fwRpm-300)){
+        index2sDelta = new Date().getTime() - index2sDate.getTime(); 
+        SmartDashboard.putNumber("index2sDelta", index2sDelta);
+        if(index2sDelta<=500){
+          indexer1Speed=1;
+          indexer2Speed=0;
+          indexer3Speed=0;
+        }else if(index2sDelta<=1000){
+          indexer1Speed=1;
+          indexer2Speed=1;
+          indexer3Speed=0;
+        }else{
+          indexer1Speed=1;
+          indexer2Speed=1;
+          indexer3Speed=1;
+        }      
+      // }else{
+      //   indexer1Speed=0;
+      //   indexer2Speed=0;
+      //   indexer3Speed=0;
+      // }
+
+    }else{
+      index2sDate = new Date();
+      
+    }
+
     SmartDashboard.putNumber("indexer1BDelta",index1BDelta);
 
 
