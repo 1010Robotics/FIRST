@@ -67,7 +67,7 @@ public class OperatorDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    camera.setLedMode(LightMode.eOff);
+    camera.setLedMode(LightMode.eOn);
     camera.setCameraMode(CameraMode.eVision);
   }
 
@@ -89,24 +89,7 @@ public class OperatorDrive extends CommandBase {
      * AIMER
      */
 
-    if (Robot.oi.partner.getBumper(Hand.kRight)) {
-    camera.setLedMode(LightMode.eOn);
-    //drivePID.current = (int) chassis.getLeftPosition();
-    tx = camera.getTx();
-    a2 = camera.getTy();
-    getDistance = (h2-h1) / Math.tan((a1+a2)*Math.PI/180);
-    SmartDashboard.putNumber("current distance is ",getDistance);
-    SmartDashboard.putNumber("a2 ",a2);
-    SmartDashboard.putNumber("math.tan",Math.tan((a1+a2)*Math.PI/180));
 
-      //if current distance from the target is bigger than this value
-      if(getDistance==8.9){
-       chassis.set(ControlMode.Velocity, 2000, 2000);
-      }else{
-       chassis.stop();
-      }//else
-  
-    }
 
     if (Robot.oi.main.getBumper(Hand.kLeft)) {
       // camera.setLedMode(LightMode.eOn);
@@ -121,32 +104,49 @@ public class OperatorDrive extends CommandBase {
       camera.setLedMode(LightMode.eOn);
       tx=camera.getTx();
       tv=camera.isTarget();
+      a2 = camera.getTy();
+      getDistance = (h2-h1) / Math.tan((a1+a2)*Math.PI/180);
       if (tv == false)
       {
           // We don't see the target, seek for the target by spinning in place at a safe speed.
           // 此处记添加若转三圈还找不到目标就后退
           steeringAdjust = 1800;
+          leftCommand=steeringAdjust;
+          rightCommand=-steeringAdjust;
+          chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
       }
       else
-      {   if(tx<=1&&tx>=-1){
+      { 
+
+
+        if(tx>=-2&&tx<=2){
           //the target is within acceptable range
-          steeringAdjust = 0;
+          if(getDistance>11){
+            steeringAdjust = 2000+Math.pow((getDistance-11),2)*1000;
+            chassis.set(ControlMode.Velocity, steeringAdjust, steeringAdjust);
+          }else if(getDistance<10.8){
+            steeringAdjust = 2000+Math.pow((11-getDistance),2)*1000;
+            chassis.set(ControlMode.Velocity, -steeringAdjust, -steeringAdjust);
+          }else{
+            chassis.set(ControlMode.Velocity, 0, 0);
+          }
           }else{
           // We do see the target, execute aiming code
           if(tx>0){
-          steeringAdjust =  tx * 30 + 1000;
+          steeringAdjust =  tx * 30 + 900;
+          leftCommand=steeringAdjust;
+          rightCommand=-steeringAdjust;
+          chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
           }else{
-          steeringAdjust = tx * 30 - 1000;
+          steeringAdjust = tx * 30 - 900;
+          leftCommand=steeringAdjust;
+          rightCommand=-steeringAdjust;
+          chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
           }
           }
-      }
+      
+    }
   
-      leftCommand=steeringAdjust;
-      rightCommand=-steeringAdjust;
-      SmartDashboard.putNumber("left velocity", leftCommand);
-      SmartDashboard.putNumber("right velocity", rightCommand);
-      SmartDashboard.putNumber("adjustValue", steeringAdjust);
-      chassis.set(ControlMode.Velocity, rightCommand, leftCommand);
     }
 
     /**
@@ -154,7 +154,7 @@ public class OperatorDrive extends CommandBase {
      */
 
     else {
-      camera.setLedMode(LightMode.eOff);
+      camera.setLedMode(LightMode.eOn);
 
       joyYval = Robot.oi.main.getY(Hand.kLeft);
       joyXval = Robot.oi.main.getX(Hand.kRight);
