@@ -122,11 +122,11 @@ public class OperatorDrive extends CommandBase {
         if(tx>=-2&&tx<=2){
           //the target is within acceptable range
           if(getDistance>11){
-            steeringAdjust = 2000+Math.pow((getDistance-11),2)*1000;
-            chassis.set(ControlMode.Velocity, steeringAdjust, steeringAdjust);
+            steeringAdjust = 1000+Math.pow((getDistance-11),1.4)*1000;
+            chassis.set(ControlMode.Velocity, steeringAdjust, steeringAdjust-200);
           }else if(getDistance<10.8){
-            steeringAdjust = 2000+Math.pow((11-getDistance),2)*1000;
-            chassis.set(ControlMode.Velocity, -steeringAdjust, -steeringAdjust);
+            steeringAdjust = 1000+Math.pow((11-getDistance),1.4)*1000;
+            chassis.set(ControlMode.Velocity, -steeringAdjust, -steeringAdjust+200);
           }else{
             chassis.set(ControlMode.Velocity, 0, 0);
           }
