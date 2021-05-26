@@ -23,7 +23,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -252,14 +251,6 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
 
-  /**
-   * Reset Selected Encoder to zero
-   * 
-   * @param motor the TalonFX to reset the encoder of
-   */
-  private void resetEnc(final TalonFX motor) {
-    motor.setSelectedSensorPosition(0);
-  }
 
 
   /**

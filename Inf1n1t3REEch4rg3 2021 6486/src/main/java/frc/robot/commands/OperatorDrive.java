@@ -46,14 +46,6 @@ public class OperatorDrive extends CommandBase {
   private double xOutput;
   private double cOutput;
 
-  // Align Code
-  private final float moveKp = 0.01f;
-  private final float moveKd = 0.06f;
-  private double moveError;
-  private double moveErrorDiff;
-  private double moveErrorLast;
-  private double moveOutput;
-
   /**
    * Creates a new arcadeDrive.
    */

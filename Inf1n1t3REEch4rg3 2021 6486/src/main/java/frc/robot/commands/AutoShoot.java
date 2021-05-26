@@ -7,20 +7,16 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FlywheelSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 
 public class AutoShoot extends CommandBase {
 
   private final FlywheelSubsystem flywheel;
-  private final IntakeSubsystem intake;
 
-  public AutoShoot(final IntakeSubsystem sub2, final FlywheelSubsystem sub3) {
-    intake = sub2;
+  public AutoShoot(final FlywheelSubsystem sub3) {
+
     flywheel = sub3;
   }
 

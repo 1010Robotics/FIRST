@@ -18,19 +18,19 @@ public class AutoSeeking extends CommandBase {
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
   private final IntakeSubsystem intake;
+  
   private double tx;
   private boolean tv;
- 
   private double direction;
-
   private double leftCommand;
   private double rightCommand;
-  private double h1=1.5;
-  private double h2=6.92;
   private double a1=50;
   private double a2;
   private double getDistance;
   double steeringAdjust = 0.0;
+  private int nb = 0;
+
+  //time variables
   private static Date processDate = new Date();
   private static Date index1Date = new Date();
   private static Date index2Date = new Date();
@@ -46,10 +46,7 @@ public class AutoSeeking extends CommandBase {
   private float indexer1Speed;
   private float indexer2Speed;
   private float indexer3Speed;
-  private double index1Position;
-  private double index2Position;
-  private double index3Position;
-  private int nb = 0;
+  
 
   /** Creates a new AutoSeeking. */
   public AutoSeeking(final DriveSubsystem sub1, final LimelightSubsystem sub4, final IntakeSubsystem sub2) {
@@ -86,14 +83,13 @@ public class AutoSeeking extends CommandBase {
     if((direction>=-20&&direction<=20&&nb==3)||(direction>=10&&direction<=40&&processDelta>=20000)){
       chassis.set(ControlMode.Velocity, 3000, 3000);   
     }else{
-    if (tv == false)//tv是有无目标
+    if (tv == false)//determine if there's a target
     {
         TargetDelta = new Date().getTime() - TargetDate.getTime();
         if (TargetDelta>=35000){
           chassis.set(ControlMode.Velocity, 3000, 3000);   
         }else{
         // We don't see the target, seek for the target by spinning in place at a safe speed.
-        // 没有目标的话，左边轮胎1800马力，右边轮胎-1800马力，原地打圈
         steeringAdjust = 1800;
         leftCommand=steeringAdjust;
         rightCommand=-steeringAdjust;
@@ -147,7 +143,6 @@ public class AutoSeeking extends CommandBase {
               nb=2;
             }
           }
-          //同理
           if(index3Delta >= 400){
             if(intake.getMotorCurrent(5)>=5&&nb==2){
               nb=3;
@@ -190,7 +185,6 @@ public class AutoSeeking extends CommandBase {
           intake.setIndexer2(indexer2Speed);
           intake.setIndexer3(indexer3Speed);
 
-        //}
       }else{
         if(tx>0){
         steeringAdjust =  tx * 30 + 1000;

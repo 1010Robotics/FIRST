@@ -9,15 +9,11 @@ package frc.robot.commands;
 
 import java.util.Date;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.FlywheelSubsystem;
 public class OperatorIntake extends CommandBase {
 
   //private double intakeSpeed = 0;
@@ -28,8 +24,6 @@ public class OperatorIntake extends CommandBase {
   private static Date currentDate = new Date();
   private static Date current2Date = new Date();
   private static Date index1ActDate = new Date();
-  private static Date index2ActDate = new Date();
-  private static Date index3ActDate = new Date();
   private static Date aDate = new Date();
 
   private static Date index1BDate = new Date();
@@ -37,7 +31,6 @@ public class OperatorIntake extends CommandBase {
   private static Date index3BDate = new Date();
 
   private static Date index2sDate = new Date();
-  private static Date index3sDate = new Date();
 
   private long delta;
   private long aDelta;
@@ -45,14 +38,11 @@ public class OperatorIntake extends CommandBase {
   private long index2Delta;
   private long index3Delta;
   private long index2sDelta;
-  private long index3sDelta;
   private long index1BDelta;
   private long index2BDelta;
   private long index3BDelta;
   
   private long index1ActDelta;
-  private long index2ActDelta;
-  private long index3ActDelta;
   private long currentDelta;
   private long current2Delta;
   private float frontSpeed;
@@ -60,11 +50,6 @@ public class OperatorIntake extends CommandBase {
   private float indexer1Speed;
   private float indexer2Speed;
   private float indexer3Speed;
-  private double index1Position;
-  private double index2Position;
-  private double index3Position;
-
-  private double fwRpm=4300;
 
   private int nb = 0;
   private final IntakeSubsystem intake;
@@ -186,7 +171,6 @@ public class OperatorIntake extends CommandBase {
             current2Delta=new Date().getTime()-current2Date.getTime();
             if (current2Delta>700){
             nb=2;
-            index2ActDate = new Date();
             current2Date = new Date();
             }
         
@@ -225,12 +209,8 @@ public class OperatorIntake extends CommandBase {
         frontSpeed=1;
         secondarySpeed=1;
         indexer1Speed=0;
-        index2ActDelta = new Date().getTime()-index2ActDate.getTime();
-        // if(index2ActDelta<100){
-        //   indexer2Speed=-1;
-        // }else{
         indexer2Speed=0;
-        // }
+    
         indexer3Speed=1;
       }else if(nb==3){
         frontSpeed=0;
@@ -287,11 +267,6 @@ public class OperatorIntake extends CommandBase {
           indexer2Speed=1;
           indexer3Speed=1;
         }      
-      // }else{
-      //   indexer1Speed=0;
-      //   indexer2Speed=0;
-      //   indexer3Speed=0;
-      // }
 
     }else{
       index2sDate = new Date();
