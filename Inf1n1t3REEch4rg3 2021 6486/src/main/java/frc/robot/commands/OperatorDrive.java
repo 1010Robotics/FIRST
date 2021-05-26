@@ -44,7 +44,6 @@ public class OperatorDrive extends CommandBase {
   private double joyXval;
   private double yOutput;
   private double xOutput;
-  private double cOutput;
 
   /**
    * Creates a new arcadeDrive.
@@ -74,34 +73,20 @@ public class OperatorDrive extends CommandBase {
     SmartDashboard.putNumber("Right Drive Velocity Raw", chassis.getRightVelocity());
     SmartDashboard.putNumber("Left Drive Velocity Raw", chassis.getLeftVelocity());
     SmartDashboard.putNumber("GyroVal", chassis.getAngle());
-    SmartDashboard.putNumber("Correction Output", cOutput);
-    SmartDashboard.putNumber("Limelight X-Axis", camera.getTx());
 
     /**
      * AIMER
      */
 
-
-
     if (Robot.oi.main.getBumper(Hand.kLeft)) {
-      // camera.setLedMode(LightMode.eOn);
 
-      // moveError = 0 - camera.getTx();
-      // moveErrorDiff = moveError - moveErrorLast;
-      // moveOutput = (moveError * moveKp) + (moveErrorDiff * moveKd);
-
-      // chassis.set(ControlMode.PercentOutput, moveOutput, -moveOutput);
-
-      // moveErrorLast = moveError;
-      camera.setLedMode(LightMode.eOn);
       tx=camera.getTx();
       tv=camera.isTarget();
       a2 = camera.getTy();
       getDistance = (h2-h1) / Math.tan((a1+a2)*Math.PI/180);
       if (tv == false)
       {
-          // We don't see the target, seek for the target by spinning in place at a safe speed.
-          // 此处记添加若转三圈还找不到目标就后退
+          // We don't see the target, seek for the target by spinning in the same place at a safe speed.
           steeringAdjust = 1800;
           leftCommand=steeringAdjust;
           rightCommand=-steeringAdjust;
@@ -109,8 +94,6 @@ public class OperatorDrive extends CommandBase {
       }
       else
       { 
-
-
         if(tx>=-2&&tx<=2){
           //the target is within acceptable range
           if(getDistance>11){
@@ -146,8 +129,6 @@ public class OperatorDrive extends CommandBase {
      */
 
     else {
-      camera.setLedMode(LightMode.eOn);
-
       joyYval = Robot.oi.main.getY(Hand.kLeft);
       joyXval = Robot.oi.main.getX(Hand.kRight);
       yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
