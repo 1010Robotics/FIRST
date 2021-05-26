@@ -45,6 +45,7 @@ public class OperatorIntake extends CommandBase {
   private long index1ActDelta;
   private long currentDelta;
   private long current2Delta;
+  
   private float frontSpeed;
   private float secondarySpeed;
   private float indexer1Speed;
@@ -78,68 +79,18 @@ public class OperatorIntake extends CommandBase {
     /**
      * INTAKE
      */
-
-    //intakeSpeed = (Robot.oi.main.getTriggerAxis(Hand.kRight) > 1 ? 1 : Robot.oi.main.getTriggerAxis(Hand.kRight));
     
+    //toggle pneumatics
     if(Robot.oi.main.getXButton()){
         delta = new Date().getTime() - date.getTime();
-        
-        //the 1000 is msec, put whatever how long it takes for the robot to finish extend the intake, 
-        //1000 msec = 1 sec
-        //maybe put a time value slightly longer than usual
-        //:3
-
         if( delta>1000 ){
             date = new Date();
             intake.toggleIntake();
         }
     }
-    // if (Robot.oi.main.getTriggerAxis(Hand.kLeft) > 0.1) {
-    //   intake.setIntake(ControlMode.PercentOutput, -0.5);
-    // } else if (Robot.oi.main.getTriggerAxis(Hand.kRight) != 0) {
-    //   intake.setIntake(ControlMode.PercentOutput, intakeSpeed);
-    // } else {
-    //   intake.setIntake(ControlMode.PercentOutput, 0);
-    // }
 
-    
-
-    
     if ( (Robot.oi.main.getYButton())){
-      frontSpeed=1;
-     }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
-      frontSpeed=-1;
-    }else {
-      frontSpeed=0;
-    }
 
-    if ((Robot.oi.main.getYButton())) {
-      secondarySpeed=1;
-    }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
-      secondarySpeed=-1;
-    }else {
-      secondarySpeed=0;
-    }
-
-    if((Robot.oi.partner.getBumper(Hand.kLeft))){
-      indexer1Speed=-1;
-    }else{
-      indexer1Speed=0;
-    }
-
-    if((Robot.oi.partner.getBumper(Hand.kLeft))){
-      indexer2Speed=-1;
-    }else {
-      indexer2Speed=0;
-    }
-
-    if((Robot.oi.partner.getBumper(Hand.kLeft))){
-      indexer3Speed=-1;
-    }else{
-      indexer3Speed=0;
-    }
-
-    if (Robot.oi.main.getYButton()){
       if (intake.indexer1Activated()==false){
         index1Date = new Date();
       }else if(intake.indexer1Activated()){
@@ -185,7 +136,6 @@ public class OperatorIntake extends CommandBase {
             }
         }
       }
-      SmartDashboard.putNumber("nb",nb);
 
       if(nb==0){
         frontSpeed=1;
@@ -196,8 +146,9 @@ public class OperatorIntake extends CommandBase {
       }else if(nb==1){ 
         frontSpeed=1;
         secondarySpeed=1;
+        //run indexer1 backwards for 100 msec to 
+        //make sure the 1st ball doesn't touch the flywheel 
         index1ActDelta = new Date().getTime()-index1ActDate.getTime();
-        SmartDashboard.putNumber("index1Act delta",index1ActDelta);
         if(index1ActDelta<100){
           indexer1Speed=-1;
         }else{
@@ -210,7 +161,6 @@ public class OperatorIntake extends CommandBase {
         secondarySpeed=1;
         indexer1Speed=0;
         indexer2Speed=0;
-    
         indexer3Speed=1;
       }else if(nb==3){
         frontSpeed=0;
@@ -219,9 +169,21 @@ public class OperatorIntake extends CommandBase {
         indexer2Speed=0;
         indexer3Speed=0;
       }
-    }else{
+    }else if((Robot.oi.partner.getBumper(Hand.kLeft))){
+      frontSpeed=-1;
+      secondarySpeed=-1;
+      indexer1Speed=-1;
+      indexer2Speed=-1;
+      indexer3Speed=-1;
       nb=0;
-    }  
+    }else {
+      frontSpeed=0;
+      secondarySpeed=0;
+      indexer1Speed=0;
+      indexer2Speed=0;
+      indexer3Speed=0;
+      nb=0;
+    }
     
   
     if (Robot.oi.main.getBButton()){
@@ -251,7 +213,6 @@ public class OperatorIntake extends CommandBase {
 
     if ((Robot.oi.main.getBumper(Hand.kRight))) {
       
-      // if((flywheel.getRpm()<=fwRpm+300)&&(flywheel.getRpm()>=fwRpm-300)){
         index2sDelta = new Date().getTime() - index2sDate.getTime(); 
         SmartDashboard.putNumber("index2sDelta", index2sDelta);
         if(index2sDelta<=500){
@@ -273,10 +234,9 @@ public class OperatorIntake extends CommandBase {
       
     }
 
-    SmartDashboard.putNumber("indexer1BDelta",index1BDelta);
-
-
-
+    //set the speeds at once at the end of the procedure
+    //to make sure there's no conflicts
+  
     intake.setFrontIntake(frontSpeed);
     intake.setSecondaryIntake(secondarySpeed);
     intake.setIndexer1(indexer1Speed);
