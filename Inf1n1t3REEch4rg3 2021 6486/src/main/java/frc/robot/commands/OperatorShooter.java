@@ -43,7 +43,7 @@ public class OperatorShooter extends CommandBase {
     SmartDashboard.putNumber("Flywheel Current RPM", flywheel.getRpm());
 
 
-    if (Robot.oi.partner.getYButton()) {
+    if (Robot.oi.mPOVr.get()) {
       delta = new Date().getTime() - date.getTime();
 
       // the 1000 is msec, put whatever how long it takes for the robot to finish
@@ -62,7 +62,7 @@ public class OperatorShooter extends CommandBase {
       }
     }
 
-    if (Robot.oi.partner.getBButton()) {
+    if (Robot.oi.mPOVd.get()) {
       delta = new Date().getTime() - date.getTime();
      
       if (delta > 1000) {
@@ -78,7 +78,7 @@ public class OperatorShooter extends CommandBase {
       }
     }
 
-    if (Robot.oi.partner.getAButton()) {
+    if (Robot.oi.mPOVr.get()) {
       delta = new Date().getTime() - date.getTime();
  
       if (delta > 1000) {
@@ -94,34 +94,10 @@ public class OperatorShooter extends CommandBase {
             }
         } else {
           fwOutput = 0;
-
-          SmartDashboard.putNumber("fwouput", fwOutput);
         }
       }
     }
 
-    if (Robot.oi.partner.getXButton()) {
-      delta = new Date().getTime() - date.getTime();
-
-      if (delta > 1000) {
-        date = new Date();
-        i += 1;
-        if (i % 2 != 0) {
-            if((flywheel.getRpm()==0)||(flywheel.getRpm()>4200&&flywheel.getRpm()<4500)){
-            fwOutput = 4300;
-            }else if(flywheel.getRpm()<=4200){
-            fwOutput = 4400;
-            }else if(flywheel.getRpm()>=4500){
-            fwOutput = 4000;
-            }
-        } else {
-          fwOutput = 0;
-
-          SmartDashboard.putNumber("fwouput", fwOutput);
-        }
-      }
-    }
-    flywheel.set(fwOutput);
   }
 
   // Called once the command ends or is interrupted.
