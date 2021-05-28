@@ -22,7 +22,8 @@ public class OperatorDrive extends CommandBase {
 
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
-
+  
+  private double error;
   private double tx;
   private boolean tv;
   private double leftCommand;
@@ -133,8 +134,19 @@ public class OperatorDrive extends CommandBase {
       joyXval = Robot.oi.main.getX(Hand.kRight);
       yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
       xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
-
+      if((-(yOutput) - (xOutput))==(-(yOutput) + (xOutput))){
+        error=chassis.getAngle();
+        if(error>180){
+        chassis.set(ControlMode.Velocity,  0.01*error*(-(yOutput) - (xOutput)), -(yOutput) + (xOutput));
+        }else if(error<180&&error!=0){
+        chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), 0.01*error*(-(yOutput) + (xOutput)));
+        }else{
+        chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
+        }
+      }else{
       chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
+      chassis.resetAngle();
+      }
     }
   }
 
