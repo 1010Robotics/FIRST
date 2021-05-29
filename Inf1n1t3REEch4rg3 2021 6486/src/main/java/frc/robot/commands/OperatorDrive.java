@@ -135,13 +135,15 @@ public class OperatorDrive extends CommandBase {
       yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
       xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
       if((-(yOutput) - (xOutput))==(-(yOutput) + (xOutput))){
+        //problem: how does the robot know which way is it going?
+        //constantly comparing feedback
         error=chassis.getAngle();
         if(error>180){
-        chassis.set(ControlMode.Velocity,  0.01*error*(-(yOutput) - (xOutput)), -(yOutput) + (xOutput));
+        chassis.set(ControlMode.Velocity,  ((yOutput) + (xOutput)), 0.01*error*((yOutput) - (xOutput)));
         }else if(error<180&&error!=0){
-        chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), 0.01*error*(-(yOutput) + (xOutput)));
+        chassis.set(ControlMode.Velocity,  0.01*error*((yOutput) + (xOutput)), ((yOutput) - (xOutput)));
         }else{
-        chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
+        chassis.set(ControlMode.Velocity,  (yOutput) + (xOutput), +(yOutput) - (xOutput));
         }
       }else{
       chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
