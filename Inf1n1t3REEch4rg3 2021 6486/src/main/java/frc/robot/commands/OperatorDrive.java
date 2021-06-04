@@ -22,8 +22,10 @@ public class OperatorDrive extends CommandBase {
 
   private final DriveSubsystem chassis;
   private final LimelightSubsystem camera;
-  
+
+  private double angle1;
   private double error;
+  private double angle2=0;
   private double tx;
   private boolean tv;
   private double leftCommand;
@@ -61,6 +63,7 @@ public class OperatorDrive extends CommandBase {
   public void initialize() {
     camera.setLedMode(LightMode.eOn);
     camera.setCameraMode(CameraMode.eVision);
+    chassis.resetAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -135,19 +138,25 @@ public class OperatorDrive extends CommandBase {
       yOutput = 21000 * Exponential.exponential(joyYval, DriveExp, JoyDead, MotorMin);
       xOutput = 21000 * Exponential.exponential(joyXval, DriveExp, JoyDead, MotorMin);
       if((-(yOutput) - (xOutput))==(-(yOutput) + (xOutput))){
+        angle1 = chassis.getAngle();
+        if(a2==0){
+        angle2=angle1;
+        }else{
+          error=angle2-angle1;
+          angle2=angle1;
+        }
+        
         //problem: how does the robot know which way is it going?
         //constantly comparing feedback
-        error=chassis.getAngle();
-        if(error>180){
+        if(error>1){
         chassis.set(ControlMode.Velocity,  ((yOutput) + (xOutput)), 0.01*error*((yOutput) - (xOutput)));
-        }else if(error<180&&error!=0){
+        }else if(error<-1){
         chassis.set(ControlMode.Velocity,  0.01*error*((yOutput) + (xOutput)), ((yOutput) - (xOutput)));
         }else{
         chassis.set(ControlMode.Velocity,  (yOutput) + (xOutput), +(yOutput) - (xOutput));
         }
       }else{
       chassis.set(ControlMode.Velocity,  -(yOutput) - (xOutput), -(yOutput) + (xOutput));
-      chassis.resetAngle();
       }
     }
   }
